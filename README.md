@@ -6,7 +6,7 @@ All teammates will need (explained in https://bit.ly/weblab-install)
 
 - A bash console (on Mac or Linux, this is Terminal. On Windows, we recommend Git Bash)
 - NodeJS version 18. If it is installed correctly, typing "node --version" should give v18.13.0 and "npm --version" should give 8.19.3
-- Visual Studio Code (or another code editor)
+- Visual Studio Code (or another code editor) 
 - the Prettier VSCode extension
 
 Also, all of you will need to go through the MongoDB Atlas setup (https://bit.ly/mongo-setup).

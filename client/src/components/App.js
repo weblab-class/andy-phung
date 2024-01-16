@@ -6,6 +6,11 @@ import jwt_decode from "jwt-decode";
 import NotFound from "./pages/NotFound.js";
 import Skeleton from "./pages/Skeleton.js";
 
+import Landing from "./pages/Landing.js";
+import RegisterLogin from "./pages/RegisterLogin.js";
+import CreateJoinRoom from "./pages/CreateJoinRoom.js";
+import Room from "./pages/Room.js";
+
 import "../utilities.css";
 
 import { socket } from "../client-socket.js";
@@ -47,12 +52,25 @@ const App = () => {
       <Route
         path="/"
         element={
-          <Skeleton
-            path="/"
-            handleLogin={handleLogin}
-            handleLogout={handleLogout}
-            userId={userId}
-          />
+          <Landing/>
+        }
+      />
+      <Route
+        path="/auth"
+        element={
+          <RegisterLogin/>
+        }
+      />
+      <Route
+        path="/join"
+        element={
+          <CreateJoinRoom/>
+        }
+      />
+      <Route
+        path="/room" // needs to be /join/[room code] eventually
+        element={
+          <Room/>
         }
       />
       <Route path="*" element={<NotFound />} />
