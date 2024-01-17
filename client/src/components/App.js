@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 
 import NotFound from "./pages/NotFound.js";
+import { NavBar } from "./modules/util.js";
 import Skeleton from "./pages/Skeleton.js";
 
 import Landing from "./pages/Landing.js";
-import RegisterLogin from "./pages/RegisterLogin.js";
+import Auth from "./pages/Auth.js";
 import CreateJoinRoom from "./pages/CreateJoinRoom.js";
 import Room from "./pages/Room.js";
 
 import "../utilities.css";
+import "../index.css";
 
 import { socket } from "../client-socket.js";
 
@@ -22,6 +24,7 @@ import { get, post } from "../utilities";
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
+  //const [blackedOut, setBlackedOut] = useState(false); // for blacking out ("") screens whenever sidebar/modal open
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -48,33 +51,19 @@ const App = () => {
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Landing/>
-        }
-      />
-      <Route
-        path="/auth"
-        element={
-          <RegisterLogin/>
-        }
-      />
-      <Route
-        path="/join"
-        element={
-          <CreateJoinRoom/>
-        }
-      />
-      <Route
-        path="/room" // needs to be /join/[room code] eventually
-        element={
-          <Room/>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <NavBar visible={useLocation().pathname.includes("/join")}/>
+      <Routes>
+        <Route path="/" element={<Landing/>}/>
+        <Route path="/register" element={<Auth auth_mode="register"/>}/>
+        <Route path="/login" element={<Auth auth_mode="login"/>}/>
+        <Route path="/join" element={<CreateJoinRoom/>}/>
+        <Route path="/join/room" // needs to be /join/[room code] eventually
+          element={<Room/>}
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </> 
   );
 };
 
