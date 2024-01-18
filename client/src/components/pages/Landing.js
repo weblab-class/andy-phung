@@ -1,11 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
-const Landing = () => {
+import "../../utilities.css";
+
+const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
+
+
+const Landing = ({ userId, handleLogin }) => {
+
     return (
         <div>
-            <Link to="/register"> Register </Link>
-            <Link to="/login"> Log In </Link>
+            <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+                <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+            </GoogleOAuthProvider>
         </div>
     )
 }

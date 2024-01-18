@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
+
+const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
 
 // TODO: maybe move some of these into separate files (NavBar+SideBar, )
 
@@ -20,12 +24,29 @@ const Modal = (props) => {
 
 // <SideBar/>
 const SideBar = (props) => {
+    const navigate = useNavigate();
+
     const sidebarClass = props.isOpen ? "bg-white border-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-20 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-20";
 
     const profileModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
         profile modal
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <button
+            onClick={() => {
+                // resetting all three popup states so they dont appear when logging in again
+                props.toggleSidebar();
+                props.closeModal();
+
+                googleLogout();
+                props.handleLogout();
+                navigate("/"); 
+            }}
+            >
+            Logout
+            </button>
+        </GoogleOAuthProvider>
     </div>
     const achievementsModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -72,6 +93,9 @@ const NavBar = (props) => {
     const [sideBarOpen, setSideBarOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(<></>); 
+    
+    // TODO: reset those three if { loggedOut } = useLocation().state;
+    
 
     const handleSidebarClick = () => {
         setSideBarOpen(!sideBarOpen);
@@ -97,7 +121,7 @@ const NavBar = (props) => {
                     purrductive
                 </div>
             </div>
-            <SideBar isOpen={sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal}/>
+            <SideBar isOpen={sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal} handleLogout={props.handleLogout}/>
             <Modal visible={modalOpen} content={modalContent}/>
         </>
         

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 
@@ -8,7 +8,6 @@ import { NavBar } from "./modules/util.js";
 import Skeleton from "./pages/Skeleton.js";
 
 import Landing from "./pages/Landing.js";
-import Auth from "./pages/Auth.js";
 import CreateJoinRoom from "./pages/CreateJoinRoom.js";
 import Room from "./pages/Room.js";
 
@@ -24,13 +23,17 @@ import { get, post } from "../utilities";
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
-  //const [blackedOut, setBlackedOut] = useState(false); // for blacking out ("") screens whenever sidebar/modal open
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
       if (user._id) {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
+        if(location.pathname == "/") { // kicking user into app if logged in and somehow still on this route
+          navigate("/join");
+        }
       }
     });
   }, []);
@@ -42,6 +45,7 @@ const App = () => {
     post("/api/login", { token: userToken }).then((user) => {
       setUserId(user._id);
       post("/api/initsocket", { socketid: socket.id });
+      navigate("/join");
     });
   };
 
@@ -52,12 +56,12 @@ const App = () => {
 
   return (
     <>
-      <NavBar visible={useLocation().pathname.includes("/join")}/>
+      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout}/>
       <Routes>
-        <Route path="/" element={<Landing/>}/>
-        <Route path="/register" element={<Auth auth_mode="register"/>}/>
-        <Route path="/login" element={<Auth auth_mode="login"/>}/>
-        <Route path="/join" element={<CreateJoinRoom/>}/>
+        <Route path="/" element={<Landing 
+          handleLogin={handleLogin}
+            userId={userId}/>}/>
+        <Route path="/join" element={<CreateJoinRoom userId={userId}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
           element={<Room/>}
         />
