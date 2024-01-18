@@ -4,7 +4,7 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 import NotFound from "./pages/NotFound.js";
-import { NavBar } from "./modules/util.js";
+import NavBar from "./modules/NavBar.js";
 import Skeleton from "./pages/Skeleton.js";
 
 import Landing from "./pages/Landing.js";
@@ -23,6 +23,7 @@ import { get, post } from "../utilities";
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
+  const [currentRoomID, setCurrentRoomID] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,9 +62,9 @@ const App = () => {
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
-        <Route path="/join" element={<CreateJoinRoom userId={userId}/>}/>
+        <Route path="/join" element={<CreateJoinRoom userId={userId} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room/>}
+          element={<Room currentRoomID={currentRoomID}/>} // TODO: hacky, just need one user obj that flows down all pages
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { CenterScreen } from "../modules/util";
 
+import { post } from "../../utilities";
 
 import plus_icon from "../../assets/icons/plus_icon.png";
 import people_icon from "../../assets/icons/people_icon.png";
@@ -12,6 +12,11 @@ import back_icon from "../../assets/icons/back_icon.png";
 
 const CreateJoinRoom = (props) => {
     const [subScreen, setSubScreen] = useState("select"); // one of: select, create, join
+
+    // bc we dont we to trigger rerenders
+    const capacity = useRef(8);
+    const theme = useRef("cafe");
+    const roomid = useRef("");
 
     const navigate = useNavigate();    
 
@@ -38,15 +43,55 @@ const CreateJoinRoom = (props) => {
         </div>
     
     const CreateRoomForm = 
-        <div className="bg-slate-400 w-10 h-10 flex">
-            <img src={back_icon} width="30px" height="auto" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
-            create
+        <div className="w-[400px] h-[200px] flex flex-col">
+            
+            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
+            <div>
+                room size: 
+                <input type="text" onChange={(event) => {
+                    capacity.current = event.target.value;
+                }}/>
+            </div>
+            <div>
+                theme: 
+                <select onChange={(event) => {
+                    theme.current = event.target.value;
+                }}>
+                    <option value="cafe">cafe</option>
+                    <option value="backyard">backyard</option>
+                    <option value="barker library">barker library</option>
+                </select>
+            </div>
+            
+            <Link to="/join/room" className="flex items-center justify-center border-2 border-black rounded-2xl" onClick={() => {
+                post("/api/joinroom", {
+                    init: true,
+                    capacity: capacity.current,
+                    theme: theme.current,
+                }).then((res) => {
+                    console.log(res.roomid);
+                    props.setCurrentRoomID(res.roomid);
+                });
+            }}>create</Link>
         </div>
     
     const JoinRoomForm = 
-        <div className="bg-slate-400 w-10 h-10 flex">
-            <img src={back_icon} width="30px" height="auto" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
-            join
+        <div className="w-[400px] h-[200px] flex flex-col">
+            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
+            <div>
+                join code: 
+                <input type="text" onChange={(event) => {
+                    roomid.current = event.target.value;
+                }}/>
+            </div>
+            <Link to="/join/room" className="flex items-center justify-center border-2 border-black rounded-2xl" onClick={() => {
+                post("/api/joinroom", {
+                    roomid: roomid.current,
+                }).then((res) => {
+                    console.log(res.roomid);
+                    props.setCurrentRoomID(res.roomid);
+                });
+            }}>join</Link>
         </div>
 
     const mapping = { // lol
