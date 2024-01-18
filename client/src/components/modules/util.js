@@ -16,7 +16,7 @@ import settings_icon from "../../assets/icons/settings_icon.png";
 // <Modal/>
 const Modal = (props) => {
     return props.visible && (
-        <div className="bg-white border-black border-4 rounded-3xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[600px] h-[350px] z-20">
+        <div className="bg-white border-black border-4 rounded-3xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[600px] h-[350px] z-30">
             {props.content}
         </div>
     )
@@ -26,7 +26,7 @@ const Modal = (props) => {
 const SideBar = (props) => {
     const navigate = useNavigate();
 
-    const sidebarClass = props.isOpen ? "bg-white border-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-20 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-20";
+    const sidebarClass = props.isOpen ? "bg-white border-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
 
     const profileModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -44,7 +44,7 @@ const SideBar = (props) => {
                 navigate("/"); 
             }}
             >
-            Logout
+            log out
             </button>
         </GoogleOAuthProvider>
     </div>
@@ -62,7 +62,10 @@ const SideBar = (props) => {
     return (
         <div className={`inline ${sidebarClass}`}>
             <img src={close_icon} className="ml-[17px] mt-[12.5px] mb-[30px] cursor-pointer" width="25" 
-            height="25" onClick={props.toggleSidebar}/>
+            height="25" onClick={() => {
+                props.toggleSidebar();
+                props.closeModal();
+            }}/>
             <div onClick={() => {props.openModal(profileModal)}} className="flex items-center pt-[15px] pb-[15px] pl-[20px] cursor-pointer hover:bg-gray-300">
                 <img src={profile_icon} className="" width="45px"  
                 height="45px"/>
@@ -114,7 +117,8 @@ const NavBar = (props) => {
 
     return props.visible && (
         <>
-            <div className="border-4 border-black inline-flex w-screen h-14 z-10">
+            {sideBarOpen && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-20" onClick={() => {handleSidebarClick(); closeModal();}}></div>)} 
+            <div className="border-b-4 border-black inline-flex w-screen h-14 z-10">
                 <img src={menu_icon} className="ml-3 mr-2 cursor-pointer" width="35" 
                 height="35" onClick={handleSidebarClick}/>
                 <div className="flex items-center text-2xl">

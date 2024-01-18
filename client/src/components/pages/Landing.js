@@ -9,7 +9,7 @@ const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.goo
 const Landing = ({ userId, handleLogin }) => {
 
     return (
-        <div>
+        <div className="flex h-full w-full items-center justify-center">
             <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
                 <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
             </GoogleOAuthProvider>
