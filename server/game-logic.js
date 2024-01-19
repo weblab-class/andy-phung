@@ -1,25 +1,40 @@
-const gameState = {
-    connected: [], // all ppl connected
-    body: "",
+const gameStates = {};
+
+const initializeGame = (roomid) => {
+    gameStates[roomid] = {
+        connected: [],
+        body: "",
+    }
 };
 
-const appendToBody = (key) => {
-    console.log(`gamelogic ${key}`);
-    gameState.body = gameState.body.concat(key);
+const deleteGame = (roomid) => {
+    delete gameStates[roomid];
+};
+
+const getGameState = (roomid) => {
+    return gameStates[roomid];
 }
-
-const addPlayer = (name) => {
-    gameState.connected = [...gameState.connected, name];
+ 
+const appendToBody = (roomid, key) => {
+    console.log(`gamelogic ${key}`);
+    gameStates[roomid].body = gameStates[roomid].body.concat(key);
 };
 
-const removePlayer = (name) => {
-    gameState.connected = gameState.connected.filter((n) => {
+const addPlayer = (roomid, name) => {
+    gameStates[roomid].connected = [...gameStates[roomid].connected, name];
+};
+
+const removePlayer = (roomid, name) => {
+    gameStates[roomid].connected = gameStates[roomid].connected.filter((n) => {
         n != name;
     })
 }
 
 module.exports = {
-    gameState,
+    gameStates,
+    initializeGame,
+    deleteGame,
+    getGameState,
     appendToBody,
     addPlayer, 
     removePlayer,

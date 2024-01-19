@@ -7,15 +7,18 @@ import { post } from "../../utilities";
 import back_icon from "../../assets/icons/back_icon.png";
 
 const Room = (props) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     useEffect(() => { // only attach client to the room when we know currentRoomID is loaded in
         if(props.currentRoomID != "") { 
-            console.log(`client side room id: ${props.currentRoomID}`);
+
+            
             socket.on(props.currentRoomID, (update) => {
                 console.log(update.body);
                 console.log(update.connected);
             });
+
+            console.log(`client listening on ${props.currentRoomID}`);
     
             window.addEventListener("keypress", (event) => {
                 handleKeyPress(event.key, props.currentRoomID);

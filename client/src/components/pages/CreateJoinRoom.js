@@ -14,9 +14,16 @@ const CreateJoinRoom = (props) => {
     const [subScreen, setSubScreen] = useState("select"); // one of: select, create, join
 
     // bc we dont we to trigger rerenders
-    const capacity = useRef(8);
+    const capacity = useRef(4);
     const theme = useRef("cafe");
     const roomid = useRef("");
+
+    const [ invalidCode, setInvalidCode ] = useState(false);
+    const [ fullState, setFullState ] = useState(false);
+    const resetJoinStates = () => {
+        setInvalidCode(false);
+        setFullState(false);
+    }
 
     const navigate = useNavigate();    
 
@@ -48,7 +55,7 @@ const CreateJoinRoom = (props) => {
             <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
             <div>
                 max capacity:
-                <select className="w-[60px]" selected="4" onChange={(event) => {
+                <select className="w-[60px]" defaultValue="4" onChange={(event) => {
                     capacity.current = event.target.value;
                 }}>
                     <option value="1">1</option>
@@ -85,20 +92,41 @@ const CreateJoinRoom = (props) => {
     
     const JoinRoomForm = 
         <div className="w-[400px] h-[200px] flex flex-col">
-            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
+            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => {setSubScreen("select"); resetJoinStates();}}/>
             <div>
                 join code: 
                 <input type="text" onChange={(event) => {
                     roomid.current = event.target.value;
                 }}/>
             </div>
-            <Link to="/join/room" className="flex items-center justify-center border-2 border-black rounded-2xl" onClick={() => {
+            <button className="flex items-center justify-center border-2 border-black rounded-2xl" onClick={() => {
                 post("/api/joinroom", {
                     roomid: roomid.current,
                 }).then((res) => {
-                    props.setCurrentRoomID(res.roomid);
+                    if(res.roomid) {
+                        props.setCurrentRoomID(res.roomid);
+                        setInvalidCode(false);
+                        setFullState(false);
+                        navigate("/join/room");
+                    } else if (res.errState == "invalid") {
+                        setInvalidCode(true);
+                        setFullState(false);
+                    } else if (res.errState == "full") {
+                        setFullState(true);
+                        setInvalidCode(false);
+                    }
                 });
-            }}>join</Link>
+            }}>join</button>
+            {invalidCode && (
+                <div className="flex items-center justify-center w-[300px] h-[100px]">
+                    invalid code lol
+                </div>
+            )}
+            {fullState && (
+                <div className="flex items-center justify-center w-[300px] h-[100px]">
+                    full room :(
+                </div>
+            )}
         </div>
 
     const mapping = { // lol

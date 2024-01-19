@@ -16,7 +16,7 @@ const User = require("./models/user");
 // import authentication library 
 const auth = require("./auth");
 
-// api endpoints: all these paths will be prefixed with "/api/"
+// api endpoints: all these paths will be prefixed with "/api/" 
 const router = express.Router();
 
 //initialize socket
@@ -51,6 +51,7 @@ router.post("/joinroom", (req, res) => { // creating a room
   let roomid; 
   let capacity;
   let theme;
+
   if(req.body.init) {
     roomid = util.generateRandomString(5);
 
@@ -64,12 +65,21 @@ router.post("/joinroom", (req, res) => { // creating a room
     roomid = req.body.roomid;
   }
 
-  socketManager.addUserToRoom(req.user, roomid, capacity, theme);
+  // TODO: need to handle rejecting when room is at capacity
+  const joinState = socketManager.addUserToRoom(req.user, roomid, capacity, theme);
 
   // intended to be after addUserToRoom; so solo players can get back to their room if accidentally left
   socketManager.deleteEmptyRooms();
 
-  res.send({roomid: roomid});
+  if(joinState == "success") {
+    res.send({roomid: roomid});
+  } else if (joinState == "full") {
+    res.send({errState: "full"});
+  } else {
+    res.send({errState: "invalid"});
+  }
+
+  
 });
 
 router.post("/leaveroom", (req, res) => {
