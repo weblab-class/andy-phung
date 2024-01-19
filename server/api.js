@@ -66,7 +66,7 @@ router.post("/joinroom", (req, res) => { // creating a room
 
   socketManager.addUserToRoom(req.user, roomid, capacity, theme);
 
-  // cleaning up
+  // intended to be after addUserToRoom; so solo players can get back to their room if accidentally left
   socketManager.deleteEmptyRooms();
 
   res.send({roomid: roomid});
@@ -74,7 +74,7 @@ router.post("/joinroom", (req, res) => { // creating a room
 
 router.post("/leaveroom", (req, res) => {
   socketManager.removeUserFromRoom(req.user, req.body.roomid);
-  console.log(`user left room ${req.body.roomid}`)
+  console.log(`user left room ${req.body.roomid}`);
 
   res.send({});
 

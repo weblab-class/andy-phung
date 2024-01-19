@@ -22,6 +22,8 @@ const rooms = {}; // maps room ID/code to array of user objs
 
   - then on: server receives action objs from clients, processes, then sends full updated state at 60 fps (setInterval)
   (connected users, cursor positions/tools/clicking for each player, cat positions/states, toy positions, etc)
+
+  - client can leave room w back button
 */
 
 const getSocketFromUserID = (userid) => userToSocketMap[userid];
@@ -48,15 +50,41 @@ const removeUser = (user, socket) => {
   delete socketToUserMap[socket.id];
 };
 
+const startRunningGame = (roomid) => {
+  const intervalId = setInterval(() => {
+    io.emit(roomid, gameLogic.gameState);
+  }, 1000 / 60) // 60 fps
+  return intervalId;
+}
+
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
   if(rooms[roomid] == undefined) {
+    const intervalId = startRunningGame(roomid);
+
+    gameLogic.addPlayer(user._id);
+    console.log(`server listening for updates on ${roomid}`);
+
+    getSocketFromUserID(user._id).on(roomid, (clientUpdate) => { // just a demo its wtv
+      console.log(clientUpdate);
+      gameLogic.appendToBody(clientUpdate.key);
+    }); 
+
     rooms[roomid] = {
       users: [userToSocketMap[user._id]],
       capacity: capacity,
-      theme: theme
+      theme: theme,
+      intervalId: intervalId, // so we can delete interval later
     };
+    
     console.log(`room (size ${capacity}, ${theme}) created with join code: ${roomid}`);
   } else {
+    gameLogic.addPlayer(user._id);
+
+    getSocketFromUserID(user._id).on(roomid, (clientUpdate) => { // just a demo its wtv
+      console.log(clientUpdate);
+      gameLogic.appendToBody(clientUpdate.key);
+    }); 
+
     rooms[roomid].users = [...rooms[roomid].users, userToSocketMap[user._id]];
     console.log(`user joined room with join code ${roomid}`);
   }
@@ -64,6 +92,8 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
 
 const removeUserFromRoom = (user, roomid) => {
   if(rooms[roomid]) {
+    gameLogic.removePlayer(user._id);
+
     rooms[roomid].users = rooms[roomid].users.filter((socket) => {
       socketToUserMap[socket.id]._id != user._id;
     })
@@ -77,11 +107,16 @@ const checkRoomIDExists = (roomid) => {
 const deleteEmptyRooms = (roomid) => {
   for (const [key, value] of Object.entries(rooms)) {
     if(value.users.length == 0) {
-      delete roomid[key];
+      clearInterval(value.intervalId); // stopping corresponding game
+      //io.off(key); // TODO: turning off listener for room (doesnt work)
+      delete rooms[key];
       console.log("empty room deleted!")
     }
   }
 }
+
+
+
 
 module.exports = {
   init: (http) => {

@@ -47,10 +47,19 @@ const CreateJoinRoom = (props) => {
             
             <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
             <div>
-                room size: 
-                <input type="text" onChange={(event) => {
+                max capacity:
+                <select className="w-[60px]" selected="4" onChange={(event) => {
                     capacity.current = event.target.value;
-                }}/>
+                }}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select>
             </div>
             <div>
                 theme: 
@@ -69,8 +78,7 @@ const CreateJoinRoom = (props) => {
                     capacity: capacity.current,
                     theme: theme.current,
                 }).then((res) => {
-                    console.log(res.roomid);
-                    props.setCurrentRoomID(res.roomid);
+                    props.setCurrentRoomID(res.roomid); 
                 });
             }}>create</Link>
         </div>
@@ -88,7 +96,6 @@ const CreateJoinRoom = (props) => {
                 post("/api/joinroom", {
                     roomid: roomid.current,
                 }).then((res) => {
-                    console.log(res.roomid);
                     props.setCurrentRoomID(res.roomid);
                 });
             }}>join</Link>
@@ -110,6 +117,5 @@ const CreateJoinRoom = (props) => {
 };
 
 // j use CenterScreen as a wrapper and define multiple components in this file for subpages
-// check catbook for how to best write form/post input (?)
 
 export default CreateJoinRoom;

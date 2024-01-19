@@ -39,6 +39,7 @@ const App = () => {
     });
   }, []);
 
+
   const handleLogin = (credentialResponse) => {
     const userToken = credentialResponse.credential;
     const decodedCredential = jwt_decode(userToken);
@@ -55,6 +56,17 @@ const App = () => {
     post("/api/logout");
   };
 
+  /*
+  app layers:
+  - modal / sidebar: z-30
+  - greyout (click anywhere to close): z-20
+  - navbar: z-10
+  - content: z-0
+
+  see NavBar.js for defs
+  
+  */
+
   return (
     <>
       <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout}/>
@@ -62,10 +74,10 @@ const App = () => {
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
-        <Route path="/join" element={<CreateJoinRoom userId={userId} setCurrentRoomID={setCurrentRoomID}/>}/>
+        <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room currentRoomID={currentRoomID}/>} // TODO: hacky, just need one user obj that flows down all pages
-        />
+          element={<Room currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>} // TODO: hacky, just need one user obj that flows down all pages
+        /> 
         <Route path="*" element={<NotFound />} />
       </Routes>
     </> 
