@@ -75,7 +75,7 @@ const CreateJoinRoom = (props) => {
                 }}>
                     <option value="cafe">cafe</option>
                     <option value="backyard">backyard</option>
-                    <option value="barker library">barker library</option>
+                    <option value="hayden library">barker library</option>
                 </select>
             </div>
             
@@ -140,6 +140,10 @@ const CreateJoinRoom = (props) => {
     return (
         <div className="h-full w-full absolute flex items-center justify-center">
             <CenterScreen content={mapping[subScreen]}/>
+            <div className="absolute h-full w-full z-[-1] flex items-center justify-center overflow-hidden">
+                <div className="absolute h-full w-full z-[-1] bg-scroll">
+                </div>
+            </div>
         </div>
     );
 };

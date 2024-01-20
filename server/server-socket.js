@@ -75,7 +75,7 @@ const endGameBroadcast = (roomid, user, rooms) => {
 
 const initUserListener = (roomid, user) => {
   getSocketFromUserID(user._id).on(roomid, (clientUpdate) => {
-    console.log(clientUpdate);
+    //console.log(clientUpdate);
     // TODO: change this to actual method used to update user state
     gameLogic.appendToBody(roomid, clientUpdate.key);
   }); 
@@ -83,7 +83,7 @@ const initUserListener = (roomid, user) => {
 
 const deleteUserListener = (roomid, user) => {
   getSocketFromUserID(user._id).off(roomid, (clientUpdate) => {
-    console.log(clientUpdate);
+    //console.log(clientUpdate);
     // TODO: change this to actual method used to update user state
     gameLogic.appendToBody(roomid, clientUpdate.key);
   }); 

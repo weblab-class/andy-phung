@@ -9,10 +9,11 @@ const Modal = (props) => {
 }
 
 const CenterScreen = (props) => { // TODO: pass dims by props; 500px, 263px for createjoinroom
-    return <div className="border-black border-4 rounded-[2rem] w-[500px] h-[263px] flex items-center justify-center">
+    return <div className="bg-white border-black border-4 rounded-[2rem] w-[500px] h-[263px] flex items-center justify-center">
         {props.content}
     </div>
 }
+
 
 // <Collapsible/>; might j use ext pkg for this
 

@@ -16,7 +16,7 @@ const getGameState = (roomid) => {
 }
  
 const appendToBody = (roomid, key) => {
-    console.log(`gamelogic ${key}`);
+    //console.log(`gamelogic ${key}`);
     gameStates[roomid].body = gameStates[roomid].body.concat(key);
 };
 

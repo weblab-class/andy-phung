@@ -65,6 +65,8 @@ const App = () => {
 
   see NavBar.js for defs
   
+  TODO: maybe use useContext/useReducer for App states
+
   */
 
   return (

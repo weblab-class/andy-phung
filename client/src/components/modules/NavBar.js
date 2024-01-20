@@ -106,7 +106,7 @@ const NavBar = (props) => {
     return props.visible && (
         <>
             {sideBarOpen && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-20" onClick={() => {handleSidebarClick(); closeModal();}}></div>)} 
-            <div className="border-b-4 border-black inline-flex w-screen h-14 z-10">
+            <div className="bg-white border-b-4 border-black inline-flex w-screen h-14 z-10">
                 <img src={menu_icon} className="ml-3 mr-2 cursor-pointer" width="35" 
                 height="35" onClick={handleSidebarClick}/>
                 <div className="flex items-center text-2xl">
