@@ -7,6 +7,8 @@ const socketToUserMap = {}; // maps socket ID to user object
 
 const rooms = {}; // maps room ID/code to array of user objs
 
+// TODO: fix disconnect issues (appendToBody, maybe more)
+
 /*
   how this works (creating room): 
   - client (logged in, exists in the two maps above) sends POST to /api/joinroom
@@ -58,7 +60,12 @@ const removeUser = (user, socket) => {
 const startGameBroadcast = (roomid, user) => {
 
   const intervalId = setInterval(() => {
-    getSocketFromUserID(user._id).emit(roomid, gameLogic.gameStates[roomid]);
+    try {
+      getSocketFromUserID(user._id).emit(roomid, gameLogic.gameStates[roomid]);
+    } catch (err) {
+      console.log("user closed tab");
+      clearInterval(intervalId);
+    }
   }, 1000 / 60) // 60 fps
   return intervalId;
 };
@@ -82,11 +89,7 @@ const initUserListener = (roomid, user) => {
 }
 
 const deleteUserListener = (roomid, user) => {
-  getSocketFromUserID(user._id).off(roomid, (clientUpdate) => {
-    //console.log(clientUpdate);
-    // TODO: change this to actual method used to update user state
-    gameLogic.appendToBody(roomid, clientUpdate.key);
-  }); 
+  getSocketFromUserID(user._id).off(roomid); 
 }
 
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom

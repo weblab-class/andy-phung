@@ -13,6 +13,8 @@ import camera_icon from "../../assets/icons/camera_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
 import music_icon from "../../assets/icons/music_icon.png";
 
+import placeholder_pfp from "../../assets/placeholderpfp.png";
+
 
 
 /*
@@ -23,10 +25,43 @@ TODO:
 
 */
 
-const Tasks = (props) => {
-    return <div className="absolute top-[56px] left-[50%] absolute-div-center-offset w-[95%] h-[450px] bg-blue-400 pl-[20px] pr-[20px] pb-[20px]">
-        <div className="bg-blue-600 h-full w-full">
+const TasksProfile = (props) => {
+    return <div className="flex justify-center items-center w-full h-[40px] bg-blue-600 mb-[10px] z-[5]">
+        <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
+        {props.name}
+    </div>
+}
 
+const TaskListMutable = (props) => {
+
+}
+
+const Tasks = (props) => { // wtf
+    return <div className="absolute flex justify-between top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] bg-blue-200 pl-[20px] pr-[20px] pb-[20px] z-[5]">
+            <div className="flex bg-blue-400 h-full w-[275px] left-0 mr-[30px] z-[5]">
+                <div className="flex flex-col bg-blue-500 h-full w-[275px] z-[5]">
+                    <TasksProfile name={"chefandyy"}/>
+                </div>
+            </div>
+            <div className="flex flex-row bg-blue-400 h-full min-w-[900px] w-[900px] z-[5] overflow-x-scroll">
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"ayz"}/>
+                </div>
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"zessicajheng"}/>
+                </div>
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"nicoli23"}/>
+                </div>
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"nicoli23"}/>
+                </div>
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"nicoli23"}/>
+                </div>
+                <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
+                    <TasksProfile name={"rahh"}/>
+                </div>
         </div>
     </div>
 }

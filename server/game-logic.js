@@ -27,7 +27,8 @@ const addPlayer = (roomid, name) => {
 const removePlayer = (roomid, name) => {
     gameStates[roomid].connected = gameStates[roomid].connected.filter((n) => {
         n != name;
-    })
+    });
+    console.log("is this remove player func being called");
 }
 
 module.exports = {
