@@ -65,6 +65,7 @@ const startGameBroadcast = (roomid, user) => {
     } catch (err) {
       console.log("user closed tab");
       clearInterval(intervalId);
+      // not removing from room in case they closed tab accidentally
     }
   }, 1000 / 60) // 60 fps
   return intervalId;
@@ -89,8 +90,13 @@ const initUserListener = (roomid, user) => {
 }
 
 const deleteUserListener = (roomid, user) => {
-  getSocketFromUserID(user._id).off(roomid); 
-}
+  try {
+    getSocketFromUserID(user._id).off(roomid); 
+  } catch(err) {
+
+  }
+  
+};
 
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
   if(rooms[roomid] == undefined && capacity != -1) { // if user is trying to create a new room

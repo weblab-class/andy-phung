@@ -18,7 +18,7 @@ const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.goo
 const SideBar = (props) => {
     const navigate = useNavigate();
 
-    const sidebarClass = props.isOpen ? "bg-white border-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
+    const sidebarClass = props.isOpen ? "bg-white border-r-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
 
     const profileModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -83,38 +83,45 @@ const SideBar = (props) => {
     )
 }
 
-const NavBar = (props) => {
-    const [sideBarOpen, setSideBarOpen] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState(<></>); 
-    
+const NavBar = (props) => { 
     const handleSidebarClick = () => {
-        setSideBarOpen(!sideBarOpen);
+        props.setSideBarOpen(!props.sideBarOpen);
     };
 
     const openModal = (content) => {
-        setModalOpen(true);
-        setModalContent(content);
+        props.setModalOpen(true);
+        props.setModalContent(content);
     }
     
     const closeModal = () => {
-        setModalOpen(false);
-        setModalContent(<></>);
+        props.setModalOpen(false);
+        props.setModalContent(<></>);
     }
     
 
     return props.visible && (
         <>
-            {sideBarOpen && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-20" onClick={() => {handleSidebarClick(); closeModal();}}></div>)} 
-            <div className="bg-white border-b-4 border-black inline-flex w-screen h-14 z-10">
-                <img src={menu_icon} className="ml-3 mr-2 cursor-pointer" width="35" 
-                height="35" onClick={handleSidebarClick}/>
-                <div className="flex items-center text-2xl">
-                    purrductive
+            {props.sideBarOpen && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-20" onClick={() => {handleSidebarClick(); closeModal();}}></div>)} 
+            <div className="bg-white border-b-4 border-black inline-flex w-screen items-center justify-between h-14 z-10">
+                <div className="inline-flex w-full h-14 z-10">
+                    <img src={menu_icon} className="ml-3 mr-2 cursor-pointer z-10" width="35" 
+                    height="35" onClick={handleSidebarClick}/>
+                    <div className="flex items-center text-2xl z-10">
+                        purrductive
+                    </div>
                 </div>
+                {props.currentRoomID != "" && (<div className="flex items-center justify-center w-[250px] h-10 mr-[20px] z-10">
+                    <div className="mr-[5px] text-xl z-10">
+                        join code:
+                    </div>
+                    <div className="border-black border-4 rounded-lg text-2xl pr-[5px] pl-[5px] z-10">
+                        {props.currentRoomID}
+                    </div>
+                </div>)}
+                
             </div>
-            <SideBar isOpen={sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal} handleLogout={props.handleLogout}/>
-            <Modal visible={modalOpen} content={modalContent}/>
+            <SideBar isOpen={props.sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal} handleLogout={props.handleLogout}/>
+            <Modal visible={props.modalOpen} content={props.modalContent}/>
         </>
         
     )

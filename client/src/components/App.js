@@ -24,6 +24,10 @@ import { get, post } from "../utilities";
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const [currentRoomID, setCurrentRoomID] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(<></>); 
+  const [sideBarOpen, setSideBarOpen] = useState(false); // lolol
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -71,14 +75,15 @@ const App = () => {
 
   return (
     <>
-      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout}/>
+      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen}/>
       <Routes>
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>} // TODO: hacky, just need one user obj that flows down all pages
+          element={<Room currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />
       </Routes>

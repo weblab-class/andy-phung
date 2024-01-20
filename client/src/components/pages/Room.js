@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { socket, handleKeyPress } from "../../client-socket.js";
 import { post } from "../../utilities"; 
+import { Modal } from "../modules/util.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 
@@ -15,7 +16,9 @@ import music_icon from "../../assets/icons/music_icon.png";
 
 import placeholder_pfp from "../../assets/placeholderpfp.png";
 
+import close_icon from "../../assets/icons/close_icon.png";
 
+// lmaoo what is this
 
 /*
 TODO:
@@ -38,12 +41,12 @@ const TaskListMutable = (props) => {
 
 const Tasks = (props) => { // wtf
     return <div className="absolute flex justify-between top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] bg-blue-200 pl-[20px] pr-[20px] pb-[20px] z-[5]">
-            <div className="flex bg-blue-400 h-full w-[275px] left-0 mr-[30px] z-[5]">
+            <div className="flex bg-blue-400 h-full w-[275px] left-0 z-[5]">
                 <div className="flex flex-col bg-blue-500 h-full w-[275px] z-[5]">
                     <TasksProfile name={"chefandyy"}/>
                 </div>
             </div>
-            <div className="flex flex-row bg-blue-400 h-full min-w-[900px] w-[900px] z-[5] overflow-x-scroll">
+            <div className="flex flex-row bg-blue-400 h-full min-w-[875px] w-[850px] z-[5] overflow-x-scroll">
                 <div className="flex flex-col bg-blue-500 h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
                     <TasksProfile name={"ayz"}/>
                 </div>
@@ -95,10 +98,26 @@ const SubToolBar = (props) => {
 
 const ToolBar = (props) => {
 
+    const storeModal = <div className="flex flex-col">
+        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
+        height="20" onClick={props.closeModal}/>
+        store modal
+    </div>
+
+    const musicModal = <div className="flex flex-col">
+        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
+        height="20" onClick={props.closeModal}/>
+        music modal
+    </div>
+
     return <div>
         <SubToolBar cursorState={props.cursorState} setCursorState={props.setCursorState}/>
-        <img src={store_icon} className="absolute w-[30px] h-[30px] bottom-[52.5px] right-[38.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]"/>
-        <img src={music_icon} className="absolute w-[30px] h-[30px] bottom-[15px] right-[38.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]"/>
+        <img src={store_icon} className="absolute w-[30px] h-[30px] bottom-[52.5px] right-[38.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]" onClick={() => {
+            props.openModal(storeModal);
+        }}/>
+        <img src={music_icon} className="absolute w-[30px] h-[30px] bottom-[15px] right-[38.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]" onClick={() => {
+            props.openModal(musicModal);
+        }}/>
     </div>
 
 }
@@ -107,8 +126,20 @@ const ToolBar = (props) => {
 
 const Room = (props) => {
     const navigate = useNavigate(); 
-    const [cursorState, setCursorState] = useState("cursor"); // cursor, pet, laser, camera
-    // uh
+    const [cursorState, setCursorState] = useState("cursor"); // uh
+    const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
+    // so we can force a rerender (to display join code) when we receive the roomid
+    
+
+    const openModal = (content) => {
+        props.setModalOpen(true);
+        props.setModalContent(content);
+    }
+    
+    const closeModal = () => {
+        props.setModalOpen(false);
+        props.setModalContent(<></>);
+    }
 
     const cursorMapper = {
         "cursor": "cursor-default",
@@ -119,8 +150,8 @@ const Room = (props) => {
 
     useEffect(() => { // only attach client to the room when we know currentRoomID is loaded in
         if(props.currentRoomID != "") { 
+            setInternalCurrentRoomID(props.currentRoomID);
 
-            
             socket.on(props.currentRoomID, (update) => {
                 console.log(update.body);
                 console.log(update.connected);
@@ -151,10 +182,14 @@ const Room = (props) => {
                 props.setCurrentRoomID("");
                 navigate("/join");
             }}/>
-            <Tasks/>
-            <ToolBar cursorState={cursorState} setCursorState={setCursorState}/>
+            <Tasks/> 
+            <ToolBar cursorState={cursorState} setCursorState={setCursorState} openModal={openModal} closeModal={closeModal}/>
+            {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-[19]" onClick={closeModal}></div>)}
+            <Modal visible={props.modalOpen} content={props.modalContent}/>
         </div>
     )
 }
 
 export default Room;
+
+//bg-slate-400

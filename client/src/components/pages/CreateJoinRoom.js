@@ -75,7 +75,7 @@ const CreateJoinRoom = (props) => {
                 }}>
                     <option value="cafe">cafe</option>
                     <option value="backyard">backyard</option>
-                    <option value="hayden library">barker library</option>
+                    <option value="hayden library">hayden library</option>
                 </select>
             </div>
             
