@@ -17,6 +17,7 @@ import close_icon from "../../assets/icons/close_icon.png";
 import checkmark_icon from "../../assets/icons/checkmark_icon.png";
 import plus_icon from "../../assets/icons/plus_icon.png";
 import rightarrow_icon from "../../assets/icons/rightarrow_icon.png";
+import x_icon from "../../assets/icons/x_icon.png";
 
 // lmaoo what is this
 
@@ -32,8 +33,10 @@ TODO:
 if moving a toy, also returns position of "ghost" of toy on backdrop surface (just one line for now)
 */
 
+
+
 const TasksProfile = (props) => {
-    return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5]">
+    return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-lg">
         <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
         {props.name}
     </div>
@@ -41,15 +44,17 @@ const TasksProfile = (props) => {
 
 const OtherTaskListItem = (props) => { // props: content
     return (
-        <div className="flex items-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
-            {props.content}
+        <div className="flex items-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]" title={props.content}>
+            <div className="flex items-center flex-nowrap w-[200px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {props.content}
+            </div>  
         </div>
     )
 };
 
 const OtherTaskList = (props) => { // just used to display tasks (scroll on overflow); props: tasks; for everyone else
     return (
-        <div className="w-full h-[160px] bg-slate-200 overflow-scroll overflow-x-hidden z-[5]">
+        <div className="w-full h-[160px] bg-slate-200 overflow-auto overflow-x-hidden z-[5]">
             {props.tasks.map((content) => (
                 <OtherTaskListItem content={content}/>
             ))}
@@ -67,8 +72,10 @@ const UserTaskListItem = (props) => { // props: userTasks, setUserTasks, content
     };
 
     return (
-        <div className="flex items-center justify-between pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
-            {props.content} 
+        <div className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]" title={props.content}>
+            <div className="border-white border-2 w-[200px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+                {props.content}
+            </div>     
             <img src={checkmark_icon} className="h-[20px] w-[20px] mr-[10px] hover:cursor-pointer hover:opacity-75" onClick={removeItem}/>
         </div>
     );
@@ -78,11 +85,22 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
     const [ editing, setEditing ] = useState(false);
     const newTask = useRef("");
 
+    
+
+    const handleEnterInInput = (e) => {
+        if(e.key == 'Enter') {
+            props.setUserTasks([newTask.current, ...props.userTasks]);
+            newTask.current = "";
+            setEditing(!editing);
+        }
+    };
+
     return (
         <div>
             { editing ?
-                (<div className="flex items-center justify-between pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
-                <input type="text" onChange={(event) => {
+                (
+                <div onBlur={() => {setEditing(!editing);}} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
+                <input autoFocus type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
                     newTask.current = event.target.value;
                 }}/>
                 <img src={rightarrow_icon} className="h-[10px] w-[10px] mr-[10px] hover:cursor-pointer" onClick={() => {
@@ -99,7 +117,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
                 </div>
                 )
             }
-            <div className="w-full h-[120px]  overflow-scroll overflow-x-hidden z-[5]">
+            <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
                     <UserTaskListItem userTasks={props.userTasks} setUserTasks={props.setUserTasks} content={content} idx={idx}/>
                 ))}
@@ -221,8 +239,8 @@ const Room = (props) => {
             }}/>
             <Tasks setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
-            {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full bg-slate-400 bg-opacity-40 z-[19]" onClick={closeModal}></div>)}
-            <Modal visible={props.modalOpen} content={props.modalContent}/>
+            {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-slate-400 bg-opacity-40 z-[19]" onClick={closeModal}></div>)}
+            <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
             
         </div>
     )

@@ -121,7 +121,7 @@ const NavBar = (props) => {
                 
             </div>
             <SideBar isOpen={props.sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal} handleLogout={props.handleLogout}/>
-            <Modal visible={props.modalOpen} content={props.modalContent}/>
+            <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
         </>
         
     )
