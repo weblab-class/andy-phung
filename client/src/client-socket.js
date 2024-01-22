@@ -6,8 +6,8 @@ socket.on("connect", () => {
   post("/api/initsocket", { socketid: socket.id });
 });
 
-export const handleKeyPress = (key, roomid) => {
+export const handleUserTaskUpdate = (userTasks, roomid) => {
   socket.emit(roomid, { 
-    key: key,
+    userTasks: userTasks,
   });
 };

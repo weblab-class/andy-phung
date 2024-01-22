@@ -65,7 +65,6 @@ router.post("/joinroom", (req, res) => { // creating a room
     roomid = req.body.roomid;
   }
 
-  // TODO: need to handle rejecting when room is at capacity
   const joinState = socketManager.addUserToRoom(req.user, roomid, capacity, theme);
 
   // intended to be after addUserToRoom; so solo players can get back to their room if accidentally left

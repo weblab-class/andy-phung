@@ -18,7 +18,7 @@ const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.goo
 const SideBar = (props) => {
     const navigate = useNavigate();
 
-    const sidebarClass = props.isOpen ? "bg-white border-r-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-white border-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
+    const sidebarClass = props.isOpen ? "bg-white border-r-4 border-black top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-white border-r-4 border-black left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
 
     const profileModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -110,7 +110,7 @@ const NavBar = (props) => {
                         purrductive
                     </div>
                 </div>
-                {props.currentRoomID != "" && (<div className="flex items-center justify-center w-[250px] h-10 mr-[20px] z-10">
+                {props.currentRoomID != "" && (<div className="flex whitespace-nowrap items-center justify-center w-[250px] h-10 mr-[20px] z-10">
                     <div className="mr-[5px] text-xl z-10">
                         join code:
                     </div>

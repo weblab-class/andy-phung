@@ -2,8 +2,7 @@ const gameStates = {};
 
 const initializeGame = (roomid) => {
     gameStates[roomid] = {
-        connected: [],
-        body: "",
+        users: []
     }
 };
 
@@ -15,28 +14,33 @@ const getGameState = (roomid) => {
     return gameStates[roomid];
 }
  
-const appendToBody = (roomid, key) => {
-    //console.log(`gamelogic ${key}`);
-    gameStates[roomid].body = gameStates[roomid].body.concat(key);
-};
-
-const addPlayer = (roomid, name) => {
-    gameStates[roomid].connected = [...gameStates[roomid].connected, name];
-};
-
-const removePlayer = (roomid, name) => {
-    gameStates[roomid].connected = gameStates[roomid].connected.filter((n) => {
-        n != name;
+const updateTasks = (roomid, user, newTasks) => {
+    gameStates[roomid].users.forEach((userObj, idx) => {
+        if(userObj.username == user.name) {
+            gameStates[roomid].users[idx].tasks = newTasks;
+        }
     });
-    console.log("is this remove player func being called");
 }
+
+const addPlayer = (roomid, user) => {
+    gameStates[roomid].users.push({
+        username: user.name,
+        tasks: []
+    })
+};
+
+const removePlayer = (roomid, user) => {
+    gameStates[roomid].users = gameStates[roomid].users.filter((n) => {
+        n.username != user.name;
+    });
+};
 
 module.exports = {
     gameStates,
     initializeGame,
     deleteGame,
     getGameState,
-    appendToBody,
+    updateTasks,
     addPlayer, 
     removePlayer,
   };

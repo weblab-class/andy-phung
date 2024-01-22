@@ -61,7 +61,10 @@ const startGameBroadcast = (roomid, user) => {
 
   const intervalId = setInterval(() => {
     try {
-      getSocketFromUserID(user._id).emit(roomid, gameLogic.gameStates[roomid]);
+      getSocketFromUserID(user._id).emit(roomid, {
+        username: user.name,
+        gameState: gameLogic.gameStates[roomid],
+      }); // user doesn't know who they are rn lmfao; TODO: fix this once u impl api calls from database
     } catch (err) {
       console.log("user closed tab");
       clearInterval(intervalId);
@@ -83,9 +86,8 @@ const endGameBroadcast = (roomid, user, rooms) => {
 
 const initUserListener = (roomid, user) => {
   getSocketFromUserID(user._id).on(roomid, (clientUpdate) => {
-    //console.log(clientUpdate);
-    // TODO: change this to actual method used to update user state
-    gameLogic.appendToBody(roomid, clientUpdate.key);
+    console.log(clientUpdate.userTasks);
+    gameLogic.updateTasks(roomid, user, clientUpdate.userTasks);
   }); 
 }
 
@@ -101,10 +103,9 @@ const deleteUserListener = (roomid, user) => {
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
   if(rooms[roomid] == undefined && capacity != -1) { // if user is trying to create a new room
     gameLogic.initializeGame(roomid);
-    gameLogic.addPlayer(roomid, user._id);
+    gameLogic.addPlayer(roomid, user);
     
     initUserListener(roomid, user);
-    console.log(`server listening on ${roomid} from ${user._id}`);
 
     const intervalId = startGameBroadcast(roomid, user);
 
@@ -115,7 +116,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
       intervalIds: [intervalId], // so we can delete intervals later
     };
     
-    console.log(`room ${roomid} created (size ${capacity}, ${theme})`);
+    console.log(`user ${user.name} created room ${roomid} (size ${capacity}, ${theme})`);
 
     return "success";
   } else if (rooms[roomid] == undefined && capacity == -1) { // if user entered an invalid room code
@@ -125,17 +126,17 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
       return "full";
     }
 
-    gameLogic.addPlayer(roomid, user._id);
+    gameLogic.addPlayer(roomid, user);
 
     initUserListener(roomid, user);
-    console.log(`server listening on ${roomid} from ${user._id}`);
+    console.log(`server listening on ${roomid} from ${user.name}`);
 
     rooms[roomid].users = [...rooms[roomid].users, userToSocketMap[user._id]];
 
     const intervalId = startGameBroadcast(roomid, user);
     rooms[roomid].intervalIds = [...rooms[roomid].intervalIds, intervalId];
 
-    console.log(`user ${user._id} joined room ${roomid}`);
+    console.log(`user ${user.name} joined room ${roomid}`);
 
     return "success";
   }
@@ -143,7 +144,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
 
 const removeUserFromRoom = (user, roomid) => {
   if(rooms[roomid]) {
-    gameLogic.removePlayer(roomid, user._id);
+    gameLogic.removePlayer(roomid, user);
 
     // delete listener for user updates
     deleteUserListener(roomid, user);
@@ -161,7 +162,7 @@ const removeUserFromRoom = (user, roomid) => {
 
     
     
-    console.log(`user ${user._id} left room ${roomid}`);
+    console.log(`user ${user.name} left room ${roomid}`);
 
   }
 };
@@ -191,6 +192,7 @@ module.exports = {
     io.on("connection", (socket) => {
       console.log(`socket has connected ${socket.id}`);
       socket.on("disconnect", (reason) => {
+        console.log(`disconnect reason: ${reason}`);
         const user = getUserFromSocketID(socket.id);
         removeUser(user, socket);
       });
