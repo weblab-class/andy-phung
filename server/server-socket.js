@@ -60,6 +60,7 @@ const removeUser = (user, socket) => {
 const startGameBroadcast = (roomid, user) => {
 
   const intervalId = setInterval(() => {
+    gameLogic.updateGameState(roomid);
     try {
       getSocketFromUserID(user._id).emit(roomid, {
         username: user.name,
@@ -86,8 +87,12 @@ const endGameBroadcast = (roomid, user, rooms) => {
 
 const initUserListener = (roomid, user) => {
   getSocketFromUserID(user._id).on(roomid, (clientUpdate) => {
-    console.log(clientUpdate.userTasks);
-    gameLogic.updateTasks(roomid, user, clientUpdate.userTasks);
+    if(clientUpdate.keepAlive) {
+
+    } else {
+      //console.log(`tasks completed: ${clientUpdate.userTasksCompleted}`);
+      gameLogic.updateTasks(roomid, user, clientUpdate.userTasks, clientUpdate.userTasksCompleted);
+    }
   }); 
 }
 
@@ -102,7 +107,7 @@ const deleteUserListener = (roomid, user) => {
 
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
   if(rooms[roomid] == undefined && capacity != -1) { // if user is trying to create a new room
-    gameLogic.initializeGame(roomid);
+    gameLogic.initializeGame(roomid, theme);
     gameLogic.addPlayer(roomid, user);
     
     initUserListener(roomid, user);

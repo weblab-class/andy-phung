@@ -6,8 +6,15 @@ socket.on("connect", () => {
   post("/api/initsocket", { socketid: socket.id });
 });
 
-export const handleUserTaskUpdate = (userTasks, roomid) => {
+export const handleUserTaskUpdate = (userTasks, userTasksCompleted, roomid) => {
   socket.emit(roomid, { 
     userTasks: userTasks,
+    userTasksCompleted: userTasksCompleted,
+  });
+};
+
+export const keepAlive = (roomid) => {
+  socket.emit(roomid, { 
+    keepAlive: true,
   });
 };

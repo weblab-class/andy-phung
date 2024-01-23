@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 
-import { socket, handleUserTaskUpdate } from "../../client-socket.js";
+import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post } from "../../utilities"; 
 import { Modal } from "../modules/util.js";
 
@@ -62,13 +62,15 @@ const OtherTaskList = (props) => { // just used to display tasks (scroll on over
     )
 };
 
-const UserTaskListItem = (props) => { // props: userTasks, setUserTasks, content, idx
+// props: userTasks, setUserTasks, userTasksCompleted, setUserTasksCompleted, content, idx
+const UserTaskListItem = (props) => { 
     const removeItem = () => {
         console.log(props.userTasks)
         const newArr = props.userTasks.filter((element, index) => {
             return index != props.idx;
         });
         props.setUserTasks(newArr);
+        props.setUserTasksCompleted(props.userTasksCompleted + 1);
     };
 
     return (
@@ -95,11 +97,18 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
         }
     };
 
+    const handleBlur = (event) => {
+        if (event.relatedTarget != null) {
+            setEditing(!editing);
+            console.log("blur firing?");
+        }   
+    }
+
     return (
         <div>
             { editing ?
                 (
-                <div onBlur={() => {setEditing(!editing);}} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
+                <div onBlur={handleBlur} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
                 <input autoFocus type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
                     newTask.current = event.target.value;
                 }}/>
@@ -119,7 +128,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
             }
             <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
-                    <UserTaskListItem userTasks={props.userTasks} setUserTasks={props.setUserTasks} content={content} idx={idx}/>
+                    <UserTaskListItem userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
                 ))}
             </div>
         </div>
@@ -129,11 +138,12 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
 
 const Tasks = (props) => { // wtf
     const [ userTasks, setUserTasks ] = useState([]);
+    const [ userTasksCompleted, setUserTasksCompleted ] = useState(0);
     const [ username, setUsername ] = useState(""); // TODO: remove once rest of api implemented
     const [ otherUserTasks, setOtherUserTasks] = useState([]); // array of userObjs; {username: "", tasks: []}
 
     useEffect(() => {
-        handleUserTaskUpdate(userTasks, props.currentRoomID);
+        handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
     }, [userTasks]);
 
     useEffect(() => { // only attach client to the room when we know currentRoomID is loaded in
@@ -146,6 +156,9 @@ const Tasks = (props) => { // wtf
                 setUsername(update.username);
                 console.log(update.username);
                 console.log(userObjs);
+
+                drawCanvas(update.gameState.canvas);
+                
             });
 
             console.log(`client listening on ${props.currentRoomID}`);  
@@ -156,7 +169,7 @@ const Tasks = (props) => { // wtf
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile name={username}/>
-                    <UserTaskList userTasks={userTasks} setUserTasks={setUserTasks}/>
+                    <UserTaskList userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
@@ -166,7 +179,6 @@ const Tasks = (props) => { // wtf
                         <OtherTaskList tasks={obj.tasks}/>
                     </div>)
                 })}
-                
         </div>
     </div>
 }
@@ -205,26 +217,29 @@ const Room = (props) => {
     const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
     // so we can force a rerender (to display join code) when we receive the roomid
 
-    const refCanvas = useRef(null) // so we can start rendering after everything loaded?
+    useEffect(() => {
+        if(internalCurrentRoomID != "") {
+            console.log("is this running???");
+            console.log(internalCurrentRoomID);
+        }
+        setInterval(() => {
+            keepAlive(internalCurrentRoomID);
+        }, 1000);
+    }, [internalCurrentRoomID]);
+
+    const refCanvas = useRef(null); // so we can start rendering after everything loaded?
     
 
     const openModal = (content) => {
         props.setModalOpen(true);
         props.setModalContent(content);
-    }
+    };
     
     const closeModal = () => {
         props.setModalOpen(false);
         props.setModalContent(<></>);
-    }
+    };
 
-    
-
-    useEffect(() => {
-        setInterval(() => {
-            drawCanvas({});
-        }, 1000);
-    }, [refCanvas]);
 
 
     return (
