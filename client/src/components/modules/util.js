@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Modal = (props) => { // 600px, 350px default
     console.log(props.width);
@@ -16,7 +16,28 @@ const CenterScreen = (props) => { // TODO: pass dims by props; 500px, 263px for 
     </div>
 }
 
+const SpinningCat = (props) => {
+    const [ spinClass, setSpinClass ] = useState(props.first);
 
-// <Collapsible/>; might j use ext pkg for this
+    const cats = ["cat-spin-1", "cat-spin-2", "cat-spin-3", "cat-spin-4", "cat-spin-5", "cat-spin-6"]; 
 
-export { CenterScreen, Modal }
+
+    useEffect(() => {
+        setInterval(() => {
+            setSpinClass(Math.floor(Math.random()*cats.length));
+        }, 10000);
+    }, []); // runs only once
+
+    useEffect(() => {
+        
+    }, [spinClass])
+
+
+    return (
+        <div className={`${cats[spinClass]} z-[-1]`}>
+            
+        </div>
+    )
+}
+
+export { CenterScreen, Modal, SpinningCat }

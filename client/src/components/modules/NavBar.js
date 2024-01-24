@@ -55,7 +55,7 @@ const SideBar = (props) => {
     </div>
     
     return (
-        <div className={`inline ${sidebarClass}`}>
+        <div className={`flex flex-col ${sidebarClass}`}>
             <svg onClick={() => {
                 props.toggleSidebar();
                 props.closeModal();

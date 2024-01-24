@@ -47,6 +47,43 @@
   animation: catSpin 20s linear infinite;
 }
 
+
+.cat-spin-4 {
+  opacity: 1;
+  position: absolute;
+  height: calc(361px / 4);
+  width: calc(452px / 4);
+  top: -200px; /* [-250, 0] */
+  left: -50px; /* [-250, 0] */
+  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199659866164314292/oye_standing.png?ex=65c35950&is=65b0e450&hm=c9b571b80cc5c40e121faf9d4fef4ae9d6e1d92f2260d4418937d81925cfc931&") no-repeat;
+  background-size: cover;
+  animation: catSpin 20s linear infinite;
+}
+
+.cat-spin-5 {
+  opacity: 1;
+  position: absolute;
+  height: calc(361px / 4);
+  width: calc(452px / 4);
+  top: -200px; /* [-250, 0] */
+  left: 250px; /* [-250, 0] */
+  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199658754875080704/comet_standing.png?ex=65c35847&is=65b0e347&hm=7a90550af6752df7ee5b96b880ccf221cf96f76b4505fb5b2e3db0b888a57fff&") no-repeat;
+  background-size: cover;
+  animation: catSpin 20s linear infinite;
+}
+
+.cat-spin-6 {
+  opacity: 1;
+  position: absolute;
+  height: calc(361px / 4);
+  width: calc(452px / 4);
+  top: -50px; /* [-250, 0] */
+  left: -100px; /* [-250, 0] */
+  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199659866164314292/oye_standing.png?ex=65c35950&is=65b0e450&hm=c9b571b80cc5c40e121faf9d4fef4ae9d6e1d92f2260d4418937d81925cfc931&") no-repeat;
+  background-size: cover;
+  animation: catSpin 20s linear infinite;
+}
+
 @keyframes catSpin {
   0% {
     transform: translate(0px, 0px) rotate(0deg);

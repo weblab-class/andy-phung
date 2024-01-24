@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { CenterScreen } from "../modules/util";
+import { CenterScreen, SpinningCat } from "../modules/util";
 
 import { post } from "../../utilities";
 
@@ -154,13 +154,14 @@ const CreateJoinRoom = (props) => {
     
 
     return (
-        <div className="h-full w-full absolute flex items-center justify-center">
+        <div className="h-full w-full absolute flex items-center justify-center overflow-hidden">
             <CenterScreen content={mapping[subScreen]}/>
             <div className="absolute h-full w-full z-[-2] flex items-center justify-center overflow-hidden">
                 <BgScrollContainers/>
                  {/* TODO: add a component w state var that has chance of being randomly changed
              to one of x cat spin classes (i.e. spinning diagonally down), on z-[-1]; same for other file */}
             </div>
+            <SpinningCat first={1}/>
         </div>
     );
 };
