@@ -36,7 +36,7 @@ if moving a toy, also returns position of "ghost" of toy on backdrop surface (ju
 
 
 const TasksProfile = (props) => {
-    return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-lg">
+    return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
         <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
         {props.name}
     </div>
@@ -45,7 +45,7 @@ const TasksProfile = (props) => {
 const OtherTaskListItem = (props) => { // props: content
     return (
         <div className="flex items-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]" title={props.content}>
-            <div className="flex items-center flex-nowrap w-[200px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+            <div className="border-white border-2 w-[250px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
                 {props.content}
             </div>  
         </div>
@@ -54,7 +54,7 @@ const OtherTaskListItem = (props) => { // props: content
 
 const OtherTaskList = (props) => { // just used to display tasks (scroll on overflow); props: tasks; for everyone else
     return (
-        <div className="w-full h-[160px] bg-slate-200 overflow-auto overflow-x-hidden z-[5]">
+        <div className="w-full h-[160px] overflow-auto overflow-x-hidden z-[5]">
             {props.tasks.map((content) => (
                 <OtherTaskListItem content={content}/>
             ))}
@@ -65,7 +65,7 @@ const OtherTaskList = (props) => { // just used to display tasks (scroll on over
 // props: userTasks, setUserTasks, userTasksCompleted, setUserTasksCompleted, content, idx
 const UserTaskListItem = (props) => { 
     const removeItem = () => {
-        console.log(props.userTasks)
+        //console.log(props.userTasks)
         const newArr = props.userTasks.filter((element, index) => {
             return index != props.idx;
         });
@@ -119,10 +119,13 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
                 }}/>
                 </div>
                 ) : (
-                <div className="flex items-center justify-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5] hover:cursor-pointer hover:opacity-75" onClick={() => {
+                <div className="flex items-center justify-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-[#f5f5f5] border-[#212529] border-4 z-[5] hover:cursor-pointer hover:opacity-75" onClick={() => {
                     setEditing(!editing);
                 }}>
-                    <img src={plus_icon} className="h-[10px] w-[10px]"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4" stroke="#212529" class="w-[15px] h-[15px]">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+
                 </div>
                 )
             }
@@ -144,6 +147,7 @@ const Tasks = (props) => { // wtf
 
     useEffect(() => {
         handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
+        console.log(`tasks completed: ${userTasksCompleted}`);
     }, [userTasks]);
 
     useEffect(() => { // only attach client to the room when we know currentRoomID is loaded in
@@ -155,7 +159,7 @@ const Tasks = (props) => { // wtf
                 setOtherUserTasks(userObjs);
                 setUsername(update.username);
                 console.log(update.username);
-                console.log(userObjs);
+                console.log(update.gameState.canvas);
 
                 drawCanvas(update.gameState.canvas);
                 
@@ -199,12 +203,16 @@ const ToolBar = (props) => {
     </div>
 
     return <div>
-        <img src={store_icon} className="absolute w-[42.5px] h-[42.5px] bottom-[65px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]" onClick={() => {
+        <svg onClick={() => {
             props.openModal(storeModal);
-        }}/>
-        <img src={music_icon} className="absolute w-[42.5px] h-[42.5px] bottom-[15px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]" onClick={() => {
+        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#f5f5f5" class="absolute w-[42.5px] h-[42.5px] bottom-[70px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+        </svg>
+        <svg onClick={() => {
             props.openModal(musicModal);
-        }}/>
+        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#f5f5f5" class="absolute w-[42.5px] h-[42.5px] bottom-[15px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
+        </svg>
     </div>
 
 }
@@ -243,18 +251,13 @@ const Room = (props) => {
 
 
     return (
-        <div className={`flex flex-col h-full w-full`}>
+        <div className={`absolute flex flex-col h-full w-full bg-[#232023]`}>
             <div className="h-full w-full z-0">
-                <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto border-red-400 border-4 z-0"/>
+                <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0"/>
             </div>
-            <img src={back_icon} width="30px" height="30px" className="absolute cursor-pointer z-[5]" onClick={() => {
-                post("/api/leaveroom", { roomid: props.currentRoomID });
-                props.setCurrentRoomID("");
-                navigate("/join");
-            }}/>
             <Tasks setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
-            {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-slate-400 bg-opacity-40 z-[19]" onClick={closeModal}></div>)}
+            {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
             
         </div>

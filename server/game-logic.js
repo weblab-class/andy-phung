@@ -9,7 +9,9 @@ how this works:
 - each has a certain duration
 - cats internally will either be doing something (walking, etc) or not (static animations)
 - (not eos) cats are idle and will stay where they are spawned; updateCatState will have a small
-chance of switching them to a different idle state
+chance of switching them to a different idle state; probabilities of switching are AIs that need to be 
+retrieved from API
+
 - (eos) at every frame, a global updateCatState function called on each cat will have a 
 a rlly small chance of switching cat's state to doing smth
 - in animation object in cat object, there should be frame number (0 when first switched to it 
@@ -23,74 +25,74 @@ const themeSurfaces = {
     "cafe": [ // list of points where cat can spawn (they just spawn for now)
         {
             x: 0,
-            y: 0,
+            y: -100,
         },
         {
-            x: -300,
-            y: 0,
+            x: -200,
+            y: -100,
         },
         {
-            x: -600,
-            y: 0,
+            x: -400,
+            y: -100,
         },
         {
-            x: 300,
-            y: 0,
+            x: 200,
+            y: -100,
         },
         {
-            x: 600,
-            y: 0,
+            x: 400,
+            y: -100,
         },
     ],
     "backyard": [
         {
             x: 0,
-            y: 0,
+            y: -100,
         },
         {
-            x: -300,
-            y: 0,
+            x: -200,
+            y: -100,
         },
         {
-            x: -600,
-            y: 0,
+            x: -400,
+            y: -100,
         },
         {
-            x: 300,
-            y: 0,
+            x: 200,
+            y: -100,
         },
         {
-            x: 600,
-            y: 0,
+            x: 400,
+            y: -100,
         },
     ],
     "hayden library": [
         {
             x: 0,
-            y: 0,
+            y: -100,
         },
         {
-            x: -300,
-            y: 0,
+            x: -200,
+            y: -100,
         },
         {
-            x: -600,
-            y: 0,
+            x: -400,
+            y: -100,
         },
         {
-            x: 300,
-            y: 0,
+            x: 200,
+            y: -100,
         },
         {
-            x: 600,
-            y: 0,
+            x: 400,
+            y: -100,
         },
     ],
 
 };
 
 catNames = [
-    "Comet", "Michi", "Mocha", "Luna", "Guangdang", "Gojo Satoru"
+    "Comet", "Michi", "Sukuna", "Oye", "Gojo Satoru"
 ];
 
 catStates = [
@@ -147,9 +149,10 @@ const updateGameState = (roomid) => {
         totalTasksCompleted = totalTasksCompleted + u.tasksCompleted;
     });
         if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
+            //console.log('spawning new cat');
         // spawning new cat (w not same name)
         while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
-            newCatName = catNames[getRandomInt(catNames.length-1)]
+            newCatName = catNames[getRandomInt(catNames.length)];
         };
         while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
             newCatPosition = getRandomInt(5);
@@ -158,7 +161,7 @@ const updateGameState = (roomid) => {
         gameStates[roomid].canvas.cats.push({
             name: newCatName,
             position: newCatPosition,
-            state: catStates[getRandomInt(catStates.length-1)],
+            state: catStates[getRandomInt(catStates.length)],
         });
     };
 

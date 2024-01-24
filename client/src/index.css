@@ -2,20 +2,36 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@font-face {
+  font-family: candy-beans;
+  src: url("./assets/text/Candy\ Beans.otf");
+}
+
+.candy-beans {
+  font-family: candy-beans;
+}
+
+.orange-cat-spin {
+  opacity: 1;
+  position: absolute;
+}
+
+
+
 .bg-scroll {
 	opacity: 1;
   position: absolute;
-  height: 230%;
-  width: 230;
+  height: 130vw;
+  width: 130vw;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg) scale(1);
   /* make BG larger than container */
   /* center bg in container - ratio of 150% */
-  background: url(https://cdn.discordapp.com/attachments/754243466241769515/1198095128863195236/testcatwall.png?ex=65bda80a&is=65ab330a&hm=c8d638e9dfb8b1afcc97852ec2f91015ed3877e09233a822e61dedf69a827b7d&) repeat;
-  background-repeat: repeat-x;
-  background-size: cover;
-  animation: backgroundScroll 25s linear infinite;
+  background: url(https://cdn.discordapp.com/attachments/754243466241769515/1199463016962474134/space_bg.png) repeat;
+  background-repeat: repeat;
+  background-size: 70%;
+  animation: backgroundScroll 50s linear infinite;
   transform-origin: center center;
 }
 
@@ -24,8 +40,8 @@
     background-position: 0 0;
   }
 	100% {
-    /* pattern bg texture is 1000x1000px */
-    background-position:1000px 0;
+    /* pattern bg texture is 1800x1800px */
+    background-position:1800px 0;
   }
 }
 
