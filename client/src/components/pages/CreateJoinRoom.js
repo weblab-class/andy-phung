@@ -87,8 +87,6 @@ const CreateJoinRoom = (props) => {
                     theme.current = event.target.value;
                 }}>
                     <option value="cafe">cafe</option>
-                    <option value="backyard">backyard</option>
-                    <option value="hayden library">hayden library</option>
                 </select>
             </div>
             

@@ -253,7 +253,7 @@ const Room = (props) => {
     return (
         <div className={`absolute flex flex-col h-full w-full bg-[#232023]`}>
             <div className="h-full w-full z-0">
-                <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0"/>
+                <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
             <Tasks setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
@@ -265,5 +265,3 @@ const Room = (props) => {
 }
 
 export default Room;
-
-//bg-slate-400

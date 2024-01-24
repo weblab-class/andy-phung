@@ -24,24 +24,24 @@ looping until animation switched
 const themeSurfaces = {
     "cafe": [ // list of points where cat can spawn (they just spawn for now)
         {
-            x: 0,
-            y: -100,
+            x: 45, // on fireplace
+            y: 3,
         },
         {
-            x: -200,
-            y: -100,
+            x: -450, // on counter
+            y: -1,
         },
         {
-            x: -400,
-            y: -100,
+            x: -100, // on pillow
+            y: -67,
         },
         {
-            x: 200,
-            y: -100,
+            x: 450, // on railing
+            y: -13,
         },
-        {
-            x: 400,
-            y: -100,
+        { 
+            x: 290, // next to pot
+            y: -84,
         },
     ],
     "backyard": [
