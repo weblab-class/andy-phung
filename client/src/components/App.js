@@ -47,6 +47,7 @@ const App = () => {
   const [modalContent, setModalContent] = useState(<></>); 
   const [sideBarOpen, setSideBarOpen] = useState(false); // lolol
   const [editing, setEditing] = useState([false, false, false]); // i hate this
+  // toggles edit fields in profile modal, only applies there
   const [userObj, setUserObj] = useState(defaultUserObj);
 
   const navigate = useNavigate();
