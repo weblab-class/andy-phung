@@ -22,11 +22,32 @@ import { get, post } from "../utilities";
  * Define the "App" component
  */
 const App = () => {
+  const defaultUserObj = {
+    user: {
+      name: "",
+      googleid: "",
+      biscuits: 0,
+      pfp: "",
+      bio: "",
+      pics: ["",],
+      favPics: ["",],
+      achievements: ["",],
+      tasksCompleted: 0,
+      sessionsCompleted: 0,
+      toysBought: ["",],
+      sfxVolume: 100,
+      musicVolume: 100,
+      notifications: true,
+      themesUnlocked: ["",],
+    }
+  };
   const [userId, setUserId] = useState(undefined);
   const [currentRoomID, setCurrentRoomID] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(<></>); 
   const [sideBarOpen, setSideBarOpen] = useState(false); // lolol
+  const [editing, setEditing] = useState([false, false, false]); // i hate this
+  const [userObj, setUserObj] = useState(defaultUserObj);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,9 +57,14 @@ const App = () => {
       if (user._id) {
         // they are registed in the database, and currently logged in.
         setUserId(user._id);
+        get("/api/user", {_id: user._id}).then((user) => {
+          setUserObj(user);
+          console.log(user);
+        });
         if(location.pathname == "/") { // kicking user into app if logged in and somehow still on this route
           navigate("/join");
         }
+
       }
     });
   }, []);
@@ -50,6 +76,10 @@ const App = () => {
     console.log(`Logged in as ${decodedCredential.name}`);
     post("/api/login", { token: userToken }).then((user) => {
       setUserId(user._id);
+      get("/api/user", {_id: user._id}).then((user) => {
+        setUserObj(user);
+        console.log(user);
+      });
       post("/api/initsocket", { socketid: socket.id });
       navigate("/join");
     });
@@ -73,9 +103,19 @@ const App = () => {
 
   */
 
+  const updateUserObj = (prop) => {
+    prop._id = userObj.user._id;
+    post("/api/user", prop).then((bleh) => {
+      get("/api/user", {_id: userObj.user._id}).then((user) => {
+        setUserObj(user);
+      })
+    });
+  }
+
   return (
     <>
-      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen}/>
+      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} userObj={userObj} updateUserObj={updateUserObj}
+      editing={editing} setEditing={setEditing}/>
       <Routes>
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const Modal = (props) => { // 600px, 350px default
-    console.log(props.width);
-    console.log(props.height);
+    //console.log(props.width);
+    //console.log(props.height);
     return props.visible && (
         <div className={`bg-[#E7AE6C] border-[#694F31] border-4 rounded-3xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[600px] h-[350px] z-30`}>
             {props.content}

@@ -77,8 +77,7 @@ const startGameBroadcast = (roomid, user) => {
 
 const endGameBroadcast = (roomid, user, rooms) => {
   for (var i = 0; i < rooms[roomid].users.length; i++) {
-    console.log(getUserFromSocketID(rooms[roomid].users[i].id)._id);
-    if(getUserFromSocketID(rooms[roomid].users[i].id)._id == user._id) { // dawg what am i looking at
+    if(rooms[roomid].users[i] == user._id) {
       clearInterval(rooms[roomid].intervalIds[i]);
       return rooms[roomid].intervalIds[i];
     }
@@ -115,7 +114,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
     const intervalId = startGameBroadcast(roomid, user);
 
     rooms[roomid] = {
-      users: [userToSocketMap[user._id]], // sockets and not users for some reason; FIXME?
+      users: [user._id], // sockets and not users for some reason; FIXME?
       capacity: capacity,
       theme: theme,
       intervalIds: [intervalId], // so we can delete intervals later
@@ -136,7 +135,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
     initUserListener(roomid, user);
     console.log(`server listening on ${roomid} from ${user.name}`);
 
-    rooms[roomid].users = [...rooms[roomid].users, userToSocketMap[user._id]];
+    rooms[roomid].users = [...rooms[roomid].users, user._id];
 
     const intervalId = startGameBroadcast(roomid, user);
     rooms[roomid].intervalIds = [...rooms[roomid].intervalIds, intervalId];
@@ -158,8 +157,8 @@ const removeUserFromRoom = (user, roomid) => {
     const intervalToDelete = endGameBroadcast(roomid, user, rooms);
 
     // delete user + their intervalId from gameObj
-    rooms[roomid].users = rooms[roomid].users.filter((socket) => {
-      socketToUserMap[socket.id]._id != user._id;
+    rooms[roomid].users = rooms[roomid].users.filter((id) => {
+      id != user._id;
     })
     rooms[roomid].intervalIds = rooms[roomid].intervalIds.filter((intervalId) => {
       intervalId != intervalToDelete;

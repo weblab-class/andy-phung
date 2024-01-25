@@ -12,9 +12,10 @@ const express = require("express");
 
 // import models so we can interact with the database
 const User = require("./models/user");
+const Cat = require("./models/cat");
 
 // import authentication library 
-const auth = require("./auth");
+const auth = require("./auth"); 
 
 // api endpoints: all these paths will be prefixed with "/api/" 
 const router = express.Router();
@@ -46,6 +47,30 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+
+router.get("/user", (req, res) => { // takes in mongodb _id
+  User.find({_id: req.query._id}).then((users) => {
+    // should be unique
+    res.send({user: users[0]});
+  });
+});
+
+router.post("/user", (req, res) => { // takes in mongodb _id + rest of props to update
+  //console.log(req.body._id);
+  User.find({_id: req.body._id}).then((users) => {
+    delete req.body._id;
+    users[0].update(req.body).then(() => {
+      res.send({});
+    });
+  });
+});
+
+router.get("/cat", (req, res) => { // takes in name of cat
+  Cat.find({name: req.query.name}).then((cats) => {
+    // should be only one cat
+    res.send({cat: cats[0]});
+  });
+});
 
 router.post("/joinroom", (req, res) => { // creating a room
   let roomid; 
