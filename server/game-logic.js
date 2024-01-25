@@ -20,6 +20,13 @@ looping until animation switched
 
 */
 
+const express = require("express");
+
+// import models so we can interact with the database
+const User = require("./models/user");
+const Cat = require("./models/cat");
+
+
 
 const themeSurfaces = {
     "cafe": [ // list of points where cat can spawn (they just spawn for now)
@@ -168,16 +175,20 @@ const updateGameState = (roomid) => {
 };
 
 const addPlayer = (roomid, user) => {
-    gameStates[roomid].users.push({
-        username: user.name,
-        tasks: [],
-        tasksCompleted: 0,
-    })
+    User.find({_id: user._id}).then((users) => {
+        gameStates[roomid].users.push({
+            username: user.name,
+            _id: user._id,
+            userObj: users[0],
+            tasks: [],
+            tasksCompleted: 0,
+        });
+    });
 };
 
 const removePlayer = (roomid, user) => {
     gameStates[roomid].users = gameStates[roomid].users.filter((n) => {
-        n.username != user.name;
+        n._id != user._id;
     });
 };
 

@@ -4,7 +4,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
-import { post } from "../../utilities"; 
+import { post, get } from "../../utilities"; 
 import { Modal } from "../modules/util.js";
 
 import { drawCanvas } from "../../canvasManager";
@@ -35,10 +35,12 @@ if moving a toy, also returns position of "ghost" of toy on backdrop surface (ju
 
 
 
-const TasksProfile = (props) => {
+const TasksProfile = (props) => { // takes in userObj
     return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
         <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
-        {props.name}
+        <div className="hover:cursor-pointer hover:opacity-70">
+            {props.userObj.user.name}
+        </div>
     </div>
 };
 
@@ -142,8 +144,8 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
 const Tasks = (props) => { // wtf
     const [ userTasks, setUserTasks ] = useState([]);
     const [ userTasksCompleted, setUserTasksCompleted ] = useState(0);
-    const [ username, setUsername ] = useState(""); // TODO: remove once rest of api implemented
     const [ otherUserTasks, setOtherUserTasks] = useState([]); // array of userObjs; {username: "", tasks: []}
+    const [ otherUserObjs, setOtherUserObjs ] = useState([]);
 
     useEffect(() => {
         handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
@@ -157,9 +159,9 @@ const Tasks = (props) => { // wtf
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
                 setOtherUserTasks(userObjs);
-                setUsername(update.username);
-                console.log(update.username);
-                console.log(update.gameState.canvas);
+
+                //console.log(update.username);
+                //console.log(update.gameState.canvas);
 
                 drawCanvas(update.gameState.canvas);
                 
@@ -172,14 +174,14 @@ const Tasks = (props) => { // wtf
     return <div className="absolute flex justify-between top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] pl-[20px] pr-[20px] pb-[20px] z-[5]">
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
-                    <TasksProfile name={username}/>
+                    <TasksProfile userObj={props.userObj}/>
                     <UserTaskList userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
                 {otherUserTasks.map((obj) => {
                     return (<div className="flex flex-col justify-between h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
-                        <TasksProfile name={obj.username}/>
+                        <TasksProfile userObj={obj.userObj}/>
                         <OtherTaskList tasks={obj.tasks}/>
                     </div>)
                 })}
@@ -255,7 +257,7 @@ const Room = (props) => {
             <div className="h-full w-full z-0">
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
-            <Tasks setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <Tasks userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>

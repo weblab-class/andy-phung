@@ -123,7 +123,7 @@ const App = () => {
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />
