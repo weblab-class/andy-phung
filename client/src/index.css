@@ -11,6 +11,15 @@
   font-family: candy-beans;
 }
 
+@font-face {
+  font-family: simply-rounded;
+  src: url("./assets/text/Simply\ Rounded.ttf");
+}
+
+.simply-rounded {
+  font-family: simply-rounded;
+}
+
 .cat-spin-1 {
   opacity: 1;
   position: absolute;

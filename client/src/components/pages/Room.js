@@ -45,7 +45,7 @@ const TasksProfile = (props) => {
 const OtherTaskListItem = (props) => { // props: content
     return (
         <div className="flex items-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]" title={props.content}>
-            <div className="border-white border-2 w-[250px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+            <div className="border-white border-2 w-[250px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap font-light simply-rounded text-[#212529]">
                 {props.content}
             </div>  
         </div>
@@ -75,7 +75,7 @@ const UserTaskListItem = (props) => {
 
     return (
         <div className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]" title={props.content}>
-            <div className="border-white border-2 w-[200px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap">
+            <div className="border-white border-2 w-[200px] h-full overflow-hidden overflow-ellipsis whitespace-nowrap font-light simply-rounded text-[#212529]">
                 {props.content}
             </div>     
             <img src={checkmark_icon} className="h-[20px] w-[20px] mr-[10px] hover:cursor-pointer hover:opacity-75" onClick={removeItem}/>
@@ -108,7 +108,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
         <div>
             { editing ?
                 (
-                <div onBlur={handleBlur} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-white border-black border-4 z-[5]">
+                <div onBlur={handleBlur} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5]">
                 <input autoFocus type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
                     newTask.current = event.target.value;
                 }}/>
@@ -119,7 +119,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
                 }}/>
                 </div>
                 ) : (
-                <div className="flex items-center justify-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-[#f5f5f5] border-[#212529] border-4 z-[5] hover:cursor-pointer hover:opacity-75" onClick={() => {
+                <div className="flex items-center justify-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5] hover:cursor-pointer hover:opacity-85" onClick={() => {
                     setEditing(!editing);
                 }}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4" stroke="#212529" class="w-[15px] h-[15px]">
