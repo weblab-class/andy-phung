@@ -40,6 +40,36 @@ const SpinningCat = (props) => {
     )
 }
 
+const AchievementCard = (props) => { // takes in name, img, opacity, desc
+    // just a sanity check for opacity i would not actually write this
+
+    return props.unlocked ? (
+        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
+            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-100`}/>
+            <div className="mt-[10px] overflow-auto">
+                <div className="font-bold">
+                    {props.name}
+                </div>
+                <div>
+                    {props.desc}
+                </div>
+            </div>
+        </div>
+    ) : (
+        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
+            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-40`}/>
+            <div className="mt-[10px] overflow-auto">
+                <div className="font-bold">
+                    {props.name}
+                </div>
+                <div>
+                    {props.desc}
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const achievements = [
     {
         name: "Feline Motivated",
@@ -203,10 +233,10 @@ const achievements = [
     {
         name: "Battle of the Strongest",
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Gojocat and Sukatna in the same session.",
+        desc: "Attract both Gojocat and Sukatna.",
         condition: {
         }
     },
 ]
 
-export { CenterScreen, Modal, SpinningCat, achievements }
+export { CenterScreen, Modal, SpinningCat, AchievementCard, achievements }

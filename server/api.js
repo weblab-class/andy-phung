@@ -60,11 +60,12 @@ router.post("/user", (req, res) => { // takes in mongodb _id + rest of props to 
   User.find({_id: req.body._id}).then((users) => {
     delete req.body._id;
 
-    if(req.body.append == "inc") { // assumes we take in only one prop
+    if(req.body.append == "inc") { // can take in multiple props
       delete req.body.append;
-      users[0].update({$inc: req.body}).then(() => {
+      users[0].update({$inc: req.body.inc}).then(() => {
         res.send({});
       });
+      
     } else if (req.body.append == "push") {
       delete req.body.append;
       users[0].update({$push: req.body}).then(() => {

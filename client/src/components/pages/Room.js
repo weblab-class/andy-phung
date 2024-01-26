@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
-import { Modal, achievements } from "../modules/util.js";
+import { Modal, AchievementCard, achievements } from "../modules/util.js";
 
 import { drawCanvas } from "../../canvasManager";
 
@@ -85,8 +85,23 @@ const TasksProfile = (props) => { // takes in userObj
                 </div>
             </div>
         </div>
-        <div className="flex items-center">
-            achievements section (put defining dict in util.js)
+        <div className="flex flex-col items-center">
+            <div className="">
+                achievements
+            </div>
+            <div className="flex flex-wrap justify-center">
+                {props.userObj.user.achievements.map((userAchievement) => {
+                    let achievement = achievements.filter((a) => {
+                        return a.name == userAchievement;
+                    });
+                    //console.log(achievement);
+                    if(achievement.length > 0) {
+                        return (
+                            <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} unlocked={true}/>
+                        )
+                    };
+                })}
+            </div>
         </div>
     </div>
 
@@ -130,9 +145,8 @@ const UserTaskListItem = (props) => {
         });
         props.setUserTasks(newArr);
         props.setUserTasksCompleted(props.userTasksCompleted + 1);
-        props.updateUserObj({_id: props.userObj.user._id, biscuits: Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2)), append: "inc"});
-        props.updateUserObj({_id: props.userObj.user._id, tasksCompleted: 1, append: "inc"});
-        props.updateAchievements(props.userObj);
+        props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2)), tasksCompleted: 1}, append: "inc"});
+        
     };
 
     return (
@@ -209,7 +223,7 @@ const Tasks = (props) => { // wtf
 
     useEffect(() => {
         handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
-        console.log(`tasks completed: ${userTasksCompleted}`);
+        //console.log(`tasks completed: ${userTasksCompleted}`);
     }, [userTasks]);
 
     useEffect(() => { // only attach client to the room when we know currentRoomID is loaded in

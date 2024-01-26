@@ -109,18 +109,25 @@ const App = () => {
 
   const updateAchievements = (userObj) => { // for now, only works for number achievements
     achievements.forEach((achievement) => {
+      //console.log(achievement.name);
       let achievementNotInUser = !userObj.user.achievements.includes(achievement.name);
       let satisfiesAchievementCondition;
       for (const [key, value] of Object.entries(achievement.condition)) {
         satisfiesAchievementCondition = userObj.user[key] >= value;
         if(achievementNotInUser && satisfiesAchievementCondition) {
-          updateUserObj({
+          let prop = {
             _id: userObj.user._id,
             append: "push",
             achievements: achievement.name,
+          };
+          prop._id = userObj.user._id;
+          post("/api/user", prop).then((bleh) => {
+            get("/api/user", {_id: userObj.user._id}).then((user) => {
+              setUserObj(user);
+              console.log(`got ${achievement.name}`);
+              return achievement;
+            })
           });
-          console.log(`got ${achievement.name}`);
-          return achievement;
         }
       }
     })

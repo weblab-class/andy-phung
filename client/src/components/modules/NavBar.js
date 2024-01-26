@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
-import { Modal, achievements } from "./util";
+import { Modal, AchievementCard, achievements } from "./util";
 import { post, get } from "../../utilities";
 
 
@@ -18,21 +18,7 @@ import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
 
 
-const AchievementCard = (props) => { // takes in name, img, opacity, desc
-    return (
-        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
-            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-[${props.opacity}%]`}/>
-            <div className="mt-[10px] overflow-auto">
-                <div className="font-bold">
-                    {props.name}
-                </div>
-                <div>
-                    {props.desc}
-                </div>
-            </div>
-        </div>
-    )
-}
+
 
 const SideBar = (props) => { // props.userObj.user._id
     
@@ -42,11 +28,6 @@ const SideBar = (props) => { // props.userObj.user._id
     let sfxEdit = props.userObj.user.sfxVolume;
     let musicEdit = props.userObj.user.musicVolume;
     let notificationsEdit = props.userObj.user.notifications;
-
-    const apiTest = () => {
-        console.log(props.userObj.user.name);
-        //post("/api/user", {_id: props.userObj.user._id, name: "rahh"});
-    };
 
     useEffect(() => { // ugh
         
@@ -158,10 +139,10 @@ const SideBar = (props) => { // props.userObj.user._id
                     let achievement = achievements.filter((a) => {
                         return a.name == userAchievement;
                     });
-                    console.log(achievement);
+                    //console.log(achievement);
                     if(achievement.length > 0) {
                         return (
-                            <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} opacity={100}/>
+                            <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} unlocked={true}/>
                         )
                     };
                 })}
@@ -181,9 +162,9 @@ const SideBar = (props) => { // props.userObj.user._id
             <div className="flex flex-wrap justify-center">
                 {achievements.map((a) => {
                     return props.userObj.user.achievements.includes(a.name) ? (
-                        <AchievementCard name={a.name} desc={a.desc} img={a.img} opacity={100}/>
+                        <AchievementCard name={a.name} desc={a.desc} img={a.img} unlocked={true}/>
                     ) : (
-                        <AchievementCard name={a.name} desc={a.desc} img={a.img} opacity={40}/>
+                        <AchievementCard name={a.name} desc={a.desc} img={a.img} unlocked={false}/>
                     )
                 })}
             </div>
@@ -281,7 +262,7 @@ const SideBar = (props) => { // props.userObj.user._id
                     props.closeModal();
     
                     props.leaveRoom();
-                    props.updateUserObj({_id: props.userObj.user._id, sessionsCompleted: 1, append: "inc"});
+                    props.updateUserObj({_id: props.userObj.user._id, inc: {sessionsCompleted: 1,}, append: "inc"});
                     }} className="flex items-center pt-[10px] pb-[10px] pl-[20px] cursor-pointer hover:bg-[#DBA568]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#694F31" className="w-[60px] h-[60px] rotate-180">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
