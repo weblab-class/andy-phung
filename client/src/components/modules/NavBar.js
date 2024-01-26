@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
-import { Modal } from "./util";
+import { Modal, achievements } from "./util";
 import { post, get } from "../../utilities";
 
 
@@ -16,6 +16,23 @@ import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 
 
 const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
+
+
+const AchievementCard = (props) => { // takes in name, img, opacity, desc
+    return (
+        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
+            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-[${props.opacity}%]`}/>
+            <div className="mt-[10px] overflow-auto">
+                <div className="font-bold">
+                    {props.name}
+                </div>
+                <div>
+                    {props.desc}
+                </div>
+            </div>
+        </div>
+    )
+}
 
 const SideBar = (props) => { // props.userObj.user._id
     
@@ -132,15 +149,48 @@ const SideBar = (props) => { // props.userObj.user._id
                 </div>
             </div>
         </div>
-        <div className="flex items-center">
-            achievements section (put defining dict in util.js)
+        <div className="flex flex-col items-center">
+            <div className="">
+                achievements
+            </div>
+            <div className="flex flex-wrap justify-center">
+                {props.userObj.user.achievements.map((userAchievement) => {
+                    let achievement = achievements.filter((a) => {
+                        return a.name == userAchievement;
+                    });
+                    console.log(achievement);
+                    if(achievement.length > 0) {
+                        return (
+                            <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} opacity={100}/>
+                        )
+                    };
+                })}
+            </div>
         </div>
     </div>
+
+
+
     const achievementsModal = <div className="flex flex-col">
-        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
+        <img src={close_icon} className="sticky ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        achievements modal
+        <div className="flex flex-col items-center">
+            <div>
+                Achievements
+            </div>
+            <div className="flex flex-wrap justify-center">
+                {achievements.map((a) => {
+                    return props.userObj.user.achievements.includes(a.name) ? (
+                        <AchievementCard name={a.name} desc={a.desc} img={a.img} opacity={100}/>
+                    ) : (
+                        <AchievementCard name={a.name} desc={a.desc} img={a.img} opacity={40}/>
+                    )
+                })}
+            </div>
+        </div>
     </div>
+
+
     const settingsModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
