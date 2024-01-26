@@ -59,6 +59,10 @@ const App = () => {
     header: "",
     body: "",
   });
+  const [biscuitsJustEarned, setBiscuitsJustEarned] = useState(0);
+  const [biscuitNotifVisible, setBiscuitNotifVisible] = useState(false);
+
+  // prop drilling goes crazyy
 
 
   const navigate = useNavigate();
@@ -123,15 +127,26 @@ const App = () => {
     setNotificationContent({
       header: props.header,
       body: props.body,
+      img: props.img,
     });
     await timeout(4000);
     setNotificationOpen(false);
     setNotificationContent({
       header: "",
       body: "",
+      img: "",
     });
     
   };
+
+  const createBiscuitNotification = async (biscuits) => {
+    setBiscuitNotifVisible(true);
+    setBiscuitsJustEarned(biscuits);
+    await timeout(100);
+    setBiscuitNotifVisible(false);
+  };
+
+  
 
   const updateAchievements = (userObj) => { // for now, only works for number achievements
     achievements.forEach((achievement) => {
@@ -151,7 +166,7 @@ const App = () => {
             get("/api/user", {_id: userObj.user._id}).then((user) => {
               setUserObj(user);
               console.log(`got ${achievement.name}`);
-              createNotification({header: achievement.name, body: achievement.desc});
+              createNotification({header: achievement.name, body: achievement.desc, img: achievement.img});
               return achievement;
             })
           });
@@ -183,7 +198,7 @@ const App = () => {
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />

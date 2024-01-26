@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
-import { Modal, AchievementCard, achievements } from "./util";
+import { Modal, AchievementCard, achievements, handleFileUpload } from "./util";
 import { post, get } from "../../utilities";
 
 
@@ -21,13 +21,10 @@ const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.goo
 
 
 const SideBar = (props) => { // props.userObj.user._id
-    
+    let pfpEdit = props.userObj.user.pfp;
+    let pfpBuffer;
     let nameEdit = props.userObj.user.name;
     let bioEdit = props.userObj.user.bio;
-
-    let sfxEdit = props.userObj.user.sfxVolume;
-    let musicEdit = props.userObj.user.musicVolume;
-    let notificationsEdit = props.userObj.user.notifications;
 
     useEffect(() => { // ugh
         
@@ -49,13 +46,18 @@ const SideBar = (props) => { // props.userObj.user._id
         <div className="flex flex-row mb-[7px]">
             {props.editing[0] ? (
                 <div className="flex flex-col items-center">
-                <img src={props.userObj.user.pfp} className="w-[90px] h-[90px] mr-[20px]"/>
-                <input className="font-sm" type="file" id="img" name="img" accept="image/*"></input>
+                <img src={pfpEdit} className="w-[90px] h-[90px] mr-[20px]"/>
+                <input onChange={(e) => {
+                    pfpBuffer = e.target.files[0];
+                    handleFileUpload(pfpBuffer).then((res) => {
+                        console.log(res);
+                    });
+                }} className="font-sm" type="file" id="img" name="img" accept="image/*"></input>
                 </div>
                 
             ) : (
                 <div className="flex flex-col items-center">
-                <img src={props.userObj.user.pfp} className="w-[90px] h-[90px] mr-[20px]"/>
+                <img src={pfpEdit} className="w-[90px] h-[90px] mr-[20px]"/>
                 <svg onClick={() => {
                             props.setEditing([!props.editing[0], props.editing[1], props.editing[2]]);
                         }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 hover:opacity-65 hover:cursor-pointer">

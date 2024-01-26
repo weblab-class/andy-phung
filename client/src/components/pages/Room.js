@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
-import { Modal, AchievementCard, achievements, Notification } from "../modules/util.js";
+import { Modal, AchievementCard, achievements, Notification, BiscuitsNotification } from "../modules/util.js";
 
 import { drawCanvas } from "../../canvasManager";
 
@@ -145,7 +145,9 @@ const UserTaskListItem = (props) => {
         });
         props.setUserTasks(newArr);
         props.setUserTasksCompleted(props.userTasksCompleted + 1);
-        props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2)), tasksCompleted: 1}, append: "inc"});
+        let biscuitsEarned = Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2));
+        props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: biscuitsEarned, tasksCompleted: 1}, append: "inc"});
+        props.createBiscuitNotification(biscuitsEarned);
         
     };
 
@@ -207,7 +209,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
             }
             <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
-                    <UserTaskListItem updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
+                    <UserTaskListItem createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
                 ))}
             </div>
         </div>
@@ -251,7 +253,7 @@ const Tasks = (props) => { // wtf
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
-                    <UserTaskList updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
+                    <UserTaskList createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
@@ -277,7 +279,10 @@ const ToolBar = (props) => {
     const musicModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        music modal
+        <audio autoPlay>
+            <source src="https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3" type="audio/mpeg"></source>
+        </audio>
+        you are my special 🗣️🗣️
     </div>
 
     return <div>
@@ -333,11 +338,12 @@ const Room = (props) => {
             <div className="h-full w-full z-0">
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
-            <Tasks updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <Tasks createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
-            <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body}/>
+            <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>
+            <BiscuitsNotification biscuits={props.biscuitsJustEarned} visible={props.biscuitNotifVisible}/>
         </div>
     )
 }

@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { ImgurClient } from 'imgur';
+
+import biscuit_icon from "../../assets/icons/biscuit_icon.png";
+
 
 const Modal = (props) => { // 600px, 350px default
     //console.log(props.width);
@@ -239,17 +243,22 @@ const achievements = [
     },
 ]
 
-const Notification = (props) => { // takes in notificationOpen, header, content
-    const notificationClass = props.notificationOpen ? "absolute top-[10px] right-0 bg-[#f5f5f5] h-[70px] w-[200px] z-[18] duration-300 transition-right" : "absolute top-[10px] right-[-200px] bg-[#f5f5f5] h-[70px] w-[200px] z-[18] duration-300 transition-right";
+const Notification = (props) => { // takes in notificationOpen, header, content, img
+    const notificationClass = props.notificationOpen ? "absolute top-[10px] right-0 bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right" : "absolute top-[10px] right-[-250px] bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right";
 
     return (
-        <div className={`${notificationClass}`}>
+        <div className={`$flex flex-row flex-nowrap items-center justify-center ${notificationClass} overflow-hidden`}>
             <div>
-                {props.header}
+                <img src={props.img} className="w-[50px] h-[50px] border-red-400 border-4"/>
             </div>
-            <div>
-                {props.body}
-            </div>
+            <div className="border-purple-400 border-4">
+                <div>
+                    {props.header}
+                </div>
+                <div>
+                    {props.body}
+                </div>
+            </div>  
         </div>
     )
 }
@@ -258,4 +267,28 @@ function timeout(delay) {
     return new Promise( res => setTimeout(res, delay) );
 }
 
-export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, achievements, timeout }
+const handleFileUpload = async (f) => {
+
+    const client = new ImgurClient({ clientId: "27696db6b038a30" });
+    client.upload({
+        image: f,
+    }).then((res) => {
+        console.log(res);
+        return res;
+    });
+
+};
+
+const BiscuitsNotification = (props) => { // takes in biscuits, visible
+    const biscuitsClass = (props.visible && props.biscuits != 0) ? "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-in opacity-100" : "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-out opacity-0";
+    return (
+        <div className={`${biscuitsClass}`}>
+            <div>
+                {`+${props.biscuits}`}
+            </div>
+        </div>
+    )
+}
+
+export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, achievements, timeout, handleFileUpload,
+BiscuitsNotification }
