@@ -268,7 +268,26 @@ const Tasks = (props) => { // wtf
 }
 
 
+
 const ToolBar = (props) => {
+    const [audioPlaying, setAudioPlaying] = useState(false);
+    let audio;
+    audio = new Audio("https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3");
+
+
+    const toggleAudio = () => {
+        console.log("does this run");
+        setAudioPlaying(!audioPlaying);
+    };
+
+    useEffect(() => {
+        console.log(audioPlaying);
+        if(audioPlaying) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }, [audioPlaying]);
 
     const storeModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -279,10 +298,10 @@ const ToolBar = (props) => {
     const musicModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        <audio autoPlay>
-            <source src="https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3" type="audio/mpeg"></source>
-        </audio>
-        you are my special 🗣️🗣️
+        <button onClick={toggleAudio} className="hover:opacity-65">
+            you are my special 🗣️🗣️
+        </button>
+        
     </div>
 
     return <div>
@@ -339,7 +358,7 @@ const Room = (props) => {
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
             <Tasks createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
-            <ToolBar openModal={openModal} closeModal={closeModal}/>
+            <ToolBar userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
             <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>

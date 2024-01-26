@@ -24,6 +24,7 @@
     "connect-ensure-login": "^0.1.1",
     "core-js": "^3.27.2",
     "crypto-random-string": "^5.0.0",
+    "expo-av": "^13.10.3",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "google-auth-library": "^8.7.0",
