@@ -179,7 +179,7 @@ const addPlayer = (roomid, user) => {
         gameStates[roomid].users.push({
             username: user.name,
             _id: user._id,
-            userObj: users[0],
+            userObj: {user: users[0]},
             tasks: [],
             tasksCompleted: 0,
         });

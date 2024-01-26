@@ -34,11 +34,68 @@ if moving a toy, also returns position of "ghost" of toy on backdrop surface (ju
 */
 
 
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ */
+function getRandomInt(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function log(num, base) {
+    if (num != 0) {
+        return (Math.log(num) / Math.log(base));
+    } else if (num == 0) {
+        return 0;
+    }
+}
+
 
 const TasksProfile = (props) => { // takes in userObj
+    const profileModal = <div className="flex flex-col items-center">
+        <img src={close_icon} className="absolute left-[15px] top-[15px] mb-[10px] cursor-pointer" width="20" 
+        height="20" onClick={props.closeModal}/>
+        <div className="h-[40px]">
+
+        </div>
+        <div className="flex flex-row mb-[7px]">
+            <img src={props.userObj.user.pfp} className="w-[90px] h-[90px] mr-[20px]"/>
+            <div className="flex flex-col">
+                <div className="flex flex-row items-center mb-[5px]">
+                    <div className="text-3xl font-bold mr-[2px]">
+                        {props.userObj.user.name}
+                    </div>
+                </div>
+                <div className="flex flex-row items-center">
+                    <div className="mr-[2px]">
+                        {props.userObj.user.bio}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="flex flex-col items-center mb-[7px]">
+            <div>
+                stats
+            </div>
+            <div className="flex flex-row">
+                <div className="mr-[7px]">
+                    tasks finished: {props.userObj.user.tasksCompleted}
+                </div>
+                <div>
+                    sessions completed: {props.userObj.user.sessionsCompleted}
+                </div>
+            </div>
+        </div>
+        <div className="flex items-center">
+            achievements section (put defining dict in util.js)
+        </div>
+    </div>
+
+    console.log(`props userobj ${props.userObj.user}`);
     return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
         <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
-        <div className="hover:cursor-pointer hover:opacity-70">
+        <div onClick={() => {
+            props.openModal(profileModal);
+        }} className="hover:cursor-pointer hover:opacity-70">
             {props.userObj.user.name}
         </div>
     </div>
@@ -73,6 +130,8 @@ const UserTaskListItem = (props) => {
         });
         props.setUserTasks(newArr);
         props.setUserTasksCompleted(props.userTasksCompleted + 1);
+        props.updateUserObj({_id: props.userObj.user._id, biscuits: Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2)), append: "inc"});
+        props.updateUserObj({_id: props.userObj.user._id, tasksCompleted: 1, append: "inc"});
     };
 
     return (
@@ -133,7 +192,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
             }
             <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
-                    <UserTaskListItem userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
+                    <UserTaskListItem userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
                 ))}
             </div>
         </div>
@@ -174,15 +233,15 @@ const Tasks = (props) => { // wtf
     return <div className="absolute flex justify-between top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] pl-[20px] pr-[20px] pb-[20px] z-[5]">
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
-                    <TasksProfile userObj={props.userObj}/>
-                    <UserTaskList userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
+                    <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
+                    <UserTaskList userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
                 {otherUserTasks.map((obj) => {
                     return (<div className="flex flex-col justify-between h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
-                        <TasksProfile userObj={obj.userObj}/>
-                        <OtherTaskList tasks={obj.tasks}/>
+                        <TasksProfile userObj={obj.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
+                        <OtherTaskList userObj={props.userObj} tasks={obj.tasks}/>
                     </div>)
                 })}
         </div>
@@ -257,7 +316,7 @@ const Room = (props) => {
             <div className="h-full w-full z-0">
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
-            <Tasks userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <Tasks openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>

@@ -59,10 +59,27 @@ router.post("/user", (req, res) => { // takes in mongodb _id + rest of props to 
   //console.log(req.body._id);
   User.find({_id: req.body._id}).then((users) => {
     delete req.body._id;
-    users[0].update(req.body).then(() => {
-      res.send({});
-    });
+
+    if(req.body.append == "inc") { // assumes we take in only one prop
+      delete req.body.append;
+      users[0].update({$inc: req.body}).then(() => {
+        res.send({});
+      });
+    } else if (req.body.append == "push") {
+      delete req.body.append;
+      users[0].update({$push: req.body}).then(() => {
+        res.send({});
+      });
+    } else {
+      users[0].update(req.body).then(() => {
+        res.send({});
+      })
+    };
+
   });
+
+  
+  
 });
 
 router.get("/cat", (req, res) => { // takes in name of cat

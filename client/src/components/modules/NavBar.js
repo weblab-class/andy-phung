@@ -11,11 +11,8 @@ import { post, get } from "../../utilities";
 import menu_icon from "../../assets/icons/menu_icon.png";
 import menu_icon_hover from "../../assets/icons/menu_icon_hover_2.png";
 import close_icon from "../../assets/icons/close_icon.png";
-import profile_icon from "../../assets/icons/profile_icon.png";
-import achievements_icon from "../../assets/icons/achievements_icon.png";
-import settings_icon from "../../assets/icons/settings_icon.png";
 import purrductive_logo from "../../assets/purrductive_logo_2.png";
-import placeholderpfp from "../../assets/placeholderpfp.png";
+import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 
 
 const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
@@ -234,6 +231,7 @@ const SideBar = (props) => { // props.userObj.user._id
                     props.closeModal();
     
                     props.leaveRoom();
+                    props.updateUserObj({_id: props.userObj.user._id, sessionsCompleted: 1, append: "inc"});
                     }} className="flex items-center pt-[10px] pb-[10px] pl-[20px] cursor-pointer hover:bg-[#DBA568]">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#694F31" className="w-[60px] h-[60px] rotate-180">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
@@ -248,6 +246,17 @@ const SideBar = (props) => { // props.userObj.user._id
         </div>
     )
 }
+
+const Biscuits = (props) => {
+    return (    
+        <div className="absolute flex flex-row items-center flex-nowrap left-[10px] bottom-[10px] text-[#f5f5f5] candy-beans text-2xl z-[9]">
+            <img src={biscuit_icon} className="w-[27px] h-[27px] mr-[6px]"/>
+            <div>
+                {props.userObj.user.biscuits}
+            </div>
+        </div>
+    );
+  };
 
 const NavBar = (props) => { 
     const [modalId, setModalId] = useState(""); // only applies to navbar/sidebar modals
@@ -298,6 +307,7 @@ const NavBar = (props) => {
             </div>
             <SideBar modalId={modalId} setModalId={setModalId} modalContent={props.modalContent} updateUserObj={props.updateUserObj} modalOpen={props.modalOpen} editing={props.editing} setEditing={props.setEditing} isOpen={props.sideBarOpen} toggleSidebar={handleSidebarClick} openModal={openModal} closeModal={closeModal} handleLogout={props.handleLogout} currentRoomID={props.currentRoomID} leaveRoom={leaveRoom} userObj={props.userObj} setUserObj={props.setUserObj}/>
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
+            <Biscuits userObj={props.userObj}/>
         </>
         
     )

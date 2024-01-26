@@ -96,6 +96,7 @@ const App = () => {
   - modal / sidebar: z-30
   - greyout (click anywhere to close): z-20
   - navbar: z-10
+  - biscuits: z-9
   - content: z-0
 
   see NavBar.js for defs
@@ -112,6 +113,8 @@ const App = () => {
       })
     });
   }
+
+  
 
   return (
     <>
