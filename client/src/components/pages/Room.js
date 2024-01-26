@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
-import { Modal } from "../modules/util.js";
+import { Modal, achievements } from "../modules/util.js";
 
 import { drawCanvas } from "../../canvasManager";
 
@@ -90,7 +90,7 @@ const TasksProfile = (props) => { // takes in userObj
         </div>
     </div>
 
-    console.log(`props userobj ${props.userObj.user}`);
+    //console.log(`props userobj ${props.userObj.user}`);
     return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
         <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
         <div onClick={() => {
@@ -132,6 +132,7 @@ const UserTaskListItem = (props) => {
         props.setUserTasksCompleted(props.userTasksCompleted + 1);
         props.updateUserObj({_id: props.userObj.user._id, biscuits: Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2)), append: "inc"});
         props.updateUserObj({_id: props.userObj.user._id, tasksCompleted: 1, append: "inc"});
+        props.updateAchievements(props.userObj);
     };
 
     return (
@@ -192,7 +193,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
             }
             <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
-                    <UserTaskListItem userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
+                    <UserTaskListItem updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
                 ))}
             </div>
         </div>
@@ -234,7 +235,7 @@ const Tasks = (props) => { // wtf
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
-                    <UserTaskList userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
+                    <UserTaskList updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
@@ -316,7 +317,7 @@ const Room = (props) => {
             <div className="h-full w-full z-0">
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
-            <Tasks openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <Tasks updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>

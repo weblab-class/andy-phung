@@ -18,6 +18,8 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 
+import { achievements } from "./modules/util.js";
+
 /**
  * Define the "App" component
  */
@@ -105,11 +107,32 @@ const App = () => {
 
   */
 
-  const updateUserObj = (prop) => {
+  const updateAchievements = (userObj) => { // for now, only works for number achievements
+    achievements.forEach((achievement) => {
+      let achievementNotInUser = !userObj.user.achievements.includes(achievement.name);
+      let satisfiesAchievementCondition;
+      for (const [key, value] of Object.entries(achievement.condition)) {
+        satisfiesAchievementCondition = userObj.user[key] >= value;
+        if(achievementNotInUser && satisfiesAchievementCondition) {
+          updateUserObj({
+            _id: userObj.user._id,
+            append: "push",
+            achievements: achievement.name,
+          });
+          console.log(`got ${achievement.name}`);
+          return achievement;
+        }
+      }
+    })
+    return {};
+  }
+
+  const updateUserObj = (prop) => { // also updates achievements
     prop._id = userObj.user._id;
     post("/api/user", prop).then((bleh) => {
       get("/api/user", {_id: userObj.user._id}).then((user) => {
         setUserObj(user);
+        updateAchievements(user);
       })
     });
   }
@@ -126,7 +149,7 @@ const App = () => {
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />

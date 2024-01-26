@@ -55,8 +55,8 @@ export const drawCanvas = (drawState) => { // canvas dims are 1200 x 250; receiv
   const allLoaded = () => {
     catImages.forEach((im) => {
       let { drawX, drawY } = convertCoord(im[1], im[2]);
-      console.log(`drawX: ${drawX}`);
-      console.log(`drawY: ${drawY}`);
+      //console.log(`drawX: ${drawX}`);
+      //console.log(`drawY: ${drawY}`);
       context.drawImage(im[0], drawX - catDimX/2, drawY - catDimY/2, catDimX, catDimY);
     })
   }
