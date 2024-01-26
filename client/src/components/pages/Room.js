@@ -232,6 +232,8 @@ const Tasks = (props) => { // wtf
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
+                const catObjs = update.gameState.canvas.cats;
+
                 setOtherUserTasks(userObjs);
 
                 //console.log(update.username);
