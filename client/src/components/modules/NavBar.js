@@ -183,7 +183,7 @@ const SideBar = (props) => { // props.userObj.user._id
                     return props.userObj.user.achievements.includes(a.name) ? (
                         <AchievementCard name={a.name} desc={a.desc} img={a.img} unlocked={true}/>
                     ) : (
-                        <AchievementCard name={a.name} desc={a.desc} img={a.img} unlocked={false}/>
+                        <AchievementCard name={"???"} desc={a.desc} img={a.img} unlocked={false}/>
                     )
                 })}
             </div>
