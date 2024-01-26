@@ -40,4 +40,117 @@ const SpinningCat = (props) => {
     )
 }
 
+const achievements = [
+    {
+        name: "Feline Motivated",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 1 task.",
+    },
+    {
+        name: "Not Kitten",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 5 tasks.",
+    },
+    {
+        name: "Litter-ally Grinding",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 20 tasks.",
+    },
+    {
+        name: "Fur Real?",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 50 tasks.",
+    },
+    {
+        name: "Maximum Outpurrt",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 100 tasks.",
+    },
+    {
+        name: "Purrductive",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Finish 200 tasks.",
+    },
+    {
+        name: "Paws-itively Awful",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 5 sessions.",
+    },
+    {
+        name: "Cat-thartic Screaming",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 10 sessions.",
+    },
+    {
+        name: "Cat-astrophe",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 20 sessions.",
+    },
+    {
+        name: "I Hate This Fur-cking Place",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 40 sessions.",
+    },
+    {
+        name: "Fur-midable Work Ethic",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 80 sessions.",
+    },
+    {
+        name: "Stand proud, you're strong",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Complete 120 sessions.",
+    },
+    {
+        name: "Nyani?",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Purchase 1 toy.",
+    },
+    {
+        name: "Hiss-terical",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Purchase 5 toys.",
+    },
+    {
+        name: "Meow and Fur-ever",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Purchase 10 toys.",
+    },
+    {
+        name: "I Have Truly Found Purr-adise",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Purchase 20 toys.",
+    },
+    {
+        name: "The Tuxedo Turns Up",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Attract Comet!",
+    },
+    {
+        name: "Michi",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Attract Michi!",
+    },
+    {
+        name: "oye.",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "attract oye",
+    },
+    {
+        name: "Nah, I'd win",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Attract Gojocat!",
+    },
+    {
+        name: "Sukatna, King of Curses",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Attract Sukatna!",
+    },
+    {
+        name: "Sukatna, King of Curses",
+        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        desc: "Attract Gojocat and Sukatna in the same session.",
+    },
+]
+
 export { CenterScreen, Modal, SpinningCat }
