@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
-import { Modal, AchievementCard, achievements } from "../modules/util.js";
+import { Modal, AchievementCard, achievements, Notification } from "../modules/util.js";
 
 import { drawCanvas } from "../../canvasManager";
 
@@ -327,7 +327,7 @@ const Room = (props) => {
 
 
     return (
-        <div className={`absolute flex flex-col h-full w-full bg-[#232023]`}>
+        <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
             <div className="h-full w-full z-0">
                 <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
             </div>
@@ -335,7 +335,7 @@ const Room = (props) => {
             <ToolBar openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
-            
+            <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body}/>
         </div>
     )
 }

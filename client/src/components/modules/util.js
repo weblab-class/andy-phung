@@ -239,4 +239,23 @@ const achievements = [
     },
 ]
 
-export { CenterScreen, Modal, SpinningCat, AchievementCard, achievements }
+const Notification = (props) => { // takes in notificationOpen, header, content
+    const notificationClass = props.notificationOpen ? "absolute top-[10px] right-0 bg-[#f5f5f5] h-[70px] w-[200px] z-[18] duration-300 transition-right" : "absolute top-[10px] right-[-200px] bg-[#f5f5f5] h-[70px] w-[200px] z-[18] duration-300 transition-right";
+
+    return (
+        <div className={`${notificationClass}`}>
+            <div>
+                {props.header}
+            </div>
+            <div>
+                {props.body}
+            </div>
+        </div>
+    )
+}
+
+function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+}
+
+export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, achievements, timeout }

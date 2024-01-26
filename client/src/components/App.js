@@ -18,7 +18,7 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 
-import { achievements } from "./modules/util.js";
+import { achievements, Notification, timeout } from "./modules/util.js";
 
 /**
  * Define the "App" component
@@ -43,6 +43,9 @@ const App = () => {
       themesUnlocked: ["",],
     }
   };
+
+  // wtfff waht is this
+  // (too lazy to switch to contexts but still think this is bad)
   const [userId, setUserId] = useState(undefined);
   const [currentRoomID, setCurrentRoomID] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -51,6 +54,12 @@ const App = () => {
   const [editing, setEditing] = useState([false, false, false]); // i hate this
   // toggles edit fields in profile modal, only applies there
   const [userObj, setUserObj] = useState(defaultUserObj);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationContent, setNotificationContent] = useState({
+    header: "",
+    body: "",
+  });
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -95,8 +104,10 @@ const App = () => {
 
   /*
   app layers:
+  
   - modal / sidebar: z-30
   - greyout (click anywhere to close): z-20
+  - notification: z-19
   - navbar: z-10
   - biscuits: z-9
   - content: z-0
@@ -106,6 +117,21 @@ const App = () => {
   TODO: maybe use useContext/useReducer for App states
 
   */
+
+  const createNotification = async (props) => { // this isnt a component but wtv idc
+    setNotificationOpen(true);
+    setNotificationContent({
+      header: props.header,
+      body: props.body,
+    });
+    await timeout(4000);
+    setNotificationOpen(false);
+    setNotificationContent({
+      header: "",
+      body: "",
+    });
+    
+  };
 
   const updateAchievements = (userObj) => { // for now, only works for number achievements
     achievements.forEach((achievement) => {
@@ -125,6 +151,7 @@ const App = () => {
             get("/api/user", {_id: userObj.user._id}).then((user) => {
               setUserObj(user);
               console.log(`got ${achievement.name}`);
+              createNotification({header: achievement.name, body: achievement.desc});
               return achievement;
             })
           });
@@ -156,7 +183,7 @@ const App = () => {
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />
