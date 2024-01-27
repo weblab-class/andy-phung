@@ -1,9 +1,14 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { AnimatedSprite } from '@pixi/react';
 import { Texture } from 'pixi.js';
 
 
 const MemoizedSprite = memo((props) => { // j takes in textures, x, y
+
+    useEffect(() => {
+        console.log(`${props.x} ${props.y} rerender forced`)
+    });
+
     return (
             <AnimatedSprite
             width={84.75}

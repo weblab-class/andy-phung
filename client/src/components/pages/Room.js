@@ -327,20 +327,28 @@ const ToolBar = (props) => {
 }
 
 const compareProps = (oldProps, newProps) => {
-  // TODO for wnv: impl this (hint not length, need to deep compare equality of each obj in props.animatedSprites + compare theme)
   // then figure out why memoizedsprites aren't loading
-  // 
+  let returnVal = true;
+  if(oldProps.theme != newProps.theme) {
+    returnVal = false;
+  }
+  if(oldProps.animatedSprites.length != newProps.animatedSprites.length) {
+    returnVal = false;
+  } else {
+    oldProps.animatedSprites.forEach((i, idx) => {
+        if(oldProps.animatedSprites[idx].state != newProps.animatedSprites[idx].state) {
+            returnVal = false;
+        }
+    });
+  }
+  return returnVal;
 }
 
 // idt memo does anything here??? 
 // fallback: define five memoized animatedsprites and j pass in data like that
 // (wouldn't update same values bc new cats are appended to catUpdates obj on backend)
 const PixiCanvas = memo((props) => { // takes in animatedSprites, theme
-    // TODO: process catUpdates
     // turn into array of objs each containing texture arrays, x, y
-    if (props.animatedSprites) {
-        //console.log(props.animatedSprites);
-    };
 
     const testTextures = [
         Texture.from("https://cdn.discordapp.com/attachments/754243466241769515/1199658754052988938/comet_sitting.png"),
@@ -399,21 +407,22 @@ const Room = (props) => {
         // TODO: memoize + use array.map to generate AnimatedSprites instead (here !!)
         //console.log(animatedSprites);
         let spriteObjs = cats.map((cat) => {
+            let state = cat.state;
             let xPos = themeSurfaces[theme][cat.position].x;
             let yPos = themeSurfaces[theme][cat.position].y;
             let textures = catAnimationDict[cat.name][cat.state].map((t) => {
                 return Texture.from(t);
             });
         
-        return {
-            textures: textures, // for now
-            x: xPos,
-            y: yPos,
-        };
-
+            return {
+                state: state,
+                textures: textures, // for now
+                x: xPos,
+                y: yPos,
+            };
       });
     
-        setAnimatedSprites([...animatedSprites, spriteObjs]);
+        setAnimatedSprites(spriteObjs);
 
         
         // holyy shit im losing it rn
