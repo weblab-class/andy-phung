@@ -92,6 +92,7 @@ const CreateJoinRoom = (props) => {
             
             <Link to="/join/room" className="flex items-center justify-center border-2 border-black bg-[#FAB566] hover:bg-[#F6AA54] rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
+                props.setTheme(theme.current);
                 post("/api/joinroom", {
                     init: true,
                     capacity: capacity.current,

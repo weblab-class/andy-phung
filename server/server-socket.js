@@ -63,9 +63,9 @@ const startGameBroadcast = (roomid, user) => {
     let catUpdates = gameLogic.updateGameState(roomid);
     try {
       getSocketFromUserID(user._id).emit(roomid, {
-        username: user.name,
+        username: user.name, 
         gameState: gameLogic.gameStates[roomid],
-        catUpdates: catUpdates, // deprecated, gameLogic.gameStates[roomid].canvas.cats is better
+        catUpdates: catUpdates, 
       });
     } catch (err) {
       console.log("user closed tab");
@@ -115,11 +115,10 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
     const intervalId = startGameBroadcast(roomid, user);
 
     rooms[roomid] = {
-      users: [user._id], // sockets and not users for some reason; FIXME?
+      users: [user._id], 
       capacity: capacity,
       theme: theme,
       intervalIds: [intervalId], // so we can delete intervals later
-      frame: 0,
     };
     
     console.log(`user ${user.name} created room ${roomid} (size ${capacity}, ${theme})`);

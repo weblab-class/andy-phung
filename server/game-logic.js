@@ -176,6 +176,7 @@ const initializeGame = (roomid, theme) => {
                 state: catStates[getRandomInt(catStates.length-1)],
             }], 
         },
+        frame: 0,
     }
 };
 

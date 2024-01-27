@@ -47,12 +47,6 @@ const App = () => {
     }
   };
 
-  const defaultCanvasObj = {
-    theme: "cafe",
-    surfaces: {},
-    cats: [],
-  }
-
   // wtfff waht is this
   // (too lazy to switch to contexts but still think this is bad)
   const [userId, setUserId] = useState(undefined);
@@ -70,6 +64,7 @@ const App = () => {
   });
   const [biscuitsJustEarned, setBiscuitsJustEarned] = useState(0);
   const [biscuitNotifVisible, setBiscuitNotifVisible] = useState(false);
+  const [theme, setTheme] = useState("cafe");
 
   // prop drilling goes crazyy
 
@@ -208,9 +203,9 @@ const App = () => {
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
-        <Route path="/join" element={<CreateJoinRoom setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
+        <Route path="/join" element={<CreateJoinRoom setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room theme={theme} setTheme={setTheme} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />

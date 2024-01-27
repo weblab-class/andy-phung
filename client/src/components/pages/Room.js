@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState, useReducer, useMemo, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-import { Stage, Container } from '@pixi/react';
-import { Texture } from 'pixi.js';
-
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
+
+import { updateCanvasState } from "../../canvasManager.js";
 import { Modal, AchievementCard, Notification, BiscuitsNotification } from "../modules/util.js";
 import { achievements, catAnimationDict, themeSurfaces } from "../modules/data.js";
-import { MemoizedSprite } from "../modules/MemoizedSprite.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
@@ -240,13 +237,12 @@ const Tasks = (props) => { // wtf
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
-                //console.log(`ugh ${update.catUpdates}`);
-                props.updateCanvasState(update.gameState.canvas.cats, update.gameState.canvas.theme);
-
+                updateCanvasState(update.gameState.canvas, update.gameState.frame);
                 setOtherUserTasks(userObjs);
 
-                //console.log(update.username);
-                //console.log(update.gameState.canvas);
+                if(props.theme != update.gameState.canvas.theme) {
+                    props.setTheme(update.gameState.canvas.theme);
+                }
 
                 
                 
@@ -260,7 +256,7 @@ const Tasks = (props) => { // wtf
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
-                    <UserTaskList updateCanvasState={props.updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
+                    <UserTaskList createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
@@ -326,50 +322,11 @@ const ToolBar = (props) => {
 
 }
 
-const compareProps = (oldProps, newProps) => {
-  // then figure out why memoizedsprites aren't loading
-  let returnVal = true;
-  if(oldProps.theme != newProps.theme) {
-    returnVal = false;
-  }
-  if(oldProps.animatedSprites.length != newProps.animatedSprites.length) {
-    returnVal = false;
-  } else {
-    oldProps.animatedSprites.forEach((i, idx) => {
-        if(oldProps.animatedSprites[idx].state != newProps.animatedSprites[idx].state) {
-            returnVal = false;
-        }
-    });
-  }
-  return returnVal;
-}
-
-// idt memo does anything here??? 
-// fallback: define five memoized animatedsprites and j pass in data like that
-// (wouldn't update same values bc new cats are appended to catUpdates obj on backend)
-const PixiCanvas = memo((props) => { // takes in animatedSprites, theme
-    // turn into array of objs each containing texture arrays, x, y
-
-    const testTextures = [
-        Texture.from("https://cdn.discordapp.com/attachments/754243466241769515/1199658754052988938/comet_sitting.png"),
-        Texture.from("https://cdn.discordapp.com/attachments/754243466241769515/1200723809557291008/biscuit_icon.png"),
-    ]
-
+const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
     return (
-        <Stage className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg" width={1200} height={250} options={{ backgroundAlpha: 0 }}>
-            <Container position={[600, 125]}>
-                {props.animatedSprites.length >= 1 ? (<MemoizedSprite textures={props.animatedSprites[0].textures} x={props.animatedSprites[0].x} y={props.animatedSprites[0].y}/>) : (<></>)}
-                {props.animatedSprites.length >= 2 ? (<MemoizedSprite textures={props.animatedSprites[1].textures} x={props.animatedSprites[1].x} y={props.animatedSprites[1].y}/>) : (<></>)}
-                {props.animatedSprites.length >= 3 ? (<MemoizedSprite textures={props.animatedSprites[2].textures} x={props.animatedSprites[2].x} y={props.animatedSprites[2].y}/>) : (<></>)}
-                {props.animatedSprites.length >= 4 ? (<MemoizedSprite textures={props.animatedSprites[3].textures} x={props.animatedSprites[3].x} y={props.animatedSprites[3].y}/>) : (<></>)}
-                {props.animatedSprites.length >= 5 ? (<MemoizedSprite textures={props.animatedSprites[4].textures} x={props.animatedSprites[4].x} y={props.animatedSprites[4].y}/>) : (<></>)}       
-            </Container>
-        </Stage>
-    );
-}, compareProps);
-
-
-
+        <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
+    )
+}
 
 const Room = (props) => {
     const navigate = useNavigate(); 
@@ -399,45 +356,13 @@ const Room = (props) => {
         props.setModalContent(<></>);
     };
 
-    const [animatedSprites, setAnimatedSprites] = useState([]); 
-    // TODO: needs to be reset when leaving room
-    const [theme, setTheme] = useState("cafe"); // don't reset this, gets set when joining room
-
-    const updateCanvasState = (cats, theme) => { // canvas dims are 1200 x 250; receives update.gameState.canvas
-        // TODO: memoize + use array.map to generate AnimatedSprites instead (here !!)
-        //console.log(animatedSprites);
-        let spriteObjs = cats.map((cat) => {
-            let state = cat.state;
-            let xPos = themeSurfaces[theme][cat.position].x;
-            let yPos = themeSurfaces[theme][cat.position].y;
-            let textures = catAnimationDict[cat.name][cat.state].map((t) => {
-                return Texture.from(t);
-            });
-        
-            return {
-                state: state,
-                textures: textures, // for now
-                x: xPos,
-                y: yPos,
-            };
-      });
-    
-        setAnimatedSprites(spriteObjs);
-
-        
-        // holyy shit im losing it rn
-        setTheme(theme);
-      };
-
-
     
     
-    
-
+    // TODO: set bg of main div based on theme
     return (
         <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
-            <PixiCanvas theme={theme} animatedSprites={animatedSprites}/>
-            <Tasks updateCanvasState={updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <Canvas theme={props.theme}/>
+            <Tasks theme={props.theme} setTheme={props.setTheme} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
