@@ -98,11 +98,61 @@ const themeSurfaces = {
 
 };
 
-catNames = [
-    "Comet", "Michi", "Sukuna", "Oye", "Gojo Satoru"
-];
+const cats = {
+    "Comet": { // likes to sit
+        dist: {
+            "sitting": 0.7,
+            "standing": 0.1,
+            "sleeping": 0.2,
+        }
+    }, 
+    "Michi": { // likes to stand
+        dist: {
+            "sitting": 0.1,
+            "standing": 0.8,
+            "sleeping": 0.1,
+        }
+    }, 
+    "Sukuna": { // likes to sleep
+        dist: {
+            "sitting": 0.1,
+            "standing": 0.2,
+            "sleeping": 0.7,
+        }
+    }, 
+    "Oye": { // likes to stand
+        dist: {
+            "sitting": 0.2,
+            "standing": 0.6,
+            "sleeping": 0.2,
+        }
+    },
+    "Gojo Satoru": { // likes to sit
+        dist: {
+            "sitting": 0.6,
+            "standing": 0.2,
+            "sleeping": 0.2,
+        }
+    }
+};
 
-catStates = [
+const getNewCatState = (cat) => { // takes in individ cat obj
+    let rand = Math.random();
+    let runningTotal = 0;
+    let last;
+    for (const [state, prob] of Object.entries(cat.dist)) {
+        runningTotal += prob;
+        if(runningTotal > rand) {
+            return state;
+        }
+        last = state;
+    }
+    console.log("returned last????");
+    return last; // should never happen
+
+}
+
+const catStates = [
     "sitting",
     "standing",
     "sleeping",
@@ -118,9 +168,10 @@ const initializeGame = (roomid, theme) => {
     gameStates[roomid] = {
         users: [],
         canvas: {
+            theme: theme,
             surfaces: themeSurfaces[theme],
             cats: [{
-                name: catNames[getRandomInt(catNames.length-1)],
+                name: Object.keys(cats)[getRandomInt(Object.keys(cats).length-1)],
                 position: getRandomInt(5),
                 state: catStates[getRandomInt(catStates.length-1)],
             }], 
@@ -150,16 +201,37 @@ const updateGameState = (roomid) => {
     let newCatName;
     let newCatPosition;
 
+    let catUpdates = [];
+
     //console.log(`wtf is happening: ${gameStates[roomid]}`);
+
+    if(gameStates[roomid].frame >= 20) { // 20 fps * 30s = 600 frames between every cat state update
+        gameStates[roomid].canvas.cats.forEach((cat, idx) => {
+            let newState = getNewCatState(cats[cat.name]);
+            if(newState != cat.state) {
+                catUpdates.push({
+                    name: cat.name,
+                    position: cat.position,
+                    to: newState,
+                    from: cat.state,
+                });
+                gameStates[roomid].canvas.cats[idx].state = newState;
+            };
+        })
+        gameStates[roomid].frame = 0;
+    } else {
+        gameStates[roomid].frame += 1;
+    };
 
     gameStates[roomid].users.forEach((u) => {
         totalTasksCompleted = totalTasksCompleted + u.tasksCompleted;
     });
+
         if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
             //console.log('spawning new cat');
         // spawning new cat (w not same name)
         while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
-            newCatName = catNames[getRandomInt(catNames.length)];
+            newCatName = Object.keys(cats)[getRandomInt(Object.keys(cats).length)];
         };
         while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
             newCatPosition = getRandomInt(5);
@@ -170,8 +242,18 @@ const updateGameState = (roomid) => {
             position: newCatPosition,
             state: catStates[getRandomInt(catStates.length)],
         });
+
+        catUpdates = [{
+            name: newCatName,
+            position: newCatPosition,
+            to: catStates[getRandomInt(catStates.length)],
+            from: "",
+        }];
     };
 
+    
+
+    return catUpdates;
 };
 
 const addPlayer = (roomid, user) => {

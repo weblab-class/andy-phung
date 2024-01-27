@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState, useReducer, useMemo, useCallback } from "react";
+import React, { useEffect, useRef, useState, useReducer, useMemo, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 
+
+import { Stage, Container } from '@pixi/react';
 import { Texture } from 'pixi.js';
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
 import { Modal, AchievementCard, Notification, BiscuitsNotification } from "../modules/util.js";
-import { achievements, catDict } from "../modules/data.js";
-import { PixiCanvas } from "../modules/PixiCanvas.js";
+import { achievements, catAnimationDict, themeSurfaces } from "../modules/data.js";
+import { MemoizedSprite } from "../modules/MemoizedSprite.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
@@ -200,8 +202,8 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
                 <div className="flex items-center justify-center pl-[5px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5] hover:cursor-pointer hover:opacity-85" onClick={() => {
                     setEditing(!editing);
                 }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="4" stroke="#212529" class="w-[15px] h-[15px]">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="4" stroke="#212529" className="w-[15px] h-[15px]">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
 
                 </div>
@@ -238,14 +240,15 @@ const Tasks = (props) => { // wtf
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
-                const catObjs = update.gameState.canvas.cats;
+                //console.log(`ugh ${update.catUpdates}`);
+                props.updateCanvasState(update.gameState.canvas.cats, update.gameState.canvas.theme);
 
                 setOtherUserTasks(userObjs);
 
                 //console.log(update.username);
                 //console.log(update.gameState.canvas);
 
-                props.updateCanvasState(update.gameState.canvas, catDict);
+                
                 
             });
 
@@ -311,31 +314,51 @@ const ToolBar = (props) => {
     return <div>
         <svg onClick={() => {
             props.openModal(storeModal);
-        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#f5f5f5" class="absolute w-[42.5px] h-[42.5px] bottom-[70px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
+        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#f5f5f5" className="absolute w-[42.5px] h-[42.5px] bottom-[70px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
         </svg>
         <svg onClick={() => {
             props.openModal(musicModal);
-        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#f5f5f5" class="absolute w-[42.5px] h-[42.5px] bottom-[15px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
+        }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#f5f5f5" className="absolute w-[42.5px] h-[42.5px] bottom-[15px] right-[35.75px] hover:opacity-[0.75] hover:cursor-pointer z-[5]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m9 9 10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
         </svg>
     </div>
 
 }
 
-const Canvas = () => {
-    
-    
-    useEffect(() => {
+const compareProps = (oldProps, newProps) => {
+  // TODO for wnv: impl this (hint not length, need to deep compare equality of each obj in props.animatedSprites + compare theme)
+  // then figure out why memoizedsprites aren't loading
+  // 
+}
 
-    });
+// idt memo does anything here??? 
+// fallback: define five memoized animatedsprites and j pass in data like that
+// (wouldn't update same values bc new cats are appended to catUpdates obj on backend)
+const PixiCanvas = memo((props) => { // takes in animatedSprites, theme
+    // TODO: process catUpdates
+    // turn into array of objs each containing texture arrays, x, y
+    if (props.animatedSprites) {
+        //console.log(props.animatedSprites);
+    };
+
+    const testTextures = [
+        Texture.from("https://cdn.discordapp.com/attachments/754243466241769515/1199658754052988938/comet_sitting.png"),
+        Texture.from("https://cdn.discordapp.com/attachments/754243466241769515/1200723809557291008/biscuit_icon.png"),
+    ]
 
     return (
-        <div className="h-full w-full z-0">
-            <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
-        </div>
+        <Stage className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg" width={1200} height={250} options={{ backgroundAlpha: 0 }}>
+            <Container position={[600, 125]}>
+                {props.animatedSprites.length >= 1 ? (<MemoizedSprite textures={props.animatedSprites[0].textures} x={props.animatedSprites[0].x} y={props.animatedSprites[0].y}/>) : (<></>)}
+                {props.animatedSprites.length >= 2 ? (<MemoizedSprite textures={props.animatedSprites[1].textures} x={props.animatedSprites[1].x} y={props.animatedSprites[1].y}/>) : (<></>)}
+                {props.animatedSprites.length >= 3 ? (<MemoizedSprite textures={props.animatedSprites[2].textures} x={props.animatedSprites[2].x} y={props.animatedSprites[2].y}/>) : (<></>)}
+                {props.animatedSprites.length >= 4 ? (<MemoizedSprite textures={props.animatedSprites[3].textures} x={props.animatedSprites[3].x} y={props.animatedSprites[3].y}/>) : (<></>)}
+                {props.animatedSprites.length >= 5 ? (<MemoizedSprite textures={props.animatedSprites[4].textures} x={props.animatedSprites[4].x} y={props.animatedSprites[4].y}/>) : (<></>)}       
+            </Container>
+        </Stage>
     );
-}
+}, compareProps);
 
 
 
@@ -345,9 +368,12 @@ const Room = (props) => {
     const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
     // so we can force a rerender (to display join code) when we receive the roomid
 
+    
+
+
+
     useEffect(() => {
         if(internalCurrentRoomID != "") {
-            console.log("is this running???");
             console.log(internalCurrentRoomID);
         }
         setInterval(() => {
@@ -365,6 +391,35 @@ const Room = (props) => {
         props.setModalContent(<></>);
     };
 
+    const [animatedSprites, setAnimatedSprites] = useState([]); 
+    // TODO: needs to be reset when leaving room
+    const [theme, setTheme] = useState("cafe"); // don't reset this, gets set when joining room
+
+    const updateCanvasState = (cats, theme) => { // canvas dims are 1200 x 250; receives update.gameState.canvas
+        // TODO: memoize + use array.map to generate AnimatedSprites instead (here !!)
+        //console.log(animatedSprites);
+        let spriteObjs = cats.map((cat) => {
+            let xPos = themeSurfaces[theme][cat.position].x;
+            let yPos = themeSurfaces[theme][cat.position].y;
+            let textures = catAnimationDict[cat.name][cat.state].map((t) => {
+                return Texture.from(t);
+            });
+        
+        return {
+            textures: textures, // for now
+            x: xPos,
+            y: yPos,
+        };
+
+      });
+    
+        setAnimatedSprites([...animatedSprites, spriteObjs]);
+
+        
+        // holyy shit im losing it rn
+        setTheme(theme);
+      };
+
 
     
     
@@ -372,8 +427,8 @@ const Room = (props) => {
 
     return (
         <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
-            <PixiCanvas/>
-            <Tasks updateCanvasState={props.updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <PixiCanvas theme={theme} animatedSprites={animatedSprites}/>
+            <Tasks updateCanvasState={updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>

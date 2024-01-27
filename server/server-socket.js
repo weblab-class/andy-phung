@@ -60,12 +60,13 @@ const removeUser = (user, socket) => {
 const startGameBroadcast = (roomid, user) => {
 
   const intervalId = setInterval(() => {
-    gameLogic.updateGameState(roomid);
+    let catUpdates = gameLogic.updateGameState(roomid);
     try {
       getSocketFromUserID(user._id).emit(roomid, {
         username: user.name,
         gameState: gameLogic.gameStates[roomid],
-      }); // user doesn't know who they are rn lmfao; TODO: fix this once u impl api calls from database
+        catUpdates: catUpdates, // deprecated, gameLogic.gameStates[roomid].canvas.cats is better
+      });
     } catch (err) {
       console.log("user closed tab");
       clearInterval(intervalId);
@@ -118,6 +119,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
       capacity: capacity,
       theme: theme,
       intervalIds: [intervalId], // so we can delete intervals later
+      frame: 0,
     };
     
     console.log(`user ${user.name} created room ${roomid} (size ${capacity}, ${theme})`);
