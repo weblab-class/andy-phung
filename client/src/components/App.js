@@ -18,7 +18,8 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 
-import { achievements, Notification, timeout } from "./modules/util.js";
+import { Notification, timeout } from "./modules/util.js";
+import { achievements } from "./modules/data.js";
 
 /**
  * Define the "App" component
@@ -63,7 +64,6 @@ const App = () => {
   const [biscuitNotifVisible, setBiscuitNotifVisible] = useState(false);
 
   // prop drilling goes crazyy
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -186,6 +186,55 @@ const App = () => {
     });
   }
 
+  const convertCoord = (x, y, canvas) => {
+    if (!canvas) {
+        console.log("wtf no canvas");
+        return;
+    }
+    return {
+      drawX: canvas.width/2 + x,
+      drawY: canvas.height/2 - y,
+    };
+  };
+
+
+
+const updateCanvasState = (drawState, catDict) => { // canvas dims are 1200 x 250; receives update.gameState.canvas
+  // use id of canvas element in HTML DOM to get reference to canvas object
+  let canvas;
+  const catDimX = 84.75;
+  const catDimY = 60.1875;
+  canvas = document.getElementById("game-canvas");
+  if (!canvas) return;
+  const context = canvas.getContext("2d");
+  let catImages = [];
+  let im;
+
+  let imageCount = 0;
+
+  const allLoaded = () => {
+    catImages.forEach((im) => {
+      let { drawX, drawY } = convertCoord(im[1], im[2], canvas);
+      //console.log(`drawX: ${drawX}`);
+      //console.log(`drawY: ${drawY}`);
+      context.drawImage(im[0], drawX - catDimX/2, drawY - catDimY/2, catDimX, catDimY);
+    })
+  }
+
+  drawState.cats.forEach(cat => {
+    const im = new Image(452, 361);
+    im.src = catDict[cat.name][cat.state];
+    im.onload = () => {
+      imageCount += 1;
+      if(imageCount == drawState.cats.length) { 
+          allLoaded(); 
+      };
+    };
+    catImages.push([im, drawState.surfaces[cat.position].x, drawState.surfaces[cat.position].y]);
+  });
+
+};
+
   
 
   return (
@@ -198,7 +247,7 @@ const App = () => {
             userId={userId}/>}/>
         <Route path="/join" element={<CreateJoinRoom userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
-          element={<Room createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
+          element={<Room updateCanvasState={updateCanvasState} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
         /> 
         <Route path="*" element={<NotFound />} />

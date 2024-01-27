@@ -1,5 +1,3 @@
-let canvas;  
-
 const catDict = { // supposed to be API calls but milestone 2 is in <12 hrs lolol
   "Comet": {
     "sitting": "https://cdn.discordapp.com/attachments/754243466241769515/1199658754052988938/comet_sitting.png?ex=65c35847&is=65b0e347&hm=a89fb29ae6d8db555d513b5db0f489177ce996b0370bd7847b51f7e576bea083&",
@@ -28,49 +26,8 @@ const catDict = { // supposed to be API calls but milestone 2 is in <12 hrs lolo
   },
 };
 
-const convertCoord = (x, y) => {
-    if (!canvas) {
-        console.log("wtf no canvas");
-        return;
-    }
-    return {
-      drawX: canvas.width/2 + x,
-      drawY: canvas.height/2 - y,
-    };
-  };
 
-const catDimX = 84.75;
-const catDimY = 60.1875;
 
-export const drawCanvas = (drawState) => { // canvas dims are 1200 x 250; receives update.gameState.canvas
-  // use id of canvas element in HTML DOM to get reference to canvas object
-  canvas = document.getElementById("game-canvas");
-  if (!canvas) return;
-  const context = canvas.getContext("2d");
-  let catImages = [];
-  let im;
+  
 
-  let imageCount = 0;
-
-  const allLoaded = () => {
-    catImages.forEach((im) => {
-      let { drawX, drawY } = convertCoord(im[1], im[2]);
-      //console.log(`drawX: ${drawX}`);
-      //console.log(`drawY: ${drawY}`);
-      context.drawImage(im[0], drawX - catDimX/2, drawY - catDimY/2, catDimX, catDimY);
-    })
-  }
-
-  drawState.cats.forEach(cat => {
-    const im = new Image(452, 361);
-    im.src = catDict[cat.name][cat.state];
-    im.onload = () => {
-      imageCount += 1;
-      if(imageCount == drawState.cats.length) { 
-          allLoaded(); 
-      };
-    };
-    catImages.push([im, drawState.surfaces[cat.position].x, drawState.surfaces[cat.position].y]);
-  });
-
-  };
+  export { catDict }

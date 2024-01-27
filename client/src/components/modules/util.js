@@ -74,174 +74,7 @@ const AchievementCard = (props) => { // takes in name, img, opacity, desc
     )
 }
 
-const achievements = [
-    {
-        name: "Feline Motivated",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 1 task.",
-        condition: {
-            tasksCompleted: 1,
-        }
-    },
-    {
-        name: "Not Kitten",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 5 tasks.",
-        condition: {
-            tasksCompleted: 5,
-        }
-    },
-    {
-        name: "Litter-ally Grinding",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 20 tasks.",
-        condition: {
-            tasksCompleted: 20,
-        }
-    },
-    {
-        name: "Fur Real?",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 50 tasks.",
-        condition: {
-            tasksCompleted: 50,
-        }
-    },
-    {
-        name: "Maximum Outpurrt",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 100 tasks.",
-        condition: {
-            tasksCompleted: 100,
-        }
-    },
-    {
-        name: "Purrductive",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Finish 200 tasks.",
-        condition: {
-            tasksCompleted: 200,
-        }
-    },
-    {
-        name: "Paws-itively Awful",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 5 sessions.",
-        condition: {
-            sessionsCompleted: 5,
-        }
-    },
-    {
-        name: "Cat-thartic Screaming",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 10 sessions.",
-        condition: {
-            sessionsCompleted: 10,
-        }
-    },
-    {
-        name: "Cat-astrophe",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 20 sessions.",
-        condition: {
-            sessionsCompleted: 20,
-        }
-    },
-    {
-        name: "I Hate This Fur-cking Place",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 40 sessions.",
-        condition: {
-            sessionsCompleted: 40,
-        }
-    },
-    {
-        name: "Fur-midable Work Ethic",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 80 sessions.",
-        condition: {
-            sessionsCompleted: 80,
-        }
-    },
-    {
-        name: "Stand purr-oud, you're strong",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Complete 120 sessions.",
-        condition: {
-            sessionsCompleted: 120,
-        }
-    },
-    {
-        name: "Nyani?",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Purchase 1 toy.",
-        condition: {
-        }
-    },
-    {
-        name: "Hiss-terical",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Purchase 5 toys.",
-        condition: {
-        }
-    },
-    {
-        name: "Meow and Fur-ever",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Purchase 10 toys.",
-        condition: {
-        }
-    },
-    {
-        name: "I Have Truly Found Purr-adise",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Purchase 20 toys.",
-        condition: {
-        }
-    },
-    {
-        name: "The Tuxedo Turns Up",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Comet!",
-        condition: {
-        }
-    },
-    {
-        name: "Michi",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Michi!",
-        condition: {
-        }
-    },
-    {
-        name: "oye.",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "attract oye",
-        condition: {
-        }
-    },
-    {
-        name: "Nah, I'd win",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Gojocat!",
-        condition: {
-        }
-    },
-    {
-        name: "Sukatna, King of Curses",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Sukatna!",
-        condition: {
-        }
-    },
-    {
-        name: "Battle of the Strongest",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract both Gojocat and Sukatna.",
-        condition: {
-        }
-    },
-]
+
 
 const Notification = (props) => { // takes in notificationOpen, header, content, img
     const notificationClass = props.notificationOpen ? "absolute top-[10px] right-0 bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right" : "absolute top-[10px] right-[-250px] bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right";
@@ -280,7 +113,14 @@ const handleFileUpload = async (f) => {
 };
 
 const BiscuitsNotification = (props) => { // takes in biscuits, visible
-    const biscuitsClass = (props.visible && props.biscuits != 0) ? "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-in opacity-100" : "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-out opacity-0";
+    let biscuitsClass; 
+    if(props.visible && props.biscuits != 0) {
+        biscuitsClass = "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-in opacity-100";
+    } else if (!props.visible && props.biscuits != 0) {
+        biscuitsClass = "absolute flex flex-row items-center flex-nowrap left-[37px] bottom-[33px] text-[#f5f5f5] candy-beans text-2xl z-[9] biscuits-earn-out opacity-0";
+    } else {
+        biscuitsClass = "opacity-0";
+    }
     return (
         <div className={`${biscuitsClass}`}>
             <div>
@@ -290,5 +130,5 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
     )
 }
 
-export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, achievements, timeout, handleFileUpload,
+export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout, handleFileUpload,
 BiscuitsNotification }

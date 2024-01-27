@@ -29,8 +29,7 @@ const Landing = ({ userId, handleLogin }) => {
 
             </div>
             <SpinningCat first={0}/>
-            {/* TODO: add a component w state var that has chance of being randomly changed
-             to one of x cat spin classes (i.e. spinning diagonally down), on z-[-1]; same for other file */}
+            
         </div>
     )
 }

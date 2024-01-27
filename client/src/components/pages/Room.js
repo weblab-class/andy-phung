@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState, useReducer, useMemo } from "react";
+import React, { useEffect, useRef, useState, useReducer, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+import { Texture } from 'pixi.js';
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
-import { Modal, AchievementCard, achievements, Notification, BiscuitsNotification } from "../modules/util.js";
-
-import { drawCanvas } from "../../canvasManager";
+import { Modal, AchievementCard, Notification, BiscuitsNotification } from "../modules/util.js";
+import { achievements, catDict } from "../modules/data.js";
+import { PixiCanvas } from "../modules/PixiCanvas.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
@@ -223,6 +223,10 @@ const Tasks = (props) => { // wtf
     const [ otherUserTasks, setOtherUserTasks] = useState([]); // array of userObjs; {username: "", tasks: []}
     const [ otherUserObjs, setOtherUserObjs ] = useState([]);
 
+    setInterval(() => {
+
+    }, []);
+
     useEffect(() => {
         handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
         //console.log(`tasks completed: ${userTasksCompleted}`);
@@ -241,7 +245,7 @@ const Tasks = (props) => { // wtf
                 //console.log(update.username);
                 //console.log(update.gameState.canvas);
 
-                drawCanvas(update.gameState.canvas);
+                props.updateCanvasState(update.gameState.canvas, catDict);
                 
             });
 
@@ -253,7 +257,7 @@ const Tasks = (props) => { // wtf
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
-                    <UserTaskList createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
+                    <UserTaskList updateCanvasState={props.updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
             <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
@@ -319,6 +323,20 @@ const ToolBar = (props) => {
 
 }
 
+const Canvas = () => {
+    
+    
+    useEffect(() => {
+
+    });
+
+    return (
+        <div className="h-full w-full z-0">
+            <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
+        </div>
+    );
+}
+
 
 
 
@@ -335,10 +353,7 @@ const Room = (props) => {
         setInterval(() => {
             keepAlive(internalCurrentRoomID);
         }, 1000);
-    }, [internalCurrentRoomID]);
-
-    const refCanvas = useRef(null); // so we can start rendering after everything loaded?
-    
+    }, [internalCurrentRoomID]);    
 
     const openModal = (content) => {
         props.setModalOpen(true);
@@ -351,13 +366,14 @@ const Room = (props) => {
     };
 
 
+    
+    
+    
 
     return (
         <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
-            <div className="h-full w-full z-0">
-                <canvas ref={refCanvas} id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
-            </div>
-            <Tasks createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <PixiCanvas/>
+            <Tasks updateCanvasState={props.updateCanvasState} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>

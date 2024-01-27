@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
-import { Modal, AchievementCard, achievements, handleFileUpload } from "./util";
+import { Modal, AchievementCard, handleFileUpload } from "./util";
+import { achievements } from "./data";
 import { post, get } from "../../utilities";
 
 

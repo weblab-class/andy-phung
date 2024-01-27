@@ -71,7 +71,7 @@ const startGameBroadcast = (roomid, user) => {
       clearInterval(intervalId);
       // not removing from room in case they closed tab accidentally
     }
-  }, 1000 / 60) // 60 fps
+  }, 1000 / 20) // 20 fps
   return intervalId;
 };
 
