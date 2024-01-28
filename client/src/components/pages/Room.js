@@ -273,25 +273,11 @@ const Tasks = (props) => { // wtf
 
 
 const ToolBar = (props) => {
-    const [audioPlaying, setAudioPlaying] = useState(false);
-    let audio;
-    audio = new Audio("https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3");
 
-
-    const toggleAudio = () => {
-        console.log("does this run");
-        setAudioPlaying(!audioPlaying);
+    const advanceAudio = () => {
+        props.audioTrackNumber == props.audioTracks.length - 1 ? props.setAudioTrackNumber(0) : props.setAudioTrackNumber(props.audioTrackNumber + 1);
     };
-
-    useEffect(() => {
-        console.log(audioPlaying);
-        if(audioPlaying) {
-            audio.play();
-        } else {
-            audio.pause();
-        }
-    }, [audioPlaying]);
-
+    
     const storeModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
@@ -301,11 +287,19 @@ const ToolBar = (props) => {
     const musicModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        <button onClick={toggleAudio} className="hover:opacity-65">
-            you are my special 🗣️🗣️
+        {props.audioTracks[props.audioTrackNumber].name}
+        <button onClick={advanceAudio} className="hover:opacity-65">
+            forward
         </button>
         
     </div>
+    
+    useEffect(() => {
+        if(props.modalOpen) {
+            props.openModal(musicModal);
+        }
+    }, [props.audioTrackNumber])
+    
 
     return <div>
         <svg onClick={() => {
@@ -332,10 +326,23 @@ const Room = (props) => {
     const navigate = useNavigate(); 
     const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
     // so we can force a rerender (to display join code) when we receive the roomid
+    const audioTracks = [ {
+        name: "specialz",
+        link: "https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3",
+    },
+    {
+        name: "where our blue is",
+        link: "https://cdn.discordapp.com/attachments/754243466241769515/1201041221624279101/-_Where_Our_Blue_Is_Tatsuya_Kitani.mp3",
+    }];
 
-    
+    const [audioTrackNumber, setAudioTrackNumber] = useState(0);
+    const audioRef = useRef();
 
-
+    useEffect(() => {
+        console.log("changed");
+        audioRef.current.pause();
+        audioRef.current.play();
+    }, [audioTrackNumber]);
 
     useEffect(() => {
         if(internalCurrentRoomID != "") {
@@ -355,7 +362,6 @@ const Room = (props) => {
         props.setModalOpen(false);
         props.setModalContent(<></>);
     };
-
     
     
     // TODO: set bg of main div based on theme
@@ -363,11 +369,12 @@ const Room = (props) => {
         <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
             <Canvas theme={props.theme}/>
             <Tasks theme={props.theme} setTheme={props.setTheme} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
-            <ToolBar userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
+            <ToolBar modalOpen={props.modalOpen} audioTracks={audioTracks} audioTrackNumber={audioTrackNumber} setAudioTrackNumber={setAudioTrackNumber} audioRef={audioRef} userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
             <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>
             <BiscuitsNotification biscuits={props.biscuitsJustEarned} visible={props.biscuitNotifVisible}/>
+            <audio ref={audioRef} src={audioTracks[audioTrackNumber].link}/>
         </div>
     )
 }

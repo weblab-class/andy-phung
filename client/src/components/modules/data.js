@@ -131,6 +131,7 @@ const catAnimationDict = { // lmfao
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
         desc: "Purchase 1 toy.",
         condition: {
+            toysBought: 1,
         }
     },
     {
@@ -138,6 +139,7 @@ const catAnimationDict = { // lmfao
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
         desc: "Purchase 5 toys.",
         condition: {
+            toysBought: 5,
         }
     },
     {
@@ -145,13 +147,15 @@ const catAnimationDict = { // lmfao
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
         desc: "Purchase 10 toys.",
         condition: {
+            toysBought: 10,
         }
     },
     {
         name: "I Have Truly Found Purr-adise",
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Purchase 20 toys.",
+        desc: "Purchase 15 toys.",
         condition: {
+            toysBought: 15,
         }
     },
     {
@@ -178,8 +182,9 @@ const catAnimationDict = { // lmfao
     {
         name: "Nah, I'd win",
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract Gojocat!",
+        desc: "Attract Gojo Catoru!",
         condition: {
+
         }
     },
     {
@@ -187,15 +192,124 @@ const catAnimationDict = { // lmfao
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
         desc: "Attract Sukatna!",
         condition: {
+
         }
     },
     {
         name: "Battle of the Strongest",
         img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
-        desc: "Attract both Gojocat and Sukatna.",
+        desc: "Attract both Gojo Catoru and Sukatna.",
         condition: {
         }
     },
-]
+];
+
+const storeItems = [
+    {
+        name: "Yarn Ball",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+    {
+        name: "Rubber Ball",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+    {
+        name: "Laptop",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+    {
+        name: "Tim the Beaver Plush",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+    {
+        name: "Fish Plush",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Jessica and Nicole!)",
+    },
     
-export { catAnimationDict, achievements }
+    {
+        name: "IKEA Shark", // blahaj
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Ethan!)",
+    }, 
+    {
+        name: "Butterfly on a Wire",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Gracie!)",
+    }, // everything below should cost more
+    {
+        name: "Haku Plush",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Dom Dang!)",
+    },
+    {
+        name: "Shooting Star Plush",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Vi Trinh!)",
+    },
+    
+    {
+        name: "Tower of Tracks",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Alena!)",
+    },
+    {
+        name: "Lasagna",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Hao!)",
+    },
+    {
+        name: "IKEA Shark", // ikea
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Ethan!)",
+    },
+    {
+        name: "Jenga", // jenga
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Vinh!)",
+    },
+    {
+        name: "Sushi Scratch Post",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Amy!)",
+    },
+    {
+        name: "Spaceship",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "(Created by Jasmine!)",
+    },
+    {
+        name: "Hayden Library (Theme)",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+    {
+        name: "Apricity (Theme)",
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "",
+    },
+
+];
+    
+export { catAnimationDict, achievements, storeItems }

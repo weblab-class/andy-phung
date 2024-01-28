@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const CatSchema = new mongoose.Schema({
   name: String,
   personality: String,
+  attribution: String,
   rare: Boolean,
-  rareAttribution: String,
 });
 
 // compile model from schema

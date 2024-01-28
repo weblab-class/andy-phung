@@ -16,6 +16,8 @@ const convertCoord = (x, y) => {
 const catDimX = 84.75;
 const catDimY = 60.1875;
 
+// TODO: need to eventually take in catUpdates for transition/spawn anim (j use built in opacity for spawn anim)
+
 export const updateCanvasState = (drawState, frame) => { // canvas dims are 1200 x 250; receives update.gameState.canvas
 // use id of canvas element in HTML DOM to get reference to canvas object
 canvas = document.getElementById("game-canvas");

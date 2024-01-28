@@ -71,6 +71,8 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  
+
   useEffect(() => {
     get("/api/whoami").then((user) => {
       if (user._id) {
