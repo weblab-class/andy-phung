@@ -274,9 +274,13 @@ const Tasks = (props) => { // wtf
 
 const ToolBar = (props) => {
 
-    const advanceAudio = () => {
+    const nextTrack = () => {
         props.audioTrackNumber == props.audioTracks.length - 1 ? props.setAudioTrackNumber(0) : props.setAudioTrackNumber(props.audioTrackNumber + 1);
     };
+
+    const prevTrack = () => {
+        props.audioTrackNumber == 0 ? props.setAudioTrackNumber(props.audioTracks.length - 1) : props.setAudioTrackNumber(props.audioTrackNumber - 1)
+    }
     
     const storeModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
@@ -285,11 +289,14 @@ const ToolBar = (props) => {
     </div>
 
     const musicModal = <div className="flex flex-col">
-        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
+        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20"
         height="20" onClick={props.closeModal}/>
+        <button onClick={nextTrack} className="hover:opacity-65">
+            prev
+        </button>
         {props.audioTracks[props.audioTrackNumber].name}
-        <button onClick={advanceAudio} className="hover:opacity-65">
-            forward
+        <button onClick={nextTrack} className="hover:opacity-65">
+            next
         </button>
         
     </div>
