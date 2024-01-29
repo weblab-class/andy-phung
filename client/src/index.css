@@ -202,9 +202,23 @@
 }
 
 .cafe-mockup-bg {
-  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1199841908831293470/cafe_mockup.png?ex=65c402db&is=65b18ddb&hm=3a19f2a38b533110819e077a2d718069e5afc1528f9da14cb9c0188a251dbdc7&);
+  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201456353252741161/purrductive_canvas-01.png?ex=65c9e26c&is=65b76d6c&hm=f2546ddb435399f830910e7f8dc045ce9da59595cba138b3832ad8a288100388&);
   background-size: contain;
 }
+
+.cafe-sky-bg {
+  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201431193263034368/night_sky_bg-01.png?ex=65c9cafd&is=65b755fd&hm=ad08671e3bc860ca8c4ce8d819d271b1517b62ad1e5951234c6d997cf3a47ac9&);
+  background-size: contain;
+  background-repeat: repeat-x;
+}
+
+.cafe-skyscrapers-bg {
+  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201451530570702909/skyscrapers-01.png?ex=65c9ddee&is=65b768ee&hm=687da48877bb8266060b5cfc480f63eaf63f168fa3644ec7d44012170a834b99&);
+  background-size: cover;
+  background-repeat: repeat-x;
+}
+
+
 
 .fade-in-cat {
   animation: fade-in 3s;

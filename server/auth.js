@@ -26,7 +26,7 @@ function getOrCreateUser(user) {
       name: user.name,
       googleid: user.sub,
       biscuits: 0,
-      bio: "",
+      bio: "i haven't set my bio yet!",
       pfp: "https://cdn.discordapp.com/attachments/754243466241769515/1200135986844291154/placeholderpfp.png",
       pics: [],
       favPics: [],

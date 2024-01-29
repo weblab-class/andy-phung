@@ -157,7 +157,7 @@ const SideBar = (props) => { // props.userObj.user._id
                 achievements
             </div>
             <div className="flex flex-wrap justify-center">
-                {props.userObj.user.achievements.map((userAchievement) => {
+                {props.userObj.user.achievements.map((userAchievement) => { // FIXME? not in order
                     let achievement = achievements.filter((a) => {
                         return a.name == userAchievement;
                     });
@@ -182,7 +182,7 @@ const SideBar = (props) => { // props.userObj.user._id
                 Achievements
             </div>
             <div className="flex flex-wrap justify-center">
-                {achievements.map((a) => {
+                {achievements.map((a) => { 
                     return props.userObj.user.achievements.includes(a.name) ? (
                         <AchievementCard name={a.name} desc={a.desc} img={a.img} unlocked={true}/>
                     ) : (

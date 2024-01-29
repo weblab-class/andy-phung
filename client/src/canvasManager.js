@@ -25,7 +25,6 @@ canvas = document.getElementById("game-canvas");
 if (!canvas) return;
 const context = canvas.getContext("2d");
 
-
 let catImages = [];
 let im;
 
@@ -42,7 +41,7 @@ const allLoaded = () => {
 }
 
 drawState.cats.forEach(cat => {
-  const im = new Image(452, 361);
+  const im = new Image(420, 336);
   im.src = catAnimationDict[cat.name][cat.state][0]; // TODO: use all frames using frame arg
   im.onload = () => {
     imageCount += 1;

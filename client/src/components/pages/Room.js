@@ -325,7 +325,13 @@ const ToolBar = (props) => {
 
 const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
     return (
-        <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-0 cafe-mockup-bg"/>
+        <>
+        <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1] cafe-mockup-bg"/>
+        <div className="absolute bottom-0 left-0 right-0 ml-auto mr-auto w-full h-[470px] z-0 cafe-skyscrapers-bg">
+
+        </div>
+        </>
+        
     )
 }
 
@@ -346,10 +352,11 @@ const Room = (props) => {
     const audioRef = useRef();
 
     useEffect(() => {
-        console.log("changed");
         audioRef.current.pause();
+        audioRef.current.volume = props.userObj.user.musicVolume / 100;
         audioRef.current.play();
-    }, [audioTrackNumber]);
+        audioRef.current.loop = true;
+    }, [audioTrackNumber, props.userObj]);
 
     useEffect(() => {
         if(internalCurrentRoomID != "") {
@@ -373,7 +380,7 @@ const Room = (props) => {
     
     // TODO: set bg of main div based on theme
     return (
-        <div className={`absolute flex flex-col h-full w-full bg-[#232023] overflow-hidden`}>
+        <div className={`absolute flex flex-col h-full w-full cafe-sky-bg overflow-hidden`}>
             <Canvas theme={props.theme}/>
             <Tasks theme={props.theme} setTheme={props.setTheme} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
             <ToolBar modalOpen={props.modalOpen} audioTracks={audioTracks} audioTrackNumber={audioTrackNumber} setAudioTrackNumber={setAudioTrackNumber} audioRef={audioRef} userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>

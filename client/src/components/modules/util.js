@@ -78,7 +78,7 @@ const AchievementCard = (props) => { // takes in name, img, opacity, desc
 
 
 const Notification = (props) => { // takes in notificationOpen, header, content, img
-    const notificationClass = props.notificationOpen ? "absolute top-[10px] right-0 bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right" : "absolute top-[10px] right-[-250px] bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right";
+    const notificationClass = props.notificationOpen ? "absolute top-0 right-0 bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right" : "absolute top-0 right-[-250px] bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right";
 
     return (
         <div className={`$flex flex-row flex-nowrap items-center justify-center ${notificationClass} overflow-hidden`}>
@@ -103,15 +103,32 @@ function timeout(delay) {
 
 const handleFileUpload = async (f) => {
 
-    const client = new ImgurClient({ clientId: "27696db6b038a30" });
+    const client = new ImgurClient({ clientId: "8aeb523ed94ae2b" });
     client.upload({
-        image: f,
+        image: "https://cdn.discordapp.com/attachments/754243466241769515/1201427389301915668/night_sky_bg-01.png?ex=65c9c773&is=65b75273&hm=89e3afcbdd8b373e290648b3da8460f7afd80a63a5b9b2d4a6961411643dd2bb&",
     }).then((res) => {
         console.log(res);
         return res;
     });
 
 };
+
+const handleFileUpload2 = (f) => {
+    const formdata = new FormData()
+    formdata.append("image", f)
+    fetch("https://api.imgur.com/3/image/", {
+        method: "post",
+        headers: {
+            Authorization: "Client-ID 8aeb523ed94ae2b"
+        },
+        body: formdata
+    }).then(data => data.json()).then(data => {
+        img.src = data.data.link
+        url.innerText = data.data.link
+        console.log(data);
+    })
+}
+
 
 const BiscuitsNotification = (props) => { // takes in biscuits, visible
     let biscuitsClass; 
@@ -134,4 +151,4 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
 
 
 export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout, handleFileUpload,
-BiscuitsNotification }
+BiscuitsNotification, handleFileUpload2 }

@@ -32,23 +32,23 @@ const themeSurfaces = {
     "cafe": [ // list of points where cat can spawn (they just spawn for now)
         {
             x: 45, // on fireplace
-            y: 3,
+            y: -2,
         },
         {
-            x: -450, // on counter
-            y: -1,
+            x: -440, // on counter
+            y: -9,
         },
         {
             x: -100, // on pillow
-            y: -67,
+            y: -78,
         },
         {
             x: 450, // on railing
-            y: -13,
+            y: -16,
         },
         { 
             x: 290, // next to pot
-            y: -84,
+            y: -89,
         },
     ],
     "backyard": [

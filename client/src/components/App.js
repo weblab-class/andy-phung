@@ -128,27 +128,30 @@ const App = () => {
   */
 
   const createNotification = async (props) => { // this isnt a component but wtv idc
-    setNotificationOpen(true);
-    setNotificationContent({
-      header: props.header,
-      body: props.body,
-      img: props.img,
-    });
-    await timeout(4000);
-    setNotificationOpen(false);
-    setNotificationContent({
-      header: "",
-      body: "",
-      img: "",
-    });
-    
+    if(userObj.user.notifications) {
+      setNotificationOpen(true);
+      setNotificationContent({
+        header: props.header,
+        body: props.body,
+        img: props.img,
+      });
+      await timeout(4000);
+      setNotificationOpen(false);
+      setNotificationContent({
+        header: "",
+        body: "",
+        img: "",
+      });
+    }
   };
 
   const createBiscuitNotification = async (biscuits) => {
-    setBiscuitNotifVisible(true);
-    setBiscuitsJustEarned(biscuits);
-    await timeout(100);
-    setBiscuitNotifVisible(false);
+    if(userObj.user.notifications) {
+      setBiscuitNotifVisible(true);
+      setBiscuitsJustEarned(biscuits);
+      await timeout(100);
+      setBiscuitNotifVisible(false);
+    }
   };
 
   
