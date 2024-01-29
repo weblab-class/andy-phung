@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
 
-import { updateCanvasState } from "../../canvasManager.js";
+import { updateCanvasState, drawToyPlaceAreas, clearToyPlaceAreas, drawToy, convertCoord } from "../../canvasManager.js";
 import { Modal, AchievementCard, Notification, BiscuitsNotification } from "../modules/util.js";
-import { achievements, catAnimationDict, themeSurfaces } from "../modules/data.js";
+import { achievements, catAnimationDict, themeSurfaces, storeItems } from "../modules/data.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
@@ -17,6 +17,7 @@ import checkmark_icon from "../../assets/icons/checkmark_icon.png";
 import plus_icon from "../../assets/icons/plus_icon.png";
 import rightarrow_icon from "../../assets/icons/rightarrow_icon.png";
 import x_icon from "../../assets/icons/x_icon.png";
+import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 
 // lmaoo what is this
 
@@ -244,6 +245,8 @@ const Tasks = (props) => { // wtf
                     props.setTheme(update.gameState.canvas.theme);
                 }
 
+                props.roomState.current = update.gameState.canvas;
+
                 
                 
             });
@@ -271,8 +274,48 @@ const Tasks = (props) => { // wtf
 }
 
 
+const StoreItem = (props) => {
+    return (
+        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl">
+            <div className="text-sm w-full border-[#694F31] text-center font-medium simply-rounded text-[#694F31]">
+                {props.item.name}
+            </div>
+            <div className="text-xxs font-extralight simply-rounded text-[#694F31]">
+                {props.item.attribution}
+            </div>
+            <img src={props.item.img} className="mt-[7px] mb-[7px] w-[40px] h-[40px]"/>
+            {props.userObj.user.toysBought.includes(props.item.name) ? (
+                <div onClick={() => {props.startToyPlace(props.item.name)}} className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer bg-[#d7a46b] hover:bg-[#CE9C63]">
+                    <div className="text-sm font-medium simply-rounded text-[#694F31]">
+                        Place
+                    </div>
+                </div>
+            ) : (
+                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer hover:bg-[#CE9C63]">
+                    <img src={biscuit_icon} className="w-[18px] h-[18px] mr-[3px]"/>
+                    <div className="text-sm font-medium simply-rounded text-[#694F31]">
+                        {props.item.price}
+                    </div>
+                </div>
+            )}
+            
+            
+        </div>
+    )
+}
 
 const ToolBar = (props) => {
+    const [storePage, setStorePage] = useState(0);
+    const [itemBoughtFlag, setItemBoughtFlag] = useState(false);
+
+    const pages = Math.ceil(storeItems.length/6)-1;
+
+    const buyItem = (name, biscuits) => {
+        props.updateUserObj({_id: props.userObj.user._id, push: {toysBought: name}, append: "push"});
+        props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: -1*biscuits}, append: "inc"});
+        setItemBoughtFlag(!itemBoughtFlag);
+    };
+    
 
     const nextTrack = () => {
         props.audioTrackNumber == props.audioTracks.length - 1 ? props.setAudioTrackNumber(0) : props.setAudioTrackNumber(props.audioTrackNumber + 1);
@@ -282,16 +325,46 @@ const ToolBar = (props) => {
         props.audioTrackNumber == 0 ? props.setAudioTrackNumber(props.audioTracks.length - 1) : props.setAudioTrackNumber(props.audioTrackNumber - 1)
     }
     
-    const storeModal = <div className="flex flex-col">
-        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20" 
+    const storeModal = <div className="w-full h-full flex flex-col">
+        <img src={close_icon} className="absolute left-[15px] top-[15px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        store modal
+        <div className="w-full h-full flex flex-row flex-nowrap justify-center items-center">
+            {storePage > 0 ? (
+                <svg onClick={() => {
+                    setStorePage(storePage-1);
+                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            ) : ( // not visible, prevents content from shifting
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            )}
+            <div className="ml-[10px] mr-[10px] flex flex-row flex-wrap w-[420px] h-[270px] justify-between content-between">
+                {storePage < pages ? storeItems.slice(storePage*6, storePage*6+6).map((i) => {
+                    return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                }) : storeItems.slice(storePage*6, storeItems.length).map((i) => {
+                    return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                })}
+            </div>
+            {storePage < pages ? (
+                <svg onClick={() => {
+                    setStorePage(storePage+1);
+                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            )}
+        </div>
     </div>
 
     const musicModal = <div className="flex flex-col">
         <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20"
         height="20" onClick={props.closeModal}/>
-        <button onClick={nextTrack} className="hover:opacity-65">
+        <button onClick={prevTrack} className="hover:opacity-65">
             prev
         </button>
         {props.audioTracks[props.audioTrackNumber].name}
@@ -305,7 +378,22 @@ const ToolBar = (props) => {
         if(props.modalOpen) {
             props.openModal(musicModal);
         }
-    }, [props.audioTrackNumber])
+    }, [props.audioTrackNumber]);
+
+    useEffect(() => { // ugh
+        if(props.modalOpen) {
+            props.openModal(storeModal);
+        }
+    }, [storePage]);
+
+    useEffect(() => { // ugh
+        if(props.modalOpen) {
+            props.openModal(storeModal);
+        }
+    }, [itemBoughtFlag, props.userObj.user.biscuits]);
+
+
+    
     
 
     return <div>
@@ -324,8 +412,96 @@ const ToolBar = (props) => {
 }
 
 const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
+    const [hoverCursor, setHoverCursor] = useState(false);
+
+    const getMousePos = (canvas, evt) => {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+            y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+        };
+    };
+
+    const changeCursor = (evt) => {
+        let canvas = document.getElementById("toy-canvas");
+        if(props.placingToy) {
+            let mousePosX = getMousePos(canvas, evt).x;
+            let mousePosY = getMousePos(canvas, evt).y;
+
+            //console.log(`cursor at ${mousePosX}, ${mousePosY}`);
+
+            let bboxes = props.roomState.current.surfaces.map((location) => {
+                let { drawX, drawY } = convertCoord(location.x, location.y);
+
+
+                return [drawX - props.rectDimX/2, drawX + props.rectDimX/2, drawY - props.rectDimY/2, drawY + props.rectDimY/2, 
+                {
+                    x: drawX,
+                    y: drawY, 
+                    rectDimX: props.rectDimX, 
+                    rectDimY: props.rectDimY
+                }]; // (canvas coords) x left, x right, y upper, y lower
+            });
+            //console.log(bboxes);
+
+            for (const bbox of bboxes) {
+                if(mousePosX >= bbox[0] && bbox[1] >= mousePosX && mousePosY >= bbox[2] && bbox[3] >= mousePosY) {
+                    setHoverCursor(true);
+                    break;
+                } else {
+                    setHoverCursor(false);
+                };
+            };
+        };
+    };
+
+    const placeToy = (evt) => {
+        let canvas = document.getElementById("toy-canvas");
+
+        if(props.placingToy) {
+            let mousePosX = getMousePos(canvas, evt).x;
+            let mousePosY = getMousePos(canvas, evt).y;
+
+            //console.log(`cursor at ${mousePosX}, ${mousePosY}`);
+
+            let bboxes = props.roomState.current.surfaces.map((location) => {
+                let { drawX, drawY } = convertCoord(location.x, location.y);
+
+
+                return [drawX - props.rectDimX/2, drawX + props.rectDimX/2, drawY - props.rectDimY/2, drawY + props.rectDimY/2, 
+                {
+                    x: drawX,
+                    y: drawY, 
+                    rectDimX: props.rectDimX, 
+                    rectDimY: props.rectDimY
+                }]; // (canvas coords) x left, x right, y upper, y lower
+            });
+            //console.log(bboxes);
+
+            bboxes.forEach((bbox) => {
+                if(mousePosX >= bbox[0] && bbox[1] >= mousePosX && mousePosY >= bbox[2] && bbox[3] >= mousePosY) {
+                    drawToy(props.toyBeingPlaced, bbox[4]);
+                    setHoverCursor(false);
+                };
+            });
+            
+
+            //console.log(`${}, ${getMousePos(canvas, evt).y}`);
+
+            // use mouse position inside canvas (???) to call drawToy
+            // props.rectDimX, props.rectDimY
+
+            // w props.toyBeingPlaced
+            props.endToyPlace();
+            // also need hover interaction for toy place squares
+            // click anywhere else to not place toy
+        }
+    };
+
     return (
         <>
+        <canvas onClick={placeToy} onMouseMove={changeCursor} id="toy-place-canvas" width={1200} height={250} className={`absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3] ${hoverCursor ? "cursor-pointer" : "cursor-default"}`}/>
+        <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[2]"/>
         <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1] cafe-mockup-bg"/>
         <div className="absolute bottom-0 left-0 right-0 ml-auto mr-auto w-full h-[470px] z-0 cafe-skyscrapers-bg">
 
@@ -350,6 +526,14 @@ const Room = (props) => {
 
     const [audioTrackNumber, setAudioTrackNumber] = useState(0);
     const audioRef = useRef();
+
+    const [placingToy, setPlacingToy] = useState(false);
+    const [toyBeingPlaced, setToyBeingPlaced] = useState("");
+
+    const roomState = useRef(); // updated w gameState.canvas
+
+    let rectDimX = 80; // bounding boxes for placing toys
+    let rectDimY = 60;
 
     useEffect(() => {
         audioRef.current.pause();
@@ -376,14 +560,27 @@ const Room = (props) => {
         props.setModalOpen(false);
         props.setModalContent(<></>);
     };
+
+    const startToyPlace = (toy) => {
+        closeModal();
+        setPlacingToy(true);
+        setToyBeingPlaced(toy);
+        drawToyPlaceAreas(roomState.current, rectDimX, rectDimY);
+    }
+
+    const endToyPlace = () => {
+        setPlacingToy(false);
+        setToyBeingPlaced("");
+        clearToyPlaceAreas();
+    }
     
     
     // TODO: set bg of main div based on theme
     return (
         <div className={`absolute flex flex-col h-full w-full cafe-sky-bg overflow-hidden`}>
-            <Canvas theme={props.theme}/>
-            <Tasks theme={props.theme} setTheme={props.setTheme} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
-            <ToolBar modalOpen={props.modalOpen} audioTracks={audioTracks} audioTrackNumber={audioTrackNumber} setAudioTrackNumber={setAudioTrackNumber} audioRef={audioRef} userObj={props.userObj} openModal={openModal} closeModal={closeModal}/>
+            <Canvas rectDimX={rectDimX} rectDimY={rectDimY} placingToy={placingToy} toyBeingPlaced={toyBeingPlaced} endToyPlace={endToyPlace} theme={props.theme} roomState={roomState}/>
+            <Tasks roomState={roomState} theme={props.theme} setTheme={props.setTheme} createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} openModal={openModal} closeModal={closeModal} userObj={props.userObj} updateUserObj={props.updateUserObj} setInternalCurrentRoomID={setInternalCurrentRoomID} currentRoomID={props.currentRoomID}/> 
+            <ToolBar startToyPlace={startToyPlace} modalContent={props.modalContent} modalOpen={props.modalOpen} audioTracks={audioTracks} audioTrackNumber={audioTrackNumber} setAudioTrackNumber={setAudioTrackNumber} audioRef={audioRef} userObj={props.userObj} openModal={openModal} closeModal={closeModal} updateUserObj={props.updateUserObj}/>
             {(props.modalOpen && !props.sideBarOpen) && (<div className="absolute w-full h-full centered-abs-xy bg-black bg-opacity-20 z-[19]" onClick={closeModal}></div>)}
             <Modal width={600} height={350} visible={props.modalOpen} content={props.modalContent}/>
             <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>

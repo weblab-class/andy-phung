@@ -4,7 +4,7 @@ import React, { useEffect, useState, memo } from "react";
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 
 
-const Modal = memo((props) => { // 600px, 350px default
+const Modal = (props) => { // 600px, 350px default
     //console.log(props.width);
     //console.log(props.height);
     
@@ -13,7 +13,7 @@ const Modal = memo((props) => { // 600px, 350px default
             {props.content}
         </div>
     )
-});
+};
 
 const CenterScreen = (props) => { // TODO: pass dims by props; 500px, 263px for createjoinroom
     return <div className="bg-[#E7AE6C] border-[#694F31] border-4 rounded-[2rem] w-[500px] h-[263px] flex items-center justify-center">

@@ -209,99 +209,99 @@ const storeItems = [
         name: "Yarn Ball",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "",
+        attribution: "classic cat toy",
     },
     {
-        name: "Rubber Ball",
+        name: "Boba",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "",
+        attribution: "teado <3",
     },
     {
         name: "Laptop",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "",
+        attribution: "psets for cats!",
     },
     {
-        name: "Tim the Beaver Plush",
+        name: "Tim the Beaver",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "",
+        attribution: "ihtfp",
     },
     {
         name: "Fish Plush",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Jessica and Nicole!)",
+        attribution: "created by jessica!",
     },
     
     {
-        name: "IKEA Shark", // blahaj
+        name: "IKEA Bear", 
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Ethan!)",
+        attribution: "created by ethan!",
     }, 
     {
-        name: "Butterfly on a Wire",
+        name: "Butterfly Teaser",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Gracie!)",
+        attribution: "created by gracie!",
     }, // everything below should cost more
     {
         name: "Haku Plush",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Dom Dang!)",
+        attribution: "created by dom!",
     },
     {
-        name: "Shooting Star Plush",
+        name: "Star Plush",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Vi Trinh!)",
+        attribution: "created by vi!",
     },
     
     {
         name: "Tower of Tracks",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Alena!)",
+        attribution: "created by alena!",
+    },
+    {
+        name: "IKEA Shark", // blahaj
+        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
+        price: 1,
+        attribution: "created by ethan!",
     },
     {
         name: "Lasagna",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Hao!)",
-    },
-    {
-        name: "IKEA Shark", // ikea
-        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
-        price: 1,
-        attribution: "(Created by Ethan!)",
+        attribution: "created by hao!",
     },
     {
         name: "Jenga", // jenga
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Vinh!)",
+        attribution: "created by vinh!",
     },
     {
         name: "Sushi Scratch Post",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Amy!)",
+        attribution: "created by amy!",
     },
     {
         name: "Spaceship",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "(Created by Jasmine!)",
+        attribution: "created by jasmine!",
     },
     {
         name: "Apricity (Theme)",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,
-        attribution: "",
+        attribution: "a film by kat chan!",
     },
 
 ];

@@ -213,7 +213,7 @@
 }
 
 .cafe-skyscrapers-bg {
-  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201451530570702909/skyscrapers-01.png?ex=65c9ddee&is=65b768ee&hm=687da48877bb8266060b5cfc480f63eaf63f168fa3644ec7d44012170a834b99&);
+  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201553716059328592/cafe-skyscrapers4-01.png?ex=65ca3d19&is=65b7c819&hm=459d5c0742815fcbde0f582aa3cdda098254706145a3cc648003cfd7758d3921&);
   background-size: cover;
   background-repeat: repeat-x;
 }
@@ -231,4 +231,13 @@
   to {
     opacity: 100;
   }
+}
+
+.text-none {
+  font-size: 0;
+}
+
+.text-xxs {
+  font-size: 0.625rem;
+  line-height: 0.75rem;
 }

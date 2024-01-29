@@ -68,7 +68,7 @@ router.post("/user", (req, res) => { // takes in mongodb _id + rest of props to 
       
     } else if (req.body.append == "push") {
       delete req.body.append;
-      users[0].update({$push: req.body}).then(() => {
+      users[0].update({$push: req.body.push}).then(() => {
         res.send({});
       });
     } else {

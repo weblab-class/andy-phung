@@ -34,7 +34,7 @@ const SideBar = (props) => { // props.userObj.user._id
         if(props.modalOpen) {
             props.openModal(modalMapper[props.modalId]);
         } // controls live updates of modals where u set things
-    }, [props.editing, props.userObj]);
+    }, [props.editing, props.userObj.user.name, props.userObj.user.bio, props.userObj.user.pfp, props.userObj.user.musicVolume, props.userObj.user.sfxVolume]);
 
     const navigate = useNavigate();
 
@@ -58,7 +58,9 @@ const SideBar = (props) => { // props.userObj.user._id
                         image: pfpBuffer,
                     }).then((res) => {
                         console.log(res);
+                        props.setEditing([!props.editing[0], props.editing[1], props.editing[2]]);
                         props.updateUserObj({pfp: res.data.link});
+
                     });
                 }} className="font-sm" type="file" id="img" name="img" accept="image/*"></input>
                 </div>
