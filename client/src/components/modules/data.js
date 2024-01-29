@@ -298,12 +298,6 @@ const storeItems = [
         attribution: "(Created by Jasmine!)",
     },
     {
-        name: "Hayden Library (Theme)",
-        img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
-        price: 1,
-        attribution: "",
-    },
-    {
         name: "Apricity (Theme)",
         img: "https://cdn.discordapp.com/attachments/754243466241769515/1200940339775668305/yarn-ball-of-1.png",
         price: 1,

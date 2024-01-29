@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import { ImgurClient } from 'imgur';
+
 
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 
@@ -101,33 +101,6 @@ function timeout(delay) {
     return new Promise( res => setTimeout(res, delay) );
 }
 
-const handleFileUpload = async (f) => {
-
-    const client = new ImgurClient({ clientId: "8aeb523ed94ae2b" });
-    client.upload({
-        image: "https://cdn.discordapp.com/attachments/754243466241769515/1201427389301915668/night_sky_bg-01.png?ex=65c9c773&is=65b75273&hm=89e3afcbdd8b373e290648b3da8460f7afd80a63a5b9b2d4a6961411643dd2bb&",
-    }).then((res) => {
-        console.log(res);
-        return res;
-    });
-
-};
-
-const handleFileUpload2 = (f) => {
-    const formdata = new FormData()
-    formdata.append("image", f)
-    fetch("https://api.imgur.com/3/image/", {
-        method: "post",
-        headers: {
-            Authorization: "Client-ID 8aeb523ed94ae2b"
-        },
-        body: formdata
-    }).then(data => data.json()).then(data => {
-        img.src = data.data.link
-        url.innerText = data.data.link
-        console.log(data);
-    })
-}
 
 
 const BiscuitsNotification = (props) => { // takes in biscuits, visible
@@ -150,5 +123,5 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
 
 
 
-export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout, handleFileUpload,
-BiscuitsNotification, handleFileUpload2 }
+export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout,
+BiscuitsNotification }

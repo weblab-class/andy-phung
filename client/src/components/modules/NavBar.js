@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
+import { ImgurClient } from 'imgur';
+
 import { Modal, AchievementCard, handleFileUpload } from "./util";
 import { achievements } from "./data";
 import { post, get } from "../../utilities";
@@ -50,8 +52,13 @@ const SideBar = (props) => { // props.userObj.user._id
                 <img src={pfpEdit} className="w-[90px] h-[90px] mr-[20px]"/>
                 <input onChange={(e) => {
                     pfpBuffer = e.target.files[0];
-                    handleFileUpload(pfpBuffer).then((res) => {
+                    const client = new ImgurClient({ clientId: "8aeb523ed94ae2b" });
+                    //console.log(pfpBuffer)
+                    client.upload({
+                        image: pfpBuffer,
+                    }).then((res) => {
                         console.log(res);
+                        props.updateUserObj({pfp: res.data.link});
                     });
                 }} className="font-sm" type="file" id="img" name="img" accept="image/*"></input>
                 </div>
