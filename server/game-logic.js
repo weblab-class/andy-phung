@@ -51,7 +51,7 @@ const themeSurfaces = {
             y: -89,
         },
     ],
-    "backyard": [
+    "apricity": [
         {
             x: 0,
             y: -100,
@@ -73,90 +73,146 @@ const themeSurfaces = {
             y: -100,
         },
     ],
-    "hayden library": [
-        {
-            x: 0,
-            y: -100,
-        },
-        {
-            x: -200,
-            y: -100,
-        },
-        {
-            x: -400,
-            y: -100,
-        },
-        {
-            x: 200,
-            y: -100,
-        },
-        {
-            x: 400,
-            y: -100,
-        },
-    ],
-
 };
 
-const cats = {
-    "Comet": { // likes to sit
-        dist: {
-            "sitting": 0.7,
-            "standing": 0.1,
-            "sleeping": 0.2,
-        }
+const commonCats = {
+    "Shiro": {
+        "sitting": 0.5,
+        "standing": 0.05,
+        "sleeping": 0.1,
+        "sittingPurring": 0.3,
+        "standingMeowing": 0.05,
+    },
+    "Tobi": {
+        "sitting": 0.05,
+        "standing": 0.5,
+        "sleeping": 0.05,
+        "sittingPurring": 0.1,
+        "standingMeowing": 0.3,
+    },
+    "Mocha": {
+        "sitting": 0.1,
+        "standing": 0.05,
+        "sleeping": 0.7,
+        "sittingPurring": 0.1,
+        "standingMeowing": 0.05,
+    },
+    "Megumi": {
+        "sitting": 0.2,
+        "standing": 0.05,
+        "sleeping": 0.4,
+        "sittingPurring": 0.3,
+        "standingMeowing": 0.05,
+    },
+    "Guangdang": {
+        "sitting": 0.1,
+        "standing": 0.05,
+        "sleeping": 0.4,
+        "sittingPurring": 0.4,
+        "standingMeowing": 0.05,
+    },
+    "Luna": {
+        "sitting": 0.05,
+        "standing": 0.4,
+        "sleeping": 0.2,
+        "sittingPurring": 0.05,
+        "standingMeowing": 0.3,
+    },
+    "Kiko": {
+        "sitting": 0.05,
+        "standing": 0.05,
+        "sleeping": 0.05,
+        "sittingPurring": 0.05,
+        "standingMeowing": 0.8,
+    },
+    "Sesame": {
+        "sitting": 0.1,
+        "standing": 0.3,
+        "sleeping": 0.2,
+        "sittingPurring": 0.1,
+        "standingMeowing": 0.3,
+    },
+    "Lola": {
+        "sitting": 0.3,
+        "standing": 0.3,
+        "sleeping": 0.3,
+        "sittingPurring": 0.05,
+        "standingMeowing": 0.05,
+    },
+};
+
+const rareCats = {
+    "Comet": { 
+            "sitting": 0.1,
+            "standing": 0.05,
+            "sleeping": 0.05,
+            "sittingPurring": 0.7,
+            "standingMeowing": 0.1,
     }, 
     "Michi": { // likes to stand
-        dist: {
             "sitting": 0.1,
-            "standing": 0.8,
+            "standing": 0.3,
             "sleeping": 0.1,
-        }
+            "sittingPurring": 0.1,
+            "standingMeowing": 0.4,
     }, 
-    "Sukuna": { // likes to sleep
-        dist: {
-            "sitting": 0.1,
-            "standing": 0.2,
+    "Sukatna": { // likes to sleep
+            "sitting": 0.05,
+            "standing": 0.05,
             "sleeping": 0.7,
-        }
+            "sittingPurring": 0.2,
+            "standingMeowing": 0,
     }, 
-    "Oye": { // likes to stand
-        dist: {
-            "sitting": 0.2,
-            "standing": 0.6,
-            "sleeping": 0.2,
-        }
+    "oye": { // likes to stand
+            "sitting": 0.5,
+            "standing": 0.3,
+            "sleeping": 0.05,
+            "sittingPurring": 0.1,
+            "standingMeowing": 0.05,
     },
-    "Gojo Satoru": { // likes to sit
-        dist: {
-            "sitting": 0.6,
+    "Gojo Catoru": { // likes to sit
+            "sitting": 0.2,
             "standing": 0.2,
-            "sleeping": 0.2,
-        }
+            "sleeping": 0.1,
+            "sittingPurring": 0.1,
+            "standingMeowing": 0.4,
     }
 };
 
-const getNewCatState = (cat) => { // takes in individ cat obj
-    let rand = Math.random();
-    let runningTotal = 0;
-    let last;
-    for (const [state, prob] of Object.entries(cat.dist)) {
-        runningTotal += prob;
-        if(runningTotal > rand) {
-            return state;
-        }
-        last = state;
-    }
-    console.log("returned last????");
-    return last; // should never happen
 
-}
 
 const catStates = [
     "sitting",
     "standing",
     "sleeping",
-]
+    "sittingPurring",
+    "standingMeowing",
+];
+
+const catStateMapper = {
+    "sitting": ["sitting", "standing", "sittingPurring"],
+    "standing": ["standing", "sitting", "sleeping"],
+    "sleeping": ["sleeping", "standing"],
+    "sittingPurring": ["sittingPurring", "sitting"],
+    "standingMeowing": ["standingMeowing", "standing"],
+};
+
+const getNewCatState = (cat, currentState) => { // takes in individ cat obj
+    let rand = Math.random();
+    let runningTotal = 0;
+    let defaultState;
+    for (const [state, prob] of Object.entries(cat)) {
+        runningTotal += prob;
+        if(runningTotal > rand && state in catStateMapper[currentState]) {
+            return state;
+        }
+        last = state;
+    }
+
+    defaultState = currentState;
+    return defaultState;
+
+}
 
 getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
@@ -171,7 +227,7 @@ const initializeGame = (roomid, theme) => {
             theme: theme,
             surfaces: themeSurfaces[theme],
             cats: [{
-                name: Object.keys(cats)[getRandomInt(Object.keys(cats).length-1)],
+                name: Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length-1)],
                 position: getRandomInt(5),
                 state: catStates[getRandomInt(catStates.length-1)],
             }], 
@@ -206,9 +262,15 @@ const updateGameState = (roomid) => {
 
     //console.log(`wtf is happening: ${gameStates[roomid]}`);
 
-    if(gameStates[roomid].frame >= 20) { // 20 fps * 30s = 600 frames between every cat state update
+    if(gameStates[roomid].frame >= 600) { // 20 fps * 30s = 600 frames between every cat state update
         gameStates[roomid].canvas.cats.forEach((cat, idx) => {
-            let newState = getNewCatState(cats[cat.name]);
+            let newState;
+            if(cat.name in commonCats) {
+                newState = getNewCatState(commonCats[cat.name], cat.state);
+            } else if(cat.name in rareCats) {
+                newState = getNewCatState(rareCats[cat.name], cat.state);
+            }
+             
             if(newState != cat.state) {
                 catUpdates.push({
                     name: cat.name,
@@ -230,26 +292,33 @@ const updateGameState = (roomid) => {
 
         if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
             //console.log('spawning new cat');
-        // spawning new cat (w not same name)
-        while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
-            newCatName = Object.keys(cats)[getRandomInt(Object.keys(cats).length)];
-        };
-        while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
-            newCatPosition = getRandomInt(5);
-        };
+            // spawning new cat (w not same name)
+            let rareCat = Math.random() <= 0.05;
+            while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
+                if(rareCat) {
+                    //console.log("rare cat spawned!");
+                    newCatName = Object.keys(rareCats)[getRandomInt(Object.keys(rareCats).length)];
+                } else {
+                    newCatName = Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length)];
+                }
+                
+            };
+            while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
+                newCatPosition = getRandomInt(5);
+            };
 
-        gameStates[roomid].canvas.cats.push({
-            name: newCatName,
-            position: newCatPosition,
-            state: catStates[getRandomInt(catStates.length)],
-        });
+            gameStates[roomid].canvas.cats.push({
+                name: newCatName,
+                position: newCatPosition,
+                state: catStates[getRandomInt(catStates.length)],
+            });
 
-        catUpdates = [{
-            name: newCatName,
-            position: newCatPosition,
-            to: catStates[getRandomInt(catStates.length)],
-            from: "",
-        }];
+            catUpdates = [{
+                name: newCatName,
+                position: newCatPosition,
+                to: catStates[getRandomInt(catStates.length)],
+                from: "",
+            }];
     };
 
     

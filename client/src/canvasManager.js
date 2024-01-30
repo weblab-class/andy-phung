@@ -34,17 +34,19 @@ let imageCount = 0;
 
 const allLoaded = () => {
   context.clearRect(0, 0, canvas.width, canvas.height); // for next frame
-  catImages.forEach((im) => {
-    let { drawX, drawY } = convertCoord(im[1], im[2]);
+  catImages.forEach((pkg) => {
+    let { drawX, drawY } = convertCoord(pkg[1], pkg[2]);
     //console.log(`drawX: ${drawX}`);
     //console.log(`drawY: ${drawY}`);
-    context.drawImage(im[0], drawX - catDimX/2, drawY - catDimY/2, catDimX, catDimY);
+    context.drawImage(pkg[0], drawX - catDimX/2, drawY - catDimY/2, catDimX, catDimY);
   })
-}
+};
 
 drawState.cats.forEach(cat => {
   const im = new Image(420, 336);
-  im.src = catAnimationDict[cat.name][cat.state][0]; // TODO: use all frames using frame arg
+  im.src = catAnimationDict[cat.name][cat.state][Math.floor((frame % 120)/10)]; 
+  // 2 fps, one new animation frame "requested" every 10 server frames (server fps is 20, runs for 30s before
+  // requesting next cat state)
   im.onload = () => {
     imageCount += 1;
     if(imageCount == drawState.cats.length) { 

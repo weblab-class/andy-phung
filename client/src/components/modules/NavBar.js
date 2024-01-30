@@ -4,7 +4,7 @@ import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
 import { ImgurClient } from 'imgur';
 
-import { Modal, AchievementCard, handleFileUpload } from "./util";
+import { Modal, AchievementCard } from "./util";
 import { achievements } from "./data";
 import { post, get } from "../../utilities";
 

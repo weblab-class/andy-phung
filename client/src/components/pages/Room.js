@@ -325,39 +325,45 @@ const ToolBar = (props) => {
         props.audioTrackNumber == 0 ? props.setAudioTrackNumber(props.audioTracks.length - 1) : props.setAudioTrackNumber(props.audioTrackNumber - 1)
     }
     
-    const storeModal = <div className="w-full h-full flex flex-col">
+    const storeModal = <div className="w-full h-full flex flex-col items-center ">
         <img src={close_icon} className="absolute left-[15px] top-[15px] cursor-pointer" width="20" 
         height="20" onClick={props.closeModal}/>
-        <div className="w-full h-full flex flex-row flex-nowrap justify-center items-center">
-            {storePage > 0 ? (
-                <svg onClick={() => {
-                    setStorePage(storePage-1);
-                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                </svg>
-            ) : ( // not visible, prevents content from shifting
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-                </svg>
-            )}
-            <div className="ml-[10px] mr-[10px] flex flex-row flex-wrap w-[420px] h-[270px] justify-between content-between">
-                {storePage < pages ? storeItems.slice(storePage*6, storePage*6+6).map((i) => {
-                    return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
-                }) : storeItems.slice(storePage*6, storeItems.length).map((i) => {
-                    return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
-                })}
+        
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="">
+                store
             </div>
-            {storePage < pages ? (
-                <svg onClick={() => {
-                    setStorePage(storePage+1);
-                }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg>
-            ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg>
-            )}
+            <div className="mt-[5px] w-full h-auto flex flex-row flex-nowrap justify-center items-center">
+                {storePage > 0 ? (
+                    <svg onClick={() => {
+                        setStorePage(storePage-1);
+                    }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                ) : ( // not visible, prevents content from shifting
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                )}
+                <div className="ml-[10px] mr-[10px] flex flex-row flex-wrap w-[420px] h-[270px] justify-between content-between">
+                    {storePage < pages ? storeItems.slice(storePage*6, storePage*6+6).map((i) => {
+                        return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                    }) : storeItems.slice(storePage*6, storeItems.length).map((i) => {
+                        return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                    })}
+                </div>
+                {storePage < pages ? (
+                    <svg onClick={() => {
+                        setStorePage(storePage+1);
+                    }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] hover:opacity-75 hover:cursor-pointer">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="#694F31" class="w-[36px] h-[36px] opacity-0">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                )}
+            </div>
         </div>
     </div>
 
