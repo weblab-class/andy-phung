@@ -37,13 +37,13 @@ const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
-/*
 
+/*
 setInterval(() => {
   console.log(Object.keys(rooms));
 }, 2000)
-
 */
+
 
 
 const getSocketsInRoom = (roomid) => rooms[roomid];
@@ -152,7 +152,7 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
 
     console.log(`user ${user.name} joined room ${roomid}`);
 
-    return "success";
+    return ["success", ""];
   }
 };
 

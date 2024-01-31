@@ -26,7 +26,7 @@ const updateCanvasState = (drawState, frame, catUpdates) => { // canvas dims are
 // use id of canvas element in HTML DOM to get reference to canvas object
 canvas = document.getElementById("game-canvas");
 if(catUpdates.length > 0) {
-  console.log(catUpdates.map((c) => c.name));
+  //console.log(catUpdates.map((c) => c.name));
 }
 
 //console.log(drawState);

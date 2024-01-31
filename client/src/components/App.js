@@ -18,7 +18,7 @@ import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
 
-import { Notification, timeout } from "./modules/util.js";
+import { Notification, timeout, BlackScreen } from "./modules/util.js";
 import { achievements, catAnimationDict, themeSurfaces } from "./modules/data.js";
 
 import { Texture } from 'pixi.js';
@@ -66,6 +66,9 @@ const App = () => {
   const [biscuitsJustEarned, setBiscuitsJustEarned] = useState(0);
   const [biscuitNotifVisible, setBiscuitNotifVisible] = useState(false);
   const [theme, setTheme] = useState("cafe");
+  const [loading, setLoading] = useState(false);
+  const [blackScreenOn, setBlackScreenOn] = useState(false);
+  const [catOn, setCatOn] = useState(false);
 
   // prop drilling goes crazyy
 
@@ -96,13 +99,14 @@ const App = () => {
     const userToken = credentialResponse.credential;
     const decodedCredential = jwt_decode(userToken);
     console.log(`Logged in as ${decodedCredential.name}`);
-    post("/api/login", { token: userToken }).then((user) => {
+    post("/api/login", { token: userToken }).then(async (user) => {
       setUserId(user._id);
       get("/api/user", {_id: user._id}).then((user) => {
         setUserObj(user);
         console.log(user);
       });
       post("/api/initsocket", { socketid: socket.id });
+      await triggerLoadingScreen(2000);
       navigate("/join");
     });
   };
@@ -223,17 +227,26 @@ useEffect(() => {
   }
 });
 
+  const triggerLoadingScreen = async (delay) => {
+    setLoading(true);
+    await timeout(100);
+    setBlackScreenOn(true);
+    await timeout(delay);
+    setBlackScreenOn(false);
+    await timeout(100);
+    setLoading(false);
+  };
+
 
   
 
   return (
     <>
+
       <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} userObj={userObj} updateUserObj={updateUserObj}
       editing={editing} setEditing={setEditing}/>
       <Routes>
-        <Route path="/" element={<Landing 
-          handleLogin={handleLogin}
-            userId={userId}/>}/>
+        <Route path="/" element={<Landing handleLogin={handleLogin} userId={userId} triggerLoadingScreen={triggerLoadingScreen}/>}/>
         <Route path="/join" element={<CreateJoinRoom updateUserObj={updateUserObj} userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
           element={<Room theme={theme} setTheme={setTheme} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 

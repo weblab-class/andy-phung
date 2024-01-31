@@ -141,7 +141,17 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
     )
 }
 
+const BlackScreen = (props) => { // takes in on, cat
+    const cl = props.on ? "transition-opacity duration-500 opacity-100 z-[100]" : "transition-opacity duration-500 opacity-0 z-[100]";
+
+    return (
+        <div className={`absolute left-0 right-0 margin-auto flex justify-center items-center w-full h-full bg-black ${cl}`}>
+            {props.cat ? (<></>) : (<></>)}
+        </div>
+    )
+}
+
 
 
 export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout,
-BiscuitsNotification, CatCard }
+BiscuitsNotification, CatCard, BlackScreen }

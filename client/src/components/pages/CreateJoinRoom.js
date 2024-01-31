@@ -146,11 +146,7 @@ const CreateJoinRoom = (props) => {
                         roomid: roomid.current,
                         user: props.userObj.user,
                     }).then((res) => {
-                        if(res.roomid && res.catname) {
-                            if(!props.userObj.user.catsSeen.includes(res.catname)) {
-                                props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: res.catname}, append: "push"});
-                            };
-
+                        if(res.roomid) {
                             props.setCurrentRoomID(res.roomid);
                             setInvalidCode(false);
                             setFullState(false);
@@ -193,7 +189,7 @@ const CreateJoinRoom = (props) => {
     useEffect(() => {
         audioRef.current.volume = props.userObj.user.musicVolume / 100;
         audioRef.current.play().catch(() => {
-            console.log("audio play failed"); 
+            //console.log("audio play failed"); 
         });
         audioRef.current.loop = true;
     }, []);

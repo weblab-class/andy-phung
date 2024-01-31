@@ -208,7 +208,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
     const handleBlur = (event) => {
         if (event.relatedTarget != null) {
             setEditing(!editing);
-            console.log("blur firing?");
+            //console.log("blur firing?");
         }   
     }
 
@@ -254,7 +254,7 @@ const Tasks = (props) => { // wtf
     const [ otherUserObjs, setOtherUserObjs ] = useState([]);
 
     useEffect(() => {
-        console.log("runs");
+        //console.log("runs");
     }, [props.roomState])
 
     useEffect(() => {
@@ -278,10 +278,10 @@ const Tasks = (props) => { // wtf
                 props.roomState.current = update.gameState.canvas;
                 
                 if(update.catUpdates.filter((c) => c.from == "").length > 0) {
-                    console.log("yeah?");
+                    //console.log("yeah?");
                     update.catUpdates.forEach((c) => {
                         if(c.from == "" && !props.userObj.user.catsSeen.includes(c.name)) { // if new spawn and haven't seen yet
-                            console.log("yeah????");
+                            //console.log("yeah????");
                             props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: c.name}, append: "push"});
                         }
                     })
@@ -289,7 +289,7 @@ const Tasks = (props) => { // wtf
                 
             });
 
-            console.log(`client listening on ${props.currentRoomID}`);  
+            //console.log(`client listening on ${props.currentRoomID}`);  
         }
     }, [props.currentRoomID]); 
 
