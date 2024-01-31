@@ -205,15 +205,22 @@ const App = () => {
   }
 
 useEffect(() => {
-  window.addEventListener("beforeunload", function(event) {
-    event.preventDefault();
-    get("/api/whoami").then((user) => {
-      post("/api/leaveroom", {user: user});
-    });
-    event.returnValue = 'are you sure?';
-    return event.returnValue;
+  const handleBeforeUnload = function(event) {
+    //event.preventDefault();
 
-  });
+    post("/api/leaveroom", {user: userObj.user}).then(() => {
+    })
+    if(currentRoomID != "") {
+      updateUserObj({_id: userObj.user._id, inc: {sessionsCompleted: 1,}, append: "inc"});
+    };
+    //event.returnValue = 'are you sure?';
+  };
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
+
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  }
 });
 
 

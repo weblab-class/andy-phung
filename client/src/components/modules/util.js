@@ -97,18 +97,19 @@ const AchievementCard = (props) => { // takes in name, img, opacity, desc
 
 
 const Notification = (props) => { // takes in notificationOpen, header, content, img
-    const notificationClass = props.notificationOpen ? "absolute top-0 right-0 bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right" : "absolute top-0 right-[-250px] bg-[#f5f5f5] h-[140px] w-[250px] z-[18] duration-300 transition-right";
+    const notificationClass = props.notificationOpen ? "absolute top-[-5px] right-[-10px] border-clr border-l-4 border-b-4 rounded-2xl h-[100px] w-[350px] z-[30] duration-300 transition-right" : "absolute top-[-5px] right-[-350px] border-clr border-l-4 border-b-4 rounded-2xl h-[100px] w-[350px] z-[30] duration-300 transition-right";
+
 
     return (
-        <div className={`$flex flex-row flex-nowrap items-center justify-center ${notificationClass} overflow-hidden`}>
-            <div>
-                <img src={props.img} className="w-[50px] h-[50px] border-red-400 border-4"/>
+        <div className={`flex flex-row flex-nowrap items-center ${notificationClass} bg-clr overflow-hidden`}>
+            <div className="z-[30]">
+                <img src={props.img} className="w-[75px] h-[75px] border-clr border-[3px] rounded-xl z-[30] ml-[15px] mr-[15px]"/>
             </div>
-            <div className="border-purple-400 border-4">
-                <div>
+            <div className="z-[30] h-[75px]">
+                <div className="simply-rounded text-clr text-xl z-[30]">
                     {props.header}
                 </div>
-                <div>
+                <div className="simply-rounded text-clr z-[30]">
                     {props.body}
                 </div>
             </div>  

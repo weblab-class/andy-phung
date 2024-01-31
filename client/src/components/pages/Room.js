@@ -20,6 +20,7 @@ import rightarrow_icon from "../../assets/icons/rightarrow_icon.png";
 import x_icon from "../../assets/icons/x_icon.png";
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 import fire from "../../assets/fire_gif.gif";
+import boombox from "../../assets/boombox.png";
 
 const svgclr = "#6A5239";
 
@@ -216,7 +217,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
             { editing ?
                 (
                 <div onBlur={handleBlur} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5]">
-                <input autoFocus type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
+                <input autoFocus placeholder="enter a task here!" type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
                     newTask.current = event.target.value;
                 }}/>
                 <img src={rightarrow_icon} className="h-[10px] w-[10px] mr-[10px] hover:cursor-pointer" onClick={() => {
@@ -312,7 +313,7 @@ const Tasks = (props) => { // wtf
 
 const ApricityStoreItem = (props) => {
     return (
-        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl">
+        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl bg-clr-one">
             <div className="text-sm w-full border-[#694F31] text-center font-medium simply-rounded text-[#694F31]">
                 {props.item.name}
             </div>
@@ -327,7 +328,7 @@ const ApricityStoreItem = (props) => {
                     </div>
                 </div>
             ) : (
-                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer hover:bg-[#CE9C63]">
+                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer bg-[#DEB484] hover:bg-[#DBAC78]">
                     <img src={biscuit_icon} className="w-[18px] h-[18px] mr-[3px]"/>
                     <div className="text-sm font-medium simply-rounded text-[#694F31]">
                         {props.item.price}
@@ -342,7 +343,7 @@ const ApricityStoreItem = (props) => {
 
 const StoreItem = (props) => {
     return (
-        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl">
+        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl bg-clr-one">
             <div className="text-sm w-full border-[#694F31] text-center font-medium simply-rounded text-[#694F31]">
                 {props.item.name}
             </div>
@@ -357,7 +358,7 @@ const StoreItem = (props) => {
                     </div>
                 </div>
             ) : (
-                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer hover:bg-[#CE9C63]">
+                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer bg-[#DEB484] hover:bg-[#DBAC78]">
                     <img src={biscuit_icon} className="w-[18px] h-[18px] mr-[3px]"/>
                     <div className="text-sm font-medium simply-rounded text-[#694F31]">
                         {props.item.price}
@@ -396,8 +397,8 @@ const ToolBar = (props) => {
         height="20" onClick={props.closeModal}/>
         
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="">
-                store
+            <div className="simply-rounded text-2xl text-clr">
+                store!
             </div>
             <div className="mt-[5px] w-full h-auto flex flex-row flex-nowrap justify-center items-center">
                 {storePage > 0 ? (
@@ -437,16 +438,25 @@ const ToolBar = (props) => {
         </div>
     </div>
 
-    const musicModal = <div className="flex flex-col">
-        <img src={close_icon} className="ml-[15px] mt-[15px] mb-[10px] cursor-pointer" width="20"
-        height="20" onClick={props.closeModal}/>
-        <button onClick={prevTrack} className="hover:opacity-65">
-            prev
-        </button>
-        {props.audioTracks[props.audioTrackNumber].name}
-        <button onClick={nextTrack} className="hover:opacity-65">
-            next
-        </button>
+    const musicModal = <div className="flex flex-col items-center">
+        <svg onClick={props.closeModal} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-[35px] h-[35px] absolute left-[15px] top-[15px] hover:opacity-75 hover:cursor-pointer">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        <img src={boombox} className="w-[391px] h-[240px] mt-[30px] mb-[10px]"/>
+        <div className="flex flex-row flex-nowrap items-center">
+            <svg onClick={prevTrack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-8 h-8 hover:cursor-pointer hover:opacity-65 mr-[7px]">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+            <div className="text-xl simply-rounded text-clr w-[70px] text-center">
+                {props.audioTracks[props.audioTrackNumber].name}
+            </div>
+            <svg onClick={nextTrack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-8 h-8 hover:cursor-pointer hover:opacity-65 ml-[7px]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+
+        </div>
+        
+        
         
     </div>
     
@@ -659,7 +669,7 @@ const Room = (props) => {
         }
         setInterval(() => {
             keepAlive(internalCurrentRoomID);
-        }, 1000);
+        }, 5000);
     }, [internalCurrentRoomID]);    
 
     const openModal = (content) => {

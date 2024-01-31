@@ -89,7 +89,7 @@ const SideBar = (props) => { // props.userObj.user._id
                         ) : (
                             
                             <>
-                            <div className="text-4xl font-semibold simply-rounded text-clr mr-[2px]">
+                            <div className="text-4xl font-semibold simply-rounded text-clr mr-[2px] max-w-[230px] max-h[120px]">
                                 {props.userObj.user.name}
                             </div>
                             <svg onClick={() => {
@@ -122,7 +122,7 @@ const SideBar = (props) => { // props.userObj.user._id
                         ) : (
                             
                             <>
-                            <div className="mr-[2px] simply-rounded text-clr text-lg">
+                            <div className="mr-[2px] simply-rounded text-clr text-lg max-w-[230px] max-h[120px]">
                                 {props.userObj.user.bio}
                             </div>
                             <svg onClick={() => {

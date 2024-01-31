@@ -37,12 +37,14 @@ const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
-
 /*
+
 setInterval(() => {
   console.log(Object.keys(rooms));
 }, 2000)
+
 */
+
 
 const getSocketsInRoom = (roomid) => rooms[roomid];
 

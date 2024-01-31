@@ -6,6 +6,8 @@ import { SpinningCat } from "../modules/util";
 import "../../utilities.css";
 
 import purrductive_logo_tight from "../../assets/purrductive_logo_tight.png";
+import purrductive_tagline from "../../assets/purrductive_tagline.png";
+
 
 const GOOGLE_CLIENT_ID = "939107447896-1b8m9slrq6ri9asd0q9cnq3q2ne7aud1.apps.googleusercontent.com";
 
@@ -18,7 +20,8 @@ const Landing = ({ userId, handleLogin }) => {
         <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
             <div className="flex flex-col items-center justify-center">
                 <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                    <img src={purrductive_logo_tight} className="h-[5.9375rem] mb-[1.875rem]"/>
+                    <img src={purrductive_logo_tight} className="h-[95px] mb-[10px]"/>
+                    <img src={purrductive_tagline} className="h-[20px] mb-[30px]"/>
                     <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
                 </GoogleOAuthProvider>
                 <div className="h-[1.875rem]">

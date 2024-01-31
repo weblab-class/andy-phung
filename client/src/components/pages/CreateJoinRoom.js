@@ -69,33 +69,43 @@ const CreateJoinRoom = (props) => {
     const CreateRoomForm = 
         <div className="w-[400px] h-[200px] flex flex-col">
             
-            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => setSubScreen("select")}/>
-            <div>
-                max capacity:
-                <select className="w-[60px]" defaultValue="4" onChange={(event) => {
-                    capacity.current = event.target.value;
-                }}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
-            </div>
-            <div>
-                theme: 
-                <select onChange={(event) => {
-                    theme.current = event.target.value;
-                }}>
-                    <option value="cafe">cafe</option>
-                    {props.userObj.user.toysBought.includes("Apricity (Theme)") ? (<option value="apricity">apricity</option>) : (<></>)}
-                </select>
-            </div>
-            
-            <Link to="/join/room" className="flex items-center justify-center border-2 border-clr hover:bg-[#D2B38C] rounded-2xl" onClick={() => {
+            <svg onClick={() => setSubScreen("select")} className="top-[10px] left-[10px] w-[30px] h-[30px] hover:cursor-pointer hover:opacity-65" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+            </svg>
+            <div className="flex flex-col items-center mr-auto ml-auto min-w-[320px] h-[150px] justify-between ">
+                <div className="flex flex-row justify-between w-full h-[100px] ">
+                    <div className="w-[170px]">
+                        <div className="flex flex-col">
+                            <div className="simply-rounded text-clr text-sm">
+                            max capacity
+                            </div>
+                            <select className="w-[60px] mb-[2px] text-xl text-clr simply-rounded border-clr border-4 bg-clr rounded-xl" defaultValue="4" onChange={(event) => {
+                                capacity.current = event.target.value;
+                            }}>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col">
+                            <div className="simply-rounded text-clr text-sm">
+                                theme 
+                            </div>
+                            <select className="w-[120px] text-xl text-clr simply-rounded border-clr border-4 bg-clr rounded-xl" onChange={(event) => {
+                                theme.current = event.target.value;
+                            }}>
+                                <option value="cafe">cafe</option>
+                            </select>
+                        </div>
+                    </div>
+                    <img src={"https://i.imgur.com/WV2O28t.png"} width={190} height={100} className="border-8 border-clr rounded-xl"/>
+                </div>
+                <Link to="/join/room" className="w-full text-lg h-[30px] flex items-center justify-center border-[3px] text-clr simply-rounded border-clr bg-[#DEB484] hover:bg-[#DBAC78] rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
                 props.setTheme(theme.current);
                 post("/api/joinroom", {
@@ -109,52 +119,65 @@ const CreateJoinRoom = (props) => {
                         props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: res.catname}, append: "push"});
                     };
                 });
-            }}>create</Link>
+                }}>create room!</Link>
+            </div>
+            
         </div>
     
+    // #DEB484
+    // hover: #DBAC78
     const JoinRoomForm = 
         <div className="w-[400px] h-[200px] flex flex-col">
-            <img src={back_icon} width="30px" height="30px" className="cursor-pointer" onClick={() => {setSubScreen("select"); resetJoinStates();}}/>
-            <div>
-                join code: 
-                <input autoFocus type="text" onChange={(event) => {
-                    roomid.current = event.target.value;
-                }}/>
-            </div>
-            <button className="flex items-center justify-center border-2 border-clr hover:bg-[#D2B38C] rounded-2xl" onClick={() => {
-                props.setBiscuitsJustEarned(0);
-                post("/api/joinroom", {
-                    roomid: roomid.current,
-                    user: props.userObj.user,
-                }).then((res) => {
-                    if(res.roomid && res.catname) {
-                        if(!props.userObj.user.catsSeen.includes(res.catname)) {
-                            props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: res.catname}, append: "push"});
-                        };
+            <svg onClick={() => {setSubScreen("select"); resetJoinStates();}} className="top-[10px] left-[10px] w-[30px] h-[30px] hover:cursor-pointer hover:opacity-65" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+            </svg>
+            <div className="relative min-w-[363px] h-[150px] mr-auto ml-auto flex flex-col justify-center">
+                <div className="flex flex-row flex-nowrap items-center">
+                    <div className="ml-[2px] text-clr text-lg simply-rounded mr-[7px]">
+                        join code:
+                    </div>
+                    <input className="w-[272px] border-2 border-clr rounded-lg" autoFocus type="text" onChange={(event) => {
+                        roomid.current = event.target.value;
+                    }}/>
+                </div>
+                <button className="mt-[7px] w-full text-lg text-clr simply-rounded flex items-center justify-center border-[3px] border-clr bg-[#DEB484] hover:bg-[#DBAC78] rounded-2xl" onClick={() => {
+                    props.setBiscuitsJustEarned(0);
+                    post("/api/joinroom", {
+                        roomid: roomid.current,
+                        user: props.userObj.user,
+                    }).then((res) => {
+                        if(res.roomid && res.catname) {
+                            if(!props.userObj.user.catsSeen.includes(res.catname)) {
+                                props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: res.catname}, append: "push"});
+                            };
 
-                        props.setCurrentRoomID(res.roomid);
-                        setInvalidCode(false);
-                        setFullState(false);
-                        navigate("/join/room");
-                    } else if (res.errState == "invalid") {
-                        setInvalidCode(true);
-                        setFullState(false);
-                    } else if (res.errState == "full") {
-                        setFullState(true);
-                        setInvalidCode(false);
-                    }
-                });
-            }}>join</button>
-            {invalidCode && (
-                <div className="flex items-center justify-center w-[300px] h-[100px]">
+                            props.setCurrentRoomID(res.roomid);
+                            setInvalidCode(false);
+                            setFullState(false);
+                            navigate("/join/room");
+                        } else if (res.errState == "invalid") {
+                            setInvalidCode(true);
+                            setFullState(false);
+                        } else if (res.errState == "full") {
+                            setFullState(true);
+                            setInvalidCode(false);
+                        }
+                    });
+                }}>join room!</button>
+                {invalidCode && (
+                <div className="absolute bottom-0 left-4 text-clr">
                     invalid code lol
                 </div>
             )}
             {fullState && (
-                <div className="flex items-center justify-center w-[300px] h-[100px]">
+                <div className="absolute bottom-0 left-4 text-clr simply-rounded">
                     full room :(
                 </div>
             )}
+            </div>
+
+            
+            
         </div>
 
     const mapping = { // lol
