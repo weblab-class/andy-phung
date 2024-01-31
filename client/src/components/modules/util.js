@@ -2,6 +2,7 @@ import React, { useEffect, useState, memo } from "react";
 
 
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
+import sleeping from "../../assets/sleeping.gif";
 
 
 const Modal = (props) => { // 600px, 350px default
@@ -142,11 +143,11 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
 }
 
 const BlackScreen = (props) => { // takes in on, cat
-    const cl = props.on ? "transition-opacity duration-500 opacity-100 z-[100]" : "transition-opacity duration-500 opacity-0 z-[100]";
+    const cl = props.on ? "transition-opacity duration-1000 opacity-100 z-[100]" : "transition-opacity duration-1000 opacity-0 z-[100]";
 
     return (
         <div className={`absolute left-0 right-0 margin-auto flex justify-center items-center w-full h-full bg-black ${cl}`}>
-            {props.cat ? (<></>) : (<></>)}
+            {props.cat ? (<img src={sleeping} className="w-[125px] h-[100px]"/>) : (<></>)}
         </div>
     )
 }

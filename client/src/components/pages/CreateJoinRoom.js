@@ -105,7 +105,7 @@ const CreateJoinRoom = (props) => {
                     </div>
                     <img src={"https://i.imgur.com/WV2O28t.png"} width={190} height={100} className="border-8 border-clr rounded-xl"/>
                 </div>
-                <Link to="/join/room" className="w-full text-lg h-[30px] flex items-center justify-center border-[3px] text-clr simply-rounded border-clr bg-[#DEB484] hover:bg-[#DBAC78] rounded-2xl" onClick={() => {
+                <div className="w-full text-lg h-[30px] flex items-center justify-center border-[3px] text-clr simply-rounded border-clr bg-[#DEB484] hover:bg-[#DBAC78] hover:cursor-pointer rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
                 props.setTheme(theme.current);
                 post("/api/joinroom", {
@@ -113,13 +113,13 @@ const CreateJoinRoom = (props) => {
                     init: true,
                     capacity: capacity.current,
                     theme: theme.current,
-                }).then((res) => {
-                    props.setCurrentRoomID(res.roomid); 
+                }).then(async (res) => {
+                    await props.triggerLoadingScreen(1500, "/join/room", () => {props.setCurrentRoomID(res.roomid)});
                     if(!props.userObj.user.catsSeen.includes(res.catname)) {
                         props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: res.catname}, append: "push"});
                     };
                 });
-                }}>create room!</Link>
+                }}>create room!</div>
             </div>
             
         </div>
@@ -145,12 +145,12 @@ const CreateJoinRoom = (props) => {
                     post("/api/joinroom", {
                         roomid: roomid.current,
                         user: props.userObj.user,
-                    }).then((res) => {
+                    }).then(async (res) => {
                         if(res.roomid) {
-                            props.setCurrentRoomID(res.roomid);
+                            await props.triggerLoadingScreen(1500, "/join/room", () => {props.setCurrentRoomID(res.roomid)});
                             setInvalidCode(false);
                             setFullState(false);
-                            navigate("/join/room");
+                            //navigate("/join/room");
                         } else if (res.errState == "invalid") {
                             setInvalidCode(true);
                             setFullState(false);

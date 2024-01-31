@@ -378,9 +378,11 @@ const ToolBar = (props) => {
     const pages = Math.ceil(storeItems.length/6)-1;
 
     const buyItem = (name, biscuits) => {
-        props.updateUserObj({_id: props.userObj.user._id, push: {toysBought: name}, append: "push"});
-        props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: -1*biscuits}, append: "inc"});
-        setItemBoughtFlag(!itemBoughtFlag);
+        if(props.userObj.user.biscuits >= biscuits) { // holy fuckk i almost forgot this -andy 14 minutes before the deadline
+            props.updateUserObj({_id: props.userObj.user._id, push: {toysBought: name}, append: "push"});
+            props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: -1*biscuits}, append: "inc"});
+            setItemBoughtFlag(!itemBoughtFlag);
+        };
     };
     
 

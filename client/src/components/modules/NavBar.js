@@ -379,11 +379,11 @@ const NavBar = (props) => {
     };
 
     const leaveRoom = () => {
-        get("/api/whoami").then((user) => {
+        get("/api/whoami").then(async (user) => {
             if (user._id) {
                 post("/api/leaveroom", { user: user });
-                props.setCurrentRoomID("");
-                navigate("/join");
+                await props.triggerLoadingScreen(1000, "/join", () => {props.setCurrentRoomID("")});
+                //navigate("/join");
             };
         });
         

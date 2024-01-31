@@ -68,7 +68,7 @@ const App = () => {
   const [theme, setTheme] = useState("cafe");
   const [loading, setLoading] = useState(false);
   const [blackScreenOn, setBlackScreenOn] = useState(false);
-  const [catOn, setCatOn] = useState(false);
+  const [catOn, setCatOn] = useState(true);
 
   // prop drilling goes crazyy
 
@@ -106,8 +106,7 @@ const App = () => {
         console.log(user);
       });
       post("/api/initsocket", { socketid: socket.id });
-      await triggerLoadingScreen(2000);
-      navigate("/join");
+      await triggerLoadingScreen(0, "/join");
     });
   };
 
@@ -227,14 +226,30 @@ useEffect(() => {
   }
 });
 
-  const triggerLoadingScreen = async (delay) => {
-    setLoading(true);
-    await timeout(100);
-    setBlackScreenOn(true);
-    await timeout(delay);
-    setBlackScreenOn(false);
-    await timeout(100);
-    setLoading(false);
+  const triggerLoadingScreen = async (delay, route, callback, cat=true) => {
+    if(!cat) {
+      setCatOn(false);
+    }
+
+    if(delay != 0) { // idk what im doign
+      setLoading(true);
+      await timeout(100);
+      setBlackScreenOn(true);
+      await timeout(delay);
+      setBlackScreenOn(false);
+      callback();
+      navigate(route);
+      await timeout(1000);
+      setLoading(false);
+    } else {
+      navigate(route);
+    }
+
+    if(!catOn) {
+      setCatOn(true);
+    };
+    
+    
   };
 
 
@@ -242,12 +257,16 @@ useEffect(() => {
 
   return (
     <>
-
-      <NavBar visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} userObj={userObj} updateUserObj={updateUserObj}
+      {loading ? (
+        <BlackScreen on={blackScreenOn} cat={catOn}/>
+      ) : (
+        <></>
+      )}
+      <NavBar triggerLoadingScreen={triggerLoadingScreen} visible={useLocation().pathname.includes("/join")} handleLogout={handleLogout} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen} setSideBarOpen={setSideBarOpen} userObj={userObj} updateUserObj={updateUserObj}
       editing={editing} setEditing={setEditing}/>
       <Routes>
         <Route path="/" element={<Landing handleLogin={handleLogin} userId={userId} triggerLoadingScreen={triggerLoadingScreen}/>}/>
-        <Route path="/join" element={<CreateJoinRoom updateUserObj={updateUserObj} userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
+        <Route path="/join"  element={<CreateJoinRoom triggerLoadingScreen={triggerLoadingScreen} updateUserObj={updateUserObj} userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
           element={<Room theme={theme} setTheme={setTheme} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages
