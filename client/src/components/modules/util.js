@@ -9,7 +9,7 @@ const Modal = (props) => { // 600px, 350px default
     //console.log(props.height);
     
     return props.visible && (
-        <div className={`bg-clr border-clr border-4 rounded-3xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[600px] h-[350px] z-30 overflow-auto`}>
+        <div className={`bg-clr border-clr border-4 rounded-3xl absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[600px] h-[350px] z-30`}>
             {props.content}
         </div>
     )
@@ -45,29 +45,48 @@ const SpinningCat = (props) => {
     )
 }
 
+const CatCard = (props) => {
+    return (
+        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[93.75px] h-[75px]`}/>
+            <div className="mt-auto mb-auto h-[75px] overflow-hidden">
+                <div className="candy-beans text-lg text-clr m-0">
+                    {props.name}
+                </div>
+                <div className="candy-beans text-xs text-clr m-0">
+                    Personality: {props.personality}
+                </div>
+                <div className="candy-beans text-xs text-clr m-0">
+                    {props.attribution}
+                </div>
+            </div>
+        </div>
+    )
+};
+
 const AchievementCard = (props) => { // takes in name, img, opacity, desc
     // just a sanity check for opacity i would not actually write this
 
     return props.unlocked ? (
-        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
-            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-100`}/>
-            <div className="mt-[10px] overflow-auto">
-                <div className="font-bold">
+        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] opacity-100 border-clr border-[3px] rounded-lg`}/>
+            <div className="mt-auto mb-auto h-[75px] overflow-hidden">
+                <div className="candy-beans text-lg text-clr m-0">
                     {props.name}
                 </div>
-                <div>
+                <div className="candy-beans text-xs text-clr m-0">
                     {props.desc}
                 </div>
             </div>
         </div>
     ) : (
-        <div className="flex ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-black border-4 rounded-lg">
-            <img src={props.img} className={`ml-[10px] mt-[10px] mr-[10px] w-[65px] h-[65px] opacity-40`}/>
-            <div className="mt-[10px] overflow-auto">
-                <div className="font-bold">
+        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] opacity-40 border-clr border-[3px] rounded-lg`}/>
+            <div className="mt-auto mb-auto h-[75px] overflow-hidden">
+                <div className="candy-beans text-lg text-clr m-0">
                     {props.name}
                 </div>
-                <div>
+                <div className="candy-beans text-xs text-clr m-0">
                     {props.desc}
                 </div>
             </div>
@@ -124,4 +143,4 @@ const BiscuitsNotification = (props) => { // takes in biscuits, visible
 
 
 export { CenterScreen, Modal, SpinningCat, AchievementCard, Notification, timeout,
-BiscuitsNotification }
+BiscuitsNotification, CatCard }

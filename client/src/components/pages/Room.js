@@ -5,8 +5,9 @@ import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js"
 import { post, get } from "../../utilities"; 
 
 import { updateCanvasState, drawToyPlaceAreas, clearToyPlaceAreas, drawToy, convertCoord } from "../../canvasManager.js";
-import { Modal, AchievementCard, Notification, BiscuitsNotification } from "../modules/util.js";
-import { achievements, catAnimationDict, themeSurfaces, storeItems } from "../modules/data.js";
+import { Modal, AchievementCard, Notification, BiscuitsNotification, CatCard } from "../modules/util.js";
+import { achievements, themeSurfaces, cats, storeItems } from "../modules/data.js";
+import { catAnimationDict, } from "../modules/animations.js";
 
 import back_icon from "../../assets/icons/back_icon.png";
 import store_icon from "../../assets/icons/store_icon.png";
@@ -19,6 +20,8 @@ import rightarrow_icon from "../../assets/icons/rightarrow_icon.png";
 import x_icon from "../../assets/icons/x_icon.png";
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
 import fire from "../../assets/fire_gif.gif";
+
+const svgclr = "#6A5239";
 
 // lmaoo what is this
 
@@ -52,46 +55,70 @@ function log(num, base) {
 
 
 const TasksProfile = (props) => { // takes in userObj
-    const profileModal = <div className="flex flex-col items-center">
-        <img src={close_icon} className="absolute left-[15px] top-[15px] mb-[10px] cursor-pointer" width="20" 
-        height="20" onClick={props.closeModal}/>
-        <div className="h-[40px]">
+    const profileModal = <div className="flex flex-col items-center justify-center">
+    <svg onClick={props.closeModal} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-[35px] h-[35px] absolute left-[15px] top-[15px] hover:opacity-75 hover:cursor-pointer">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+    </svg>
 
-        </div>
-        <div className="flex flex-row mb-[7px]">
-            <img src={props.userObj.user.pfp} className="w-[90px] h-[90px] mr-[20px]"/>
-            <div className="flex flex-col">
+    <div id="brown-scrollbar" className="flex flex-col items-center h-[342px] w-full overflow-auto">
+        <div className="flex flex-row mt-[40px] mb-[20px] justify-center">
+            <div id="pfp-container">
+                <img src={props.userObj.user.pfp} className="w-[105px] h-[105px] mr-[20px] border-clr border-[6px] rounded-full"/>
+            </div>
+
+            <div className="flex flex-col" id="name-bio-container">
                 <div className="flex flex-row items-center mb-[5px]">
-                    <div className="text-3xl font-bold mr-[2px]">
+                    <div className="text-4xl font-semibold simply-rounded text-clr mr-[2px]">
                         {props.userObj.user.name}
                     </div>
                 </div>
                 <div className="flex flex-row items-center">
-                    <div className="mr-[2px]">
+                    <div className="mr-[2px] simply-rounded text-clr text-lg">
                         {props.userObj.user.bio}
                     </div>
                 </div>
             </div>
         </div>
-        <div className="flex flex-col items-center mb-[7px]">
-            <div>
-                stats
+        <div id="divider" className="mt-[5px] mb-[5px] w-[85%] border-b-4 border-clr opacity-40">
+        </div>
+        <div className="w-full flex flex-col items-center mb-[7px]">
+            <div className="text-2xl text-clr simply-rounded font-bold">
+                ~ stats ~
             </div>
-            <div className="flex flex-row">
-                <div className="mr-[7px]">
+            <div className="w-full flex flex-row justify-between flex-nowrap">
+                <div className="ml-[67px] text-clr simply-rounded text-xl font-light">
                     tasks finished: {props.userObj.user.tasksCompleted}
                 </div>
-                <div>
+                <div className="mr-[67px] text-clr simply-rounded text-xl font-light">
                     sessions completed: {props.userObj.user.sessionsCompleted}
                 </div>
             </div>
         </div>
+        <div id="divider" className="mt-[5px] mb-[5px] w-[85%] border-b-4 border-clr opacity-40">
+        </div>
         <div className="flex flex-col items-center">
-            <div className="">
-                achievements
+            <div className="text-2xl text-clr simply-rounded font-bold">
+                ~ cats seen ~
             </div>
             <div className="flex flex-wrap justify-center">
-                {props.userObj.user.achievements.map((userAchievement) => {
+                {props.userObj.user.catsSeen.map((cat) => {
+                    //console.log(achievement);
+                    if(cats[cat]) {
+                        return (
+                            <CatCard name={cat} personality={cats[cat].personality} attribution={cats[cat].attribution} img={catAnimationDict[cat]["standing"][0]} unlocked={true}/>
+                        )
+                    };
+                })}
+            </div>
+        </div>
+        <div id="divider" className="mt-[5px] mb-[5px] w-[85%] border-b-4 border-clr opacity-40">
+        </div>
+        <div className="flex flex-col items-center">
+            <div className="text-2xl text-clr simply-rounded font-bold">
+                ~ achievements ~
+            </div>
+            <div className="flex flex-wrap justify-center">
+                {props.userObj.user.achievements.map((userAchievement) => { // FIXME? not in order
                     let achievement = achievements.filter((a) => {
                         return a.name == userAchievement;
                     });
@@ -105,6 +132,7 @@ const TasksProfile = (props) => { // takes in userObj
             </div>
         </div>
     </div>
+</div>
 
     //console.log(`props userobj ${props.userObj.user}`);
     return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
@@ -129,7 +157,7 @@ const OtherTaskListItem = (props) => { // props: content
 
 const OtherTaskList = (props) => { // just used to display tasks (scroll on overflow); props: tasks; for everyone else
     return (
-        <div className="w-full h-[160px] overflow-auto overflow-x-hidden z-[5]">
+        <div id="gray-scrollbar" className="w-full h-[160px] overflow-auto overflow-x-hidden z-[5]">
             {props.tasks.map((content) => (
                 <OtherTaskListItem content={content}/>
             ))}
@@ -208,7 +236,7 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
                 </div>
                 )
             }
-            <div className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
+            <div id="gray-scrollbar" className="w-full h-[120px]  overflow-auto overflow-x-hidden z-[5]">
                 {props.userTasks.map((content, idx) => (
                     <UserTaskListItem createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={props.userTasks} setUserTasks={props.setUserTasks} userTasksCompleted={props.userTasksCompleted} setUserTasksCompleted={props.setUserTasksCompleted} content={content} idx={idx}/>
                 ))}
@@ -551,7 +579,7 @@ const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
         <canvas onClick={placeToy} onMouseMove={changeCursor} id="toy-place-canvas" width={1200} height={250} className={`absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[4] ${hoverCursor ? "cursor-pointer" : "cursor-default"}`}/>
         <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3]"/>     
         <div className="w-[1200px] h-[250px] absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1]">
-            <img src={fire} width={41} height={41} className="absolute bottom-[44px] left-[110px] right-0 ml-auto mr-auto z-[2]"/>
+            <img src={fire} width={35} height={35} className="absolute bottom-[44px] left-[110px] right-0 ml-auto mr-auto z-[2]"/>
             <canvas id="game-canvas" width={1200} height={250} className="cafe-mockup-bg z-[1]"/>
         </div>
         

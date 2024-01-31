@@ -367,4 +367,4 @@ const storeItems = [
 
 ];
     
-export { achievements, storeItems }
+export { achievements, storeItems, cats }
