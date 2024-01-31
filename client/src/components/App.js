@@ -208,7 +208,7 @@ const App = () => {
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
-        <Route path="/join" element={<CreateJoinRoom setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
+        <Route path="/join" element={<CreateJoinRoom userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
           element={<Room theme={theme} setTheme={setTheme} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages

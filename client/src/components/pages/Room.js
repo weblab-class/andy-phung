@@ -18,6 +18,7 @@ import plus_icon from "../../assets/icons/plus_icon.png";
 import rightarrow_icon from "../../assets/icons/rightarrow_icon.png";
 import x_icon from "../../assets/icons/x_icon.png";
 import biscuit_icon from "../../assets/icons/biscuit_icon.png";
+import fire from "../../assets/fire_gif.gif";
 
 // lmaoo what is this
 
@@ -238,7 +239,7 @@ const Tasks = (props) => { // wtf
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
-                updateCanvasState(update.gameState.canvas, update.gameState.frame);
+                updateCanvasState(update.gameState.canvas, update.gameState.frame, update.catUpdates);
                 setOtherUserTasks(userObjs);
 
                 if(props.theme != update.gameState.canvas.theme) {
@@ -506,10 +507,11 @@ const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
 
     return (
         <>
-        <canvas onClick={placeToy} onMouseMove={changeCursor} id="toy-place-canvas" width={1200} height={250} className={`absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3] ${hoverCursor ? "cursor-pointer" : "cursor-default"}`}/>
-        <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[2]"/>
+        <canvas onClick={placeToy} onMouseMove={changeCursor} id="toy-place-canvas" width={1200} height={250} className={`absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[4] ${hoverCursor ? "cursor-pointer" : "cursor-default"}`}/>
+        <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3]"/>
+        <img src={fire} width={41} height={41} className="absolute bottom-[44px] left-[110px] right-0 ml-auto mr-auto z-[2]"/>
         <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1] cafe-mockup-bg"/>
-        <div className="absolute bottom-0 left-0 right-0 ml-auto mr-auto w-full h-[470px] z-0 cafe-skyscrapers-bg">
+        <div className="absolute bottom-0 left-0 right-0 ml-auto mr-auto w-full h-[470px] z-[0] cafe-skyscrapers-bg">
 
         </div>
         </>
@@ -521,17 +523,34 @@ const Room = (props) => {
     const navigate = useNavigate(); 
     const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
     // so we can force a rerender (to display join code) when we receive the roomid
-    const audioTracks = [ {
-        name: "specialz",
-        link: "https://cdn.discordapp.com/attachments/754243466241769515/1200523017726468106/SPECIALZ.mp3",
-    },
-    {
-        name: "where our blue is",
-        link: "https://cdn.discordapp.com/attachments/754243466241769515/1201041221624279101/-_Where_Our_Blue_Is_Tatsuya_Kitani.mp3",
-    }];
+    const audioTracks = [ 
+        {
+            name: "lofi 1",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174774583318/Animal_Crossing__New_Horizons_-_5AM_Lofi_Lia_Remix.mp3",
+        },
+        {
+            name: "lofi 2",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175109857300/animal_crossing_lofi_new_horizons.mp3",
+        },
+        {
+            name: "lofi 3",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175420493866/Copyright_Locked_Chill_Lofi_Hiphop_-_Kimochi_by_FrkA2.mp3",
+        },
+        {
+            name: "lofi 4",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174455808070/Animal_Crossing_New_Leaf_-_8PM_Lofi_Lia_Remix.mp3",
+        },
+        {
+            name: "lofi 5",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174078054440/Ao_no_Sumika_Jujutsu_Kaisen_Season_2_Opening_but_its_lofi_hip_hop.mp3",
+        },
+    ];
 
     const [audioTrackNumber, setAudioTrackNumber] = useState(0);
     const audioRef = useRef();
+
+    const sfxRef = useRef();
+
 
     const [placingToy, setPlacingToy] = useState(false);
     const [toyBeingPlaced, setToyBeingPlaced] = useState("");
@@ -546,7 +565,16 @@ const Room = (props) => {
         audioRef.current.volume = props.userObj.user.musicVolume / 100;
         audioRef.current.play();
         audioRef.current.loop = true;
-    }, [audioTrackNumber, props.userObj]);
+    }, [audioTrackNumber, props.userObj.user.musicVolume]);
+
+    useEffect(() => {
+        sfxRef.current.volume = props.userObj.user.sfxVolume / 100;
+        sfxRef.current.loop = true;
+    }, [props.userObj.user.sfxVolume]);
+
+    useEffect(() => {
+        sfxRef.current.play();
+    }, [])
 
     useEffect(() => {
         if(internalCurrentRoomID != "") {
@@ -592,8 +620,12 @@ const Room = (props) => {
             <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>
             <BiscuitsNotification biscuits={props.biscuitsJustEarned} visible={props.biscuitNotifVisible}/>
             <audio ref={audioRef} src={audioTracks[audioTrackNumber].link}/>
+            <audio ref={sfxRef} src="https://cdn.discordapp.com/attachments/1201919002264490034/1202047959324446720/fireplace_sfx.mp3"/>
         </div>
     )
 }
 
 export default Room;
+
+// "https://cdn.discordapp.com/attachments/754243466241769515/1201041221624279101/-_Where_Our_Blue_Is_Tatsuya_Kitani.mp3"
+// "https://cdn.discordapp.com/attachments/1201919002264490034/1202047959324446720/fireplace_sfx.mp3"

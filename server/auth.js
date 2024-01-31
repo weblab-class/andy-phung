@@ -35,7 +35,7 @@ function getOrCreateUser(user) {
       sessionsCompleted: 0,
       toysBought: [],
       sfxVolume: 100,
-      musicVolume: 100,
+      musicVolume: 33,
       notifications: true,
       themesUnlocked: ["cafe",],
     });

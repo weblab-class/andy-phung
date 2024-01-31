@@ -209,7 +209,18 @@
 .cafe-sky-bg {
   background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201431193263034368/night_sky_bg-01.png?ex=65c9cafd&is=65b755fd&hm=ad08671e3bc860ca8c4ce8d819d271b1517b62ad1e5951234c6d997cf3a47ac9&);
   background-size: contain;
-  background-repeat: repeat-x;
+  background-repeat: repeat;
+  animation: cafeBackgroundScroll 250s linear infinite;
+}
+
+@keyframes cafeBackgroundScroll {
+	0% {
+    background-position: 0% 0%;
+  }
+	100% {
+    /* pattern bg texture is 1800x1800px */
+    background-position:-100% 0%;
+  }
 }
 
 .cafe-skyscrapers-bg {
@@ -241,3 +252,18 @@
   font-size: 0.625rem;
   line-height: 0.75rem;
 }
+
+.bg-clr {
+  background-color: #BC9D77;
+}
+
+
+.border-clr {
+  border-color: #6A5239;
+}
+
+.text-clr {
+  color: #6A5239;
+}
+
+/* hover:bg-[#DED6CC]*/

@@ -26,30 +26,48 @@ const express = require("express");
 const User = require("./models/user");
 const Cat = require("./models/cat");
 
-
-
 const themeSurfaces = {
-    "cafe": [ // list of points where cat can spawn (they just spawn for now)
-        {
-            x: 45, // on fireplace
-            y: -2,
-        },
-        {
-            x: -440, // on counter
-            y: -9,
-        },
-        {
-            x: -100, // on pillow
-            y: -78,
-        },
-        {
-            x: 450, // on railing
-            y: -16,
-        },
-        { 
-            x: 290, // next to pot
-            y: -89,
-        },
+    "cafe": [ // list of points where cat can spawn
+    {
+        x: 45, // on fireplace
+        y: -2,
+    },
+    {
+        x: -440, // on counter
+        y: -9,
+    },
+    {
+        x: -100, // on pillow
+        y: -78,
+    },
+    {
+        x: 450, // on railing
+        y: -16,
+    },
+    { 
+        x: 290, // next to pot
+        y: -89,
+    },
+    {
+        x: -460, // counter ground 1
+        y: -89,
+    },
+    {
+        x: -300, // counter ground 2
+        y: -89,
+    },
+    {
+        x: 120, // fireplace ground
+        y: -89,
+    },
+    {
+        x: 470, // railing ground
+        y: -89,
+    },
+    { 
+        x: 235, // bookshelf
+        y: -32,
+    },
     ],
     "apricity": [
         {
@@ -203,7 +221,8 @@ const getNewCatState = (cat, currentState) => { // takes in individ cat obj
     let defaultState;
     for (const [state, prob] of Object.entries(cat)) {
         runningTotal += prob;
-        if(runningTotal > rand && state in catStateMapper[currentState]) {
+        if(runningTotal > rand && catStateMapper[currentState].includes(state)) {
+            //console.log("state transitioned succesfully");
             return state;
         }
         last = state;
@@ -218,6 +237,12 @@ getRandomInt = (max) => {
     return Math.floor(Math.random() * max);
 };
 
+function getRandomIntRanged(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const gameStates = {};
 
 const initializeGame = (roomid, theme) => {
@@ -228,9 +253,13 @@ const initializeGame = (roomid, theme) => {
             surfaces: themeSurfaces[theme],
             cats: [{
                 name: Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length-1)],
-                position: getRandomInt(5),
+                position: getRandomInt(themeSurfaces[theme].length),
                 state: catStates[getRandomInt(catStates.length-1)],
             }], 
+            spawnCountdown: -1, // between 1-3 seconds -> 20fps * [1,3] = [20, 60]
+            spawnFrame: -1, // 4 spawn frames ([0, 30] bc zero-indexed) at opacities 0.3, 0.5, 0.7, 0.9
+            spawningCat: "",
+            updateObjToSend: {},
         },
         frame: 0,
     }
@@ -257,12 +286,13 @@ const updateGameState = (roomid) => {
     let totalTasksCompleted = 0;
     let newCatName;
     let newCatPosition;
+    let newCatState;
 
     let catUpdates = [];
 
     //console.log(`wtf is happening: ${gameStates[roomid]}`);
 
-    if(gameStates[roomid].frame >= 600) { // 20 fps * 30s = 600 frames between every cat state update
+    if(gameStates[roomid].frame >= 1200) { // 20 fps * 60s = 1200 frames between every cat state update
         gameStates[roomid].canvas.cats.forEach((cat, idx) => {
             let newState;
             if(cat.name in commonCats) {
@@ -286,39 +316,64 @@ const updateGameState = (roomid) => {
         gameStates[roomid].frame += 1;
     };
 
+    if(gameStates[roomid].canvas.spawnCountdown == 0) {
+        gameStates[roomid].canvas.spawnCountdown = -1;
+        gameStates[roomid].canvas.spawnFrame = 0;
+        const updateObj = gameStates[roomid].canvas.updateObjToSend;
+        catUpdates = [updateObj];
+        gameStates[roomid].canvas.spawningCat = updateObj.name;
+
+        gameStates[roomid].canvas.cats.push({
+            name: updateObj.name,
+            position: updateObj.position,
+            state: updateObj.to,
+        });
+        gameStates[roomid].canvas.updateObjToSend = {};
+    } else if(gameStates[roomid].canvas.spawnCountdown != -1) {
+        gameStates[roomid].canvas.spawnCountdown += -1;
+    };
+
+
+    if(gameStates[roomid].canvas.spawnFrame > 30) {
+        gameStates[roomid].canvas.spawnFrame = -1;
+        gameStates[roomid].canvas.spawningCat = "";
+    } else if(gameStates[roomid].canvas.spawnFrame != -1) {
+        gameStates[roomid].canvas.spawnFrame += 1;
+    };
+
+    
+
     gameStates[roomid].users.forEach((u) => {
         totalTasksCompleted = totalTasksCompleted + u.tasksCompleted;
     });
 
-        if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
-            //console.log('spawning new cat');
-            // spawning new cat (w not same name)
-            let rareCat = Math.random() <= 0.05;
-            while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
-                if(rareCat) {
-                    //console.log("rare cat spawned!");
-                    newCatName = Object.keys(rareCats)[getRandomInt(Object.keys(rareCats).length)];
-                } else {
-                    newCatName = Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length)];
-                }
-                
+    if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
+        //console.log('spawning new cat');
+        // spawning new cat (w not same name)
+        let rareCat = Math.random() <= 0.05;
+        while(newCatName == undefined || gameStates[roomid].canvas.cats.some((e) => e.name == newCatName)) {
+            if(rareCat) {
+                //console.log("rare cat spawned!");
+                newCatName = Object.keys(rareCats)[getRandomInt(Object.keys(rareCats).length)];
+            } else {
+                newCatName = Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length)];
             };
-            while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
-                newCatPosition = getRandomInt(5);
-            };
+        };
+        while(newCatPosition == undefined || gameStates[roomid].canvas.cats.some((e) => e.position == newCatPosition)) {
+            newCatPosition = getRandomInt(gameStates[roomid].canvas.surfaces.length);
+        };
 
-            gameStates[roomid].canvas.cats.push({
+
+        if(gameStates[roomid].canvas.spawnCountdown == -1) {
+            newCatState = catStates[getRandomInt(catStates.length)];
+            gameStates[roomid].canvas.spawnCountdown = getRandomIntRanged(20, 61);
+            gameStates[roomid].canvas.updateObjToSend = {
                 name: newCatName,
                 position: newCatPosition,
-                state: catStates[getRandomInt(catStates.length)],
-            });
-
-            catUpdates = [{
-                name: newCatName,
-                position: newCatPosition,
-                to: catStates[getRandomInt(catStates.length)],
+                to: newCatState,
                 from: "",
-            }];
+            };      
+        };
     };
 
     

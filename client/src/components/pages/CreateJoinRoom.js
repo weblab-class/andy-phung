@@ -8,10 +8,12 @@ import plus_icon from "../../assets/icons/plus_icon.png";
 import people_icon from "../../assets/icons/people_icon.png";
 import back_icon from "../../assets/icons/back_icon.png";
 
+const svgclr = "#6A5239";
+
 const BgScrollContainers = () => {
     return (
         <>
-            <div className="absolute h-full w-full z-[-2] bg-scroll border-2 border-red-400">
+            <div className="absolute h-full w-full z-[-2] bg-scroll">
             </div>
         </>
     );
@@ -45,18 +47,20 @@ const CreateJoinRoom = (props) => {
     const Select = 
         <div className=" w-[400px] h-[170px] flex items-center justify-center">
             <div className="flex flex-col items-center justify-center h-full mr-8">
-                <img src={plus_icon} className="max-h-[125px] max-w-[125px] h-[125px] w-[125px] border-[#694F31] p-5 mb-[4px] border-[6px] rounded-2xl cursor-pointer bg-[#E7AE6C] hover:bg-[#CE9C63]" onClick={() => setSubScreen("create")}/>
-                <div className="text-xl font-medium candy-beans text-[#694F31]">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke={svgclr} className="max-h-[125px] max-w-[125px] h-[125px] w-[125px] border-clr p-5 mb-[4px] border-[6px] rounded-2xl cursor-pointer hover:bg-[#B49774]" onClick={() => setSubScreen("create")}>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <div className="text-xl font-medium candy-beans text-clr">
                     create room
                 </div>
             </div>
             <div className="flex flex-col items-center justify-center h-full ml-8">
-                <div className="flex justify-center items-center max-h-[125px] max-w-[125px] h-[125px] w-[125px] border-[#694F31] p-5 mb-[4px] border-[6px] rounded-2xl cursor-pointer bg-[#E7AE6C] hover:bg-[#CE9C63]" onClick={() => setSubScreen("join")}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#694F31" className="w-[100px] h-[100px]">
+                <div className="flex justify-center items-center max-h-[125px] max-w-[125px] h-[125px] w-[125px] border-clr p-5 mb-[4px] border-[6px] rounded-2xl cursor-pointer hover:bg-[#B49774]" onClick={() => setSubScreen("join")}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke={svgclr} className="w-[100px] h-[100px]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
                 </div>
-                <div className="text-xl font-medium candy-beans text-[#694F31]">
+                <div className="text-xl font-medium candy-beans text-clr">
                     join room
                 </div>
             </div>
@@ -87,10 +91,11 @@ const CreateJoinRoom = (props) => {
                     theme.current = event.target.value;
                 }}>
                     <option value="cafe">cafe</option>
+                    {props.userObj.user.toysBought.includes("Apricity (Theme)") ? (<option value="apricity">apricity</option>) : (<></>)}
                 </select>
             </div>
             
-            <Link to="/join/room" className="flex items-center justify-center border-2 border-black bg-[#FAB566] hover:bg-[#F6AA54] rounded-2xl" onClick={() => {
+            <Link to="/join/room" className="flex items-center justify-center border-2 border-clr hover:bg-[#B49774] rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
                 props.setTheme(theme.current);
                 post("/api/joinroom", {
@@ -113,7 +118,7 @@ const CreateJoinRoom = (props) => {
                     roomid.current = event.target.value;
                 }}/>
             </div>
-            <button className="flex items-center justify-center border-2 border-black bg-[#FAB566] hover:bg-[#F6AA54] rounded-2xl" onClick={() => {
+            <button className="flex items-center justify-center border-2 border-clr hover:bg-[#B49774] rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
                 post("/api/joinroom", {
                     roomid: roomid.current,
