@@ -108,13 +108,13 @@ router.post("/joinroom", (req, res) => { // creating a room
     roomid = req.body.roomid;
   }
 
-  const joinState = socketManager.addUserToRoom(req.user, roomid, capacity, theme);
+  const [joinState, catname] = socketManager.addUserToRoom(req.user, roomid, capacity, theme);
 
   // intended to be after addUserToRoom; so solo players can get back to their room if accidentally left
   socketManager.deleteEmptyRooms();
 
   if(joinState == "success") {
-    res.send({roomid: roomid});
+    res.send({roomid: roomid, catname: catname});
   } else if (joinState == "full") {
     res.send({errState: "full"});
   } else {
@@ -125,11 +125,18 @@ router.post("/joinroom", (req, res) => { // creating a room
 });
 
 router.post("/leaveroom", (req, res) => {
-  socketManager.removeUserFromRoom(req.user, req.body.roomid);
-  console.log(`user left room ${req.body.roomid}`);
+  if(req.body.roomid) {
+    socketManager.removeUserFromRoom(req.user, req.body.roomid);
+  } else {
+    socketManager.removeUserFromRoomWithoutRoomId(req.user);
+  }
 
   res.send({});
 
+});
+
+router.get("/inaroom", (req, res) => {
+  res.send({roomid: socketManager.userInARoom(req.user)});
 });
 
 

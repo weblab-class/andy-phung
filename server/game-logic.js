@@ -246,13 +246,14 @@ function getRandomIntRanged(min, max) {
 const gameStates = {};
 
 const initializeGame = (roomid, theme) => {
+    const newCatName = Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length-1)];
     gameStates[roomid] = {
         users: [],
         canvas: {
             theme: theme,
             surfaces: themeSurfaces[theme],
             cats: [{
-                name: Object.keys(commonCats)[getRandomInt(Object.keys(commonCats).length-1)],
+                name: newCatName,
                 position: getRandomInt(themeSurfaces[theme].length),
                 state: catStates[getRandomInt(catStates.length-1)],
             }], 
@@ -263,6 +264,7 @@ const initializeGame = (roomid, theme) => {
         },
         frame: 0,
     }
+    return newCatName;
 };
 
 const deleteGame = (roomid) => {
@@ -347,7 +349,7 @@ const updateGameState = (roomid) => {
         totalTasksCompleted = totalTasksCompleted + u.tasksCompleted;
     });
 
-    if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 6) {
+    if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 8) {
         //console.log('spawning new cat');
         // spawning new cat (w not same name)
         let rareCat = Math.random() <= 0.05;

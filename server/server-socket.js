@@ -37,6 +37,13 @@ const getSocketFromUserID = (userid) => userToSocketMap[userid];
 const getUserFromSocketID = (socketid) => socketToUserMap[socketid];
 const getSocketFromSocketID = (socketid) => io.sockets.connected[socketid];
 
+
+/*
+setInterval(() => {
+  console.log(Object.keys(rooms));
+}, 2000)
+*/
+
 const getSocketsInRoom = (roomid) => rooms[roomid];
 
 const addUser = (user, socket) => {
@@ -107,7 +114,7 @@ const deleteUserListener = (roomid, user) => {
 
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
   if(rooms[roomid] == undefined && capacity != -1) { // if user is trying to create a new room
-    gameLogic.initializeGame(roomid, theme);
+    const initcat = gameLogic.initializeGame(roomid, theme);
     gameLogic.addPlayer(roomid, user);
     
     initUserListener(roomid, user);
@@ -123,12 +130,12 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
     
     console.log(`user ${user.name} created room ${roomid} (size ${capacity}, ${theme})`);
 
-    return "success";
+    return ["success", initcat];
   } else if (rooms[roomid] == undefined && capacity == -1) { // if user entered an invalid room code
-    return "invalid";
+    return ["invalid", ""];
   } else if (rooms[roomid] != undefined) { // if user entered a valid room code
     if(rooms[roomid].capacity == rooms[roomid].users.length) {
-      return "full";
+      return ["full", ""];
     }
 
     gameLogic.addPlayer(roomid, user);
@@ -146,6 +153,23 @@ const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional par
     return "success";
   }
 };
+
+const userInARoom = (user) => {
+  for (const [roomid, room] of Object.entries(rooms)) {
+    if(room.users.includes(user._id)) {
+      return roomid;
+    }
+  }
+  // i think this returns undefined if not specified here?
+}
+
+const removeUserFromRoomWithoutRoomId = (user) => {
+  for (const [roomid, room] of Object.entries(rooms)) {
+    if(room.users.includes(user._id)) {
+      removeUserFromRoom(user, roomid);
+    }
+  }
+}
 
 const removeUserFromRoom = (user, roomid) => {
   if(rooms[roomid]) {
@@ -206,13 +230,14 @@ module.exports = {
 
   addUser: addUser,
   removeUser: removeUser,
-
+  userInARoom: userInARoom,
   getSocketFromUserID: getSocketFromUserID,
   getUserFromSocketID: getUserFromSocketID,
   getSocketFromSocketID: getSocketFromSocketID,
   getSocketsInRoom: getSocketsInRoom,
   addUserToRoom: addUserToRoom,
   removeUserFromRoom: removeUserFromRoom,
+  removeUserFromRoomWithoutRoomId: removeUserFromRoomWithoutRoomId,
   checkRoomIDExists: checkRoomIDExists,
   deleteEmptyRooms: deleteEmptyRooms,
   getIo: () => io,

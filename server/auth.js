@@ -38,6 +38,7 @@ function getOrCreateUser(user) {
       musicVolume: 33,
       notifications: true,
       themesUnlocked: ["cafe",],
+      catsSeen: [],
     });
 
     return newUser.save();

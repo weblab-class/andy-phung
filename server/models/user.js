@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
   musicVolume: Number,
   notifications: Boolean,
   themesUnlocked: [String],
+  catsSeen: [String],
 });
 
 // compile model from schema

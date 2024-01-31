@@ -44,6 +44,7 @@ const App = () => {
       musicVolume: 100,
       notifications: true,
       themesUnlocked: ["",],
+      catsSeen: ["",]
     }
   };
 
@@ -162,12 +163,21 @@ const App = () => {
       let achievementNotInUser = !userObj.user.achievements.includes(achievement.name);
       let satisfiesAchievementCondition;
       for (const [key, value] of Object.entries(achievement.condition)) {
-        satisfiesAchievementCondition = userObj.user[key] >= value;
+        if(typeof value === 'number') { // tasks and sessions
+          satisfiesAchievementCondition = userObj.user[key] >= value;
+        } else if (typeof value === 'string') { // catsSeen
+          satisfiesAchievementCondition = userObj.user[key].includes(value);
+        } else if (value.constructor === Array) { // toysBought (ex. [1])
+          satisfiesAchievementCondition = userObj.user[key].length >= value[0];
+        }
+        
         if(achievementNotInUser && satisfiesAchievementCondition) {
           let prop = {
             _id: userObj.user._id,
             append: "push",
-            achievements: achievement.name,
+            push: {
+              achievements: achievement.name,
+            }
           };
           prop._id = userObj.user._id;
           post("/api/user", prop).then((bleh) => {
@@ -194,8 +204,17 @@ const App = () => {
     });
   }
 
+useEffect(() => {
+  window.addEventListener("beforeunload", function(event) {
+    event.preventDefault();
+    get("/api/whoami").then((user) => {
+      post("/api/leaveroom", {user: user});
+    });
+    event.returnValue = 'are you sure?';
+    return event.returnValue;
 
-
+  });
+});
 
 
   
@@ -208,7 +227,7 @@ const App = () => {
         <Route path="/" element={<Landing 
           handleLogin={handleLogin}
             userId={userId}/>}/>
-        <Route path="/join" element={<CreateJoinRoom userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
+        <Route path="/join" element={<CreateJoinRoom updateUserObj={updateUserObj} userObj={userObj} setTheme={setTheme} setBiscuitsJustEarned={setBiscuitsJustEarned} userId={userId} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID}/>}/>
         <Route path="/join/room" // needs to be /join/[room code] eventually
           element={<Room theme={theme} setTheme={setTheme} createBiscuitNotification={createBiscuitNotification} biscuitNotifVisible={biscuitNotifVisible} biscuitsJustEarned={biscuitsJustEarned} createNotification={createNotification} notificationOpen={notificationOpen} notificationContent={notificationContent} updateAchievements={updateAchievements} userObj={userObj} updateUserObj={updateUserObj} currentRoomID={currentRoomID} setCurrentRoomID={setCurrentRoomID} modalOpen={modalOpen} setModalOpen={setModalOpen} modalContent={modalContent} setModalContent={setModalContent} sideBarOpen={sideBarOpen}/>} 
           // TODO: hacky, just need one user obj that flows down all pages

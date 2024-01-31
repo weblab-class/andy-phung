@@ -18,10 +18,10 @@ const Landing = ({ userId, handleLogin }) => {
         <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
             <div className="flex flex-col items-center justify-center">
                 <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-                    <img src={purrductive_logo_tight} className="h-[95px] mb-[30px]"/>
+                    <img src={purrductive_logo_tight} className="h-[5.9375rem] mb-[1.875rem]"/>
                     <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
                 </GoogleOAuthProvider>
-                <div className="h-[30px]">
+                <div className="h-[1.875rem]">
 
                 </div>
             </div>

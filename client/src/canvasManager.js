@@ -1,4 +1,5 @@
-import { catAnimationDict, storeItems } from "./components/modules/data";
+import { storeItems } from "./components/modules/data";
+import { catAnimationDict } from "./components/modules/animations";
 import { timeout } from "./components/modules/util";
 
 let canvas;
@@ -125,13 +126,13 @@ const clearToyPlaceAreas = () => {
 }
 
 const drawToy = (toy, bbox) => { // toy is j the name
-  const toysize = 20;
+  const toysize = 25;
   canvas = document.getElementById("toy-canvas");
 
   if (!canvas) return;
   const context = canvas.getContext("2d");
 
-  const im = new Image(toysize + 20, toysize + 20); // extra room for bigger toys; j position on the artboard
+  const im = new Image(toysize + 25, toysize + 25); // extra room for bigger toys; j position on the artboard
   // TODO: need separate store images (centered + bigger)
   let imsrc;
 
@@ -146,7 +147,7 @@ const drawToy = (toy, bbox) => { // toy is j the name
   im.onload = () => {
     // clearing toy area first
     context.clearRect(bbox.x - bbox.rectDimX/2, bbox.y - bbox.rectDimY/2, bbox.rectDimX, bbox.rectDimY);
-    let xOffset = -30;
+    let xOffset = -20;
     let yOffset = 20;
     context.drawImage(im, bbox.x - toysize/2 + xOffset, bbox.y - toysize/2 + yOffset, toysize, toysize);
   };

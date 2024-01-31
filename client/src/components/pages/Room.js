@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useReducer, useMemo, useCallback, memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { socket, handleUserTaskUpdate, keepAlive } from "../../client-socket.js";
 import { post, get } from "../../utilities"; 
@@ -224,9 +224,9 @@ const Tasks = (props) => { // wtf
     const [ otherUserTasks, setOtherUserTasks] = useState([]); // array of userObjs; {username: "", tasks: []}
     const [ otherUserObjs, setOtherUserObjs ] = useState([]);
 
-    setInterval(() => {
-
-    }, []);
+    useEffect(() => {
+        console.log("runs");
+    }, [props.roomState])
 
     useEffect(() => {
         handleUserTaskUpdate(userTasks, userTasksCompleted, props.currentRoomID);
@@ -247,8 +247,16 @@ const Tasks = (props) => { // wtf
                 }
 
                 props.roomState.current = update.gameState.canvas;
-
                 
+                if(update.catUpdates.filter((c) => c.from == "").length > 0) {
+                    console.log("yeah?");
+                    update.catUpdates.forEach((c) => {
+                        if(c.from == "" && !props.userObj.user.catsSeen.includes(c.name)) { // if new spawn and haven't seen yet
+                            console.log("yeah????");
+                            props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: c.name}, append: "push"});
+                        }
+                    })
+                }
                 
             });
 
@@ -274,6 +282,35 @@ const Tasks = (props) => { // wtf
     </div>
 }
 
+const ApricityStoreItem = (props) => {
+    return (
+        <div className="p-[2px] flex flex-col justify-center items-center h-[130px] w-[130px] border-[#694F31] border-4 rounded-xl">
+            <div className="text-sm w-full border-[#694F31] text-center font-medium simply-rounded text-[#694F31]">
+                {props.item.name}
+            </div>
+            <div className="text-xxs font-extralight simply-rounded text-[#694F31]">
+                {props.item.attribution}
+            </div>
+            <img src={props.item.img} className="mt-[7px] mb-[7px] w-[40px] h-[40px]"/>
+            {props.userObj.user.toysBought.includes(props.item.name) ? (
+                <div className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg bg-[#d7a46b]">
+                    <div className="text-sm font-medium simply-rounded text-[#694F31]">
+                        Bought!
+                    </div>
+                </div>
+            ) : (
+                <div onClick={() => {props.buyItem(props.item.name, props.item.price)} } className="flex flex-nowrap justify-center w-[100px] items-center border-[#694F31] border-2 rounded-lg hover:cursor-pointer hover:bg-[#CE9C63]">
+                    <img src={biscuit_icon} className="w-[18px] h-[18px] mr-[3px]"/>
+                    <div className="text-sm font-medium simply-rounded text-[#694F31]">
+                        {props.item.price}
+                    </div>
+                </div>
+            )}
+            
+            
+        </div>
+    )
+}
 
 const StoreItem = (props) => {
     return (
@@ -348,9 +385,13 @@ const ToolBar = (props) => {
                 )}
                 <div className="ml-[10px] mr-[10px] flex flex-row flex-wrap w-[420px] h-[270px] justify-between content-between">
                     {storePage < pages ? storeItems.slice(storePage*6, storePage*6+6).map((i) => {
-                        return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                        return i.name != "Apricity (Theme)" ? (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>) : (
+                            <ApricityStoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>
+                        )
                     }) : storeItems.slice(storePage*6, storeItems.length).map((i) => {
-                        return (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>)
+                        return i.name != "Apricity (Theme)" ? (<StoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>) : (
+                            <ApricityStoreItem item={i} userObj={props.userObj} updateUserObj={props.updateUserObj} buyItem={buyItem} startToyPlace={props.startToyPlace}/>
+                        )
                     })}
                 </div>
                 {storePage < pages ? (
@@ -508,9 +549,12 @@ const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
     return (
         <>
         <canvas onClick={placeToy} onMouseMove={changeCursor} id="toy-place-canvas" width={1200} height={250} className={`absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[4] ${hoverCursor ? "cursor-pointer" : "cursor-default"}`}/>
-        <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3]"/>
-        <img src={fire} width={41} height={41} className="absolute bottom-[44px] left-[110px] right-0 ml-auto mr-auto z-[2]"/>
-        <canvas id="game-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1] cafe-mockup-bg"/>
+        <canvas id="toy-canvas" width={1200} height={250} className="absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[3]"/>     
+        <div className="w-[1200px] h-[250px] absolute bottom-0 left-0 right-0 ml-auto mr-auto z-[1]">
+            <img src={fire} width={41} height={41} className="absolute bottom-[44px] left-[110px] right-0 ml-auto mr-auto z-[2]"/>
+            <canvas id="game-canvas" width={1200} height={250} className="cafe-mockup-bg z-[1]"/>
+        </div>
+        
         <div className="absolute bottom-0 left-0 right-0 ml-auto mr-auto w-full h-[470px] z-[0] cafe-skyscrapers-bg">
 
         </div>
@@ -521,6 +565,7 @@ const Canvas = (props) => { // takes in theme; TODO: set bg based on theme
 
 const Room = (props) => {
     const navigate = useNavigate(); 
+    const location = useLocation();
     const [internalCurrentRoomID, setInternalCurrentRoomID] = useState(""); 
     // so we can force a rerender (to display join code) when we receive the roomid
     const audioTracks = [ 
@@ -563,7 +608,9 @@ const Room = (props) => {
     useEffect(() => {
         audioRef.current.pause();
         audioRef.current.volume = props.userObj.user.musicVolume / 100;
-        audioRef.current.play();
+        audioRef.current.play().catch(() => {
+            console.log("audio play failed"); 
+        });
         audioRef.current.loop = true;
     }, [audioTrackNumber, props.userObj.user.musicVolume]);
 
@@ -573,7 +620,9 @@ const Room = (props) => {
     }, [props.userObj.user.sfxVolume]);
 
     useEffect(() => {
-        sfxRef.current.play();
+        sfxRef.current.play().catch(() => {
+            console.log("audio play failed");
+        });
     }, [])
 
     useEffect(() => {
@@ -606,10 +655,18 @@ const Room = (props) => {
         setPlacingToy(false);
         setToyBeingPlaced("");
         clearToyPlaceAreas();
-    }
+    };
+
+    useEffect(() => {
+        get("/api/whoami").then((user) => {
+            get("/api/inaroom").then((res) => {
+                if(!res.roomid) {
+                    navigate("/join");
+                }
+            })
+        })
+    }, [props.currentRoomID]);
     
-    
-    // TODO: set bg of main div based on theme
     return (
         <div className={`absolute flex flex-col h-full w-full cafe-sky-bg overflow-hidden`}>
             <Canvas rectDimX={rectDimX} rectDimY={rectDimY} placingToy={placingToy} toyBeingPlaced={toyBeingPlaced} endToyPlace={endToyPlace} theme={props.theme} roomState={roomState}/>
