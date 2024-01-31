@@ -175,7 +175,7 @@ const UserTaskListItem = (props) => {
         });
         props.setUserTasks(newArr);
         props.setUserTasksCompleted(props.userTasksCompleted + 1);
-        let biscuitsEarned = Math.round(getRandomInt(7, 13) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2));
+        let biscuitsEarned = Math.round(getRandomInt(3, 7) + log(props.userObj.user.tasksCompleted, 2.5) + log(props.userObj.user.sessionsCompleted, 2));
         props.updateUserObj({_id: props.userObj.user._id, inc: {biscuits: biscuitsEarned, tasksCompleted: 1}, append: "inc"});
         props.createBiscuitNotification(biscuitsEarned);
         

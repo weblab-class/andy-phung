@@ -155,33 +155,33 @@ const cats = {
     {
         name: "Cat-astrophe",
         img: "https://i.imgur.com/YpoXjtJ.png",
-        desc: "Complete 20 sessions.",
+        desc: "Complete 15 sessions.",
         condition: {
-            sessionsCompleted: 20,
+            sessionsCompleted: 15,
         }
     },
     {
         name: "I Hate This Fur-cking Place",
         img: "https://i.imgur.com/jyu7PXN.png",
+        desc: "Complete 25 sessions.",
+        condition: {
+            sessionsCompleted: 25,
+        }
+    },
+    {
+        name: "Fur-midable Work Ethic",
+        img: "https://i.imgur.com/N8YoKLb.png",
         desc: "Complete 40 sessions.",
         condition: {
             sessionsCompleted: 40,
         }
     },
     {
-        name: "Fur-midable Work Ethic",
-        img: "https://i.imgur.com/N8YoKLb.png",
-        desc: "Complete 80 sessions.",
-        condition: {
-            sessionsCompleted: 80,
-        }
-    },
-    {
         name: "Stand purr-oud, you're strong",
         img: "https://i.imgur.com/vA0mXDf.png",
-        desc: "Complete 120 sessions.",
+        desc: "Complete 60 sessions.",
         condition: {
-            sessionsCompleted: 120,
+            sessionsCompleted: 60,
         }
     },
     {
@@ -269,99 +269,99 @@ const storeItems = [
     {
         name: "Yarn Ball",
         img: "https://i.imgur.com/KGVzVqD.png",
-        price: 1,
+        price: 10,
         attribution: "classic cat toy",
     },
     {
         name: "Boba",
         img: "https://i.imgur.com/QYajpsk.png",
-        price: 1,
+        price: 20,
         attribution: "teado <3",
     },
     {
         name: "Laptop",
         img: "https://i.imgur.com/egdGDNA.png",
-        price: 1,
+        price: 20,
         attribution: "psets for cats!",
     },
     {
         name: "Tim the Beaver",
         img: "https://i.imgur.com/rnN72dD.png",
-        price: 1,
+        price: 25,
         attribution: "ihtfp",
     },
     {
         name: "Fish Plush",
         img: "https://i.imgur.com/l3IBzuN.png",
-        price: 1,
+        price: 20,
         attribution: "created by jessica!",
     },
     
     {
         name: "Bear Plush", 
         img: "https://i.imgur.com/1WjVJ5Y.png",
-        price: 1,
+        price: 20,
         attribution: "created by ethan!",
     }, 
     {
         name: "Butterfly Teaser",
         img: "https://i.imgur.com/sI5eUPN.png",
-        price: 1,
+        price: 35,
         attribution: "created by gracie!",
     }, // everything below should cost more
     {
         name: "Pocky",
         img: "https://i.imgur.com/Et0AGrU.png",
-        price: 1,
+        price: 35,
         attribution: "created by andy!",
     },
     {
         name: "Star Plush",
         img: "https://i.imgur.com/zmhWGRa.png",
-        price: 1,
+        price: 30,
         attribution: "created by vi!",
     },
     
     {
         name: "Tower of Tracks",
         img: "https://i.imgur.com/4hMTehB.png",
-        price: 1,
+        price: 25,
         attribution: "created by alena!",
     },
     {
         name: "Shark Plush", // blahaj
         img: "https://i.imgur.com/SJPulM6.png",
-        price: 1,
+        price: 25,
         attribution: "created by ethan!",
     },
     {
         name: "Lasagna",
         img: "https://i.imgur.com/qDnHOB1.png",
-        price: 1,
+        price: 25,
         attribution: "created by hao!",
     },
     {
         name: "Jenga", // jenga
         img: "https://i.imgur.com/sNj8RMX.png",
-        price: 1,
+        price: 30,
         attribution: "created by vinh!",
     },
     {
         name: "Sushi Scratch Post",
         img: "https://i.imgur.com/36BImAT.png",
-        price: 1,
+        price: 40,
         attribution: "created by amy!",
     },
     {
         name: "Spaceship",
         img: "https://i.imgur.com/Dziqdrc.png",
-        price: 1,
+        price: 35,
         attribution: "created by jasmine!",
     },
     {
         name: "Apricity (Theme)",
         img: "https://i.imgur.com/KEXuGuk.png",
-        price: 1,
+        price: 100,
         attribution: "@apricityshortfilm",
     },
 
