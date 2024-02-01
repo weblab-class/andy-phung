@@ -362,7 +362,7 @@ const storeItems = [
         name: "Apricity (Theme)",
         img: "https://i.imgur.com/KEXuGuk.png",
         price: 200,
-        attribution: "@apricityshortfilm",
+        attribution: "@apricity.shortfilm",
     },
 
 ];
