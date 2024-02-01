@@ -294,69 +294,69 @@ const storeItems = [
         name: "Fish Plush",
         img: "https://i.imgur.com/PvmOJqk.png",
         price: 20,
-        attribution: "created by jessica!",
+        attribution: "suggested by jessica!",
     },
     
     {
         name: "Bear Plush", 
         img: "https://i.imgur.com/1WjVJ5Y.png",
         price: 20,
-        attribution: "created by ethan!",
+        attribution: "suggested by ethan!",
     }, 
     {
         name: "Butterfly Teaser",
         img: "https://i.imgur.com/sI5eUPN.png",
         price: 35,
-        attribution: "created by gracie!",
+        attribution: "suggested by gracie!",
     }, // everything below should cost more
     {
         name: "Pocky",
         img: "https://i.imgur.com/Et0AGrU.png",
         price: 35,
-        attribution: "created by andy!",
+        attribution: "suggested by andy!",
     },
     {
         name: "Star Plush",
         img: "https://i.imgur.com/yvLBk45.png",
         price: 30,
-        attribution: "created by vi!",
+        attribution: "suggested by vi!",
     },
     
     {
         name: "Tower of Tracks",
         img: "https://i.imgur.com/4hMTehB.png",
         price: 25,
-        attribution: "created by alena!",
+        attribution: "suggested by alena!",
     },
     {
         name: "Shark Plush", // blahaj
         img: "https://i.imgur.com/SJPulM6.png",
         price: 25,
-        attribution: "created by ethan!",
+        attribution: "suggested by ethan!",
     },
     {
         name: "Lasagna",
         img: "https://i.imgur.com/qDnHOB1.png",
         price: 25,
-        attribution: "created by hao!",
+        attribution: "suggested by hao!",
     },
     {
         name: "Jenga", // jenga
         img: "https://i.imgur.com/sNj8RMX.png",
         price: 30,
-        attribution: "created by vinh!",
+        attribution: "suggested by vinh!",
     },
     {
         name: "Sushi Scratch Post",
         img: "https://i.imgur.com/36BImAT.png",
         price: 40,
-        attribution: "created by amy!",
+        attribution: "suggested by amy!",
     },
     {
         name: "Spaceship",
         img: "https://i.imgur.com/Dziqdrc.png",
         price: 35,
-        attribution: "created by jasmine!",
+        attribution: "suggested by jasmine!",
     },
     {
         name: "Apricity (Theme)",
