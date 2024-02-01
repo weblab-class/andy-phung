@@ -309,13 +309,13 @@ const Tasks = (props) => { // wtf
     }, [props.currentRoomID]); 
 
     return <div className="absolute flex justify-start top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] pl-[20px] pr-[20px] pb-[20px] z-[5]">
-            <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
+            <div className="flex h-full w-[275px] left-0 mr-[20px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
                     <UserTaskList createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
-            <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[60%] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
+            <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[60%] mt-[13px] z-[5] overflow-x-scroll" id="gray-scrollbar">
                 {otherUserTasks.map((obj) => {
                     return (<div className="flex flex-col justify-between h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
                         <TasksProfile userObj={obj.userObj} openModal={props.openModal} closeModal={props.closeModal}/>

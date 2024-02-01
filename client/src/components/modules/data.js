@@ -300,7 +300,7 @@ const storeItems = [
     {
         name: "Bear Plush", 
         img: "https://i.imgur.com/1WjVJ5Y.png",
-        price: 20,
+        price: 25,
         attribution: "suggested by ethan!",
     }, 
     {
@@ -312,26 +312,26 @@ const storeItems = [
     {
         name: "Pocky",
         img: "https://i.imgur.com/Et0AGrU.png",
-        price: 35,
+        price: 45,
         attribution: "suggested by andy!",
     },
     {
         name: "Star Plush",
         img: "https://i.imgur.com/yvLBk45.png",
-        price: 30,
+        price: 40,
         attribution: "suggested by vi!",
     },
     
     {
         name: "Tower of Tracks",
         img: "https://i.imgur.com/4hMTehB.png",
-        price: 25,
+        price: 30,
         attribution: "suggested by alena!",
     },
     {
         name: "Shark Plush", // blahaj
         img: "https://i.imgur.com/SJPulM6.png",
-        price: 25,
+        price: 35,
         attribution: "suggested by ethan!",
     },
     {
@@ -343,25 +343,25 @@ const storeItems = [
     {
         name: "Jenga", // jenga
         img: "https://i.imgur.com/sNj8RMX.png",
-        price: 30,
+        price: 35,
         attribution: "suggested by vinh!",
     },
     {
         name: "Sushi Scratch Post",
         img: "https://i.imgur.com/36BImAT.png",
-        price: 40,
+        price: 45,
         attribution: "suggested by amy!",
     },
     {
         name: "Spaceship",
         img: "https://i.imgur.com/Dziqdrc.png",
-        price: 35,
+        price: 45,
         attribution: "suggested by jasmine!",
     },
     {
         name: "Apricity (Theme)",
         img: "https://i.imgur.com/KEXuGuk.png",
-        price: 100,
+        price: 200,
         attribution: "@apricityshortfilm",
     },
 
