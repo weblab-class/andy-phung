@@ -276,16 +276,22 @@ const getGameState = (roomid) => {
 };
  
 const updateTasks = (roomid, user, newTasks, newTasksCompleted) => {
-    gameStates[roomid].users.forEach((userObj, idx) => {
-        if(userObj.username == user.name) {
-            gameStates[roomid].users[idx].tasks = newTasks;
-            gameStates[roomid].users[idx].tasksCompleted = newTasksCompleted;
-        }
-    });
+    try {
+        gameStates[roomid].users.forEach((userObj, idx) => {
+            if(userObj.username == user.name) {
+                gameStates[roomid].users[idx].tasks = newTasks;
+                gameStates[roomid].users[idx].tasksCompleted = newTasksCompleted;
+            }
+        });
+    } catch {
+
+    }
+    
 };
 
 const updateGameState = (roomid) => {
-    let totalTasksCompleted = 0;
+    try {
+        let totalTasksCompleted = 0;
     let newCatName;
     let newCatPosition;
     let newCatState;
@@ -381,18 +387,28 @@ const updateGameState = (roomid) => {
     
 
     return catUpdates;
+    }
+    catch {
+        return [];
+    }
+    
 };
 
 const addPlayer = (roomid, user) => {
-    User.find({_id: user._id}).then((users) => {
-        gameStates[roomid].users.push({
-            username: user.name,
-            _id: user._id,
-            userObj: {user: users[0]},
-            tasks: [],
-            tasksCompleted: 0,
+    try {
+        User.find({_id: user._id}).then((users) => {
+            gameStates[roomid].users.push({
+                username: user.name,
+                _id: user._id,
+                userObj: {user: users[0]},
+                tasks: [],
+                tasksCompleted: 0,
+            });
         });
-    });
+    } catch {
+        
+    }
+    
 };
 
 const removePlayer = (roomid, user) => {
