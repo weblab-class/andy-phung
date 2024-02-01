@@ -1,3 +1,5 @@
+disclaimer code is vv messy and not packaged into modules like it should b
+
 # How to code a webapp with this skeleton
 
 ## Initial setup
