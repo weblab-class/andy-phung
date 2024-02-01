@@ -40,7 +40,11 @@ router.get("/whoami", (req, res) => {
 router.post("/initsocket", (req, res) => {
   // do nothing if user not logged in
   if (req.user)
-    socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
+    try {
+      socketManager.addUser(req.user, socketManager.getSocketFromSocketID(req.body.socketid));
+    } catch {
+    }
+    
   res.send({});
 });
 
@@ -49,36 +53,46 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 
 router.get("/user", (req, res) => { // takes in mongodb _id
-  User.find({_id: req.query._id}).then((users) => {
-    // should be unique
-    res.send({user: users[0]});
-  });
+  try {
+    User.find({_id: req.query._id}).then((users) => {
+      // should be unique
+      res.send({user: users[0]});
+    });
+  } catch {
+
+  }
+  
 });
 
 router.post("/user", (req, res) => { // takes in mongodb _id + rest of props to update
+  try {
+    User.find({_id: req.body._id}).then((users) => {
+      delete req.body._id;
+  
+      if(req.body.append == "inc") { // can take in multiple props
+        delete req.body.append;
+        users[0].update({$inc: req.body.inc}).then(() => {
+          res.send({});
+        });
+        
+      } else if (req.body.append == "push") {
+        delete req.body.append;
+        users[0].update({$push: req.body.push}).then(() => {
+          res.send({});
+        });
+      } else {
+        users[0].update(req.body).then(() => {
+          res.send({});
+        })
+      };
+  
+    });
+  
+  } catch {
+
+  }
   //console.log(req.body._id);
-  User.find({_id: req.body._id}).then((users) => {
-    delete req.body._id;
-
-    if(req.body.append == "inc") { // can take in multiple props
-      delete req.body.append;
-      users[0].update({$inc: req.body.inc}).then(() => {
-        res.send({});
-      });
-      
-    } else if (req.body.append == "push") {
-      delete req.body.append;
-      users[0].update({$push: req.body.push}).then(() => {
-        res.send({});
-      });
-    } else {
-      users[0].update(req.body).then(() => {
-        res.send({});
-      })
-    };
-
-  });
-
+  
   
   
 });
@@ -91,7 +105,8 @@ router.get("/cat", (req, res) => { // takes in name of cat
 });
 
 router.post("/joinroom", (req, res) => { // creating a room
-  let roomid; 
+  try {
+    let roomid; 
   let capacity;
   let theme;
 
@@ -121,22 +136,34 @@ router.post("/joinroom", (req, res) => { // creating a room
     res.send({errState: "invalid"});
   }
 
+  } catch {
+
+  }
+  
   
 });
 
 router.post("/leaveroom", (req, res) => {
-  if(req.body.roomid) {
-    socketManager.removeUserFromRoom(req.user, req.body.roomid);
-  } else {
-    socketManager.removeUserFromRoomWithoutRoomId(req.user);
-  }
-
-  res.send({});
+  try {
+    if(req.body.roomid) {
+      socketManager.removeUserFromRoom(req.user, req.body.roomid);
+    } else {
+      socketManager.removeUserFromRoomWithoutRoomId(req.user);
+    }
+  
+    res.send({});
+  } catch {}
+  
 
 });
 
 router.get("/inaroom", (req, res) => {
-  res.send({roomid: socketManager.userInARoom(req.user)});
+  try {
+    res.send({roomid: socketManager.userInARoom(req.user)});
+  } catch {
+    
+  }
+ 
 });
 
 
