@@ -189,7 +189,7 @@ const App = () => {
               console.log(`got ${achievement.name}`);
               createNotification({header: achievement.name, body: achievement.desc, img: achievement.img});
               return achievement;
-            })
+            });
           });
         }
       }

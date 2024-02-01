@@ -47,8 +47,9 @@ const SpinningCat = (props) => {
 }
 
 const CatCard = (props) => {
+    const bg = props.rare ? "bg-[#D5B684]" : "bg-clr-one";
     return (
-        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+        <div className={`flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg ${bg}`}>
             <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[93.75px] h-[75px]`}/>
             <div className="mt-auto mb-auto h-[75px] overflow-hidden">
                 <div className="candy-beans text-lg text-clr m-0">
@@ -69,8 +70,8 @@ const AchievementCard = (props) => { // takes in name, img, opacity, desc
     // just a sanity check for opacity i would not actually write this
 
     return props.unlocked ? (
-        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
-            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] opacity-100 border-clr border-[3px] rounded-lg`}/>
+        <div className="opacity-100 flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] border-clr border-[3px] rounded-lg`}/>
             <div className="mt-auto mb-auto h-[75px] overflow-hidden">
                 <div className="candy-beans text-lg text-clr m-0">
                     {props.name}
@@ -81,8 +82,8 @@ const AchievementCard = (props) => { // takes in name, img, opacity, desc
             </div>
         </div>
     ) : (
-        <div className="flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
-            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] opacity-40 border-clr border-[3px] rounded-lg`}/>
+        <div className="opacity-60 flex p-[2px] ml-[2px] mr-[2px] mb-[2px] flex-row h-[100px] w-[270px] border-clr border-4 rounded-lg bg-clr-one">
+            <img src={props.img} className={`ml-[10px] mt-auto mb-auto mr-[10px] w-[75px] h-[75px] border-clr border-[3px] rounded-lg`}/>
             <div className="mt-auto mb-auto h-[75px] overflow-hidden">
                 <div className="candy-beans text-lg text-clr m-0">
                     {props.name}
@@ -147,7 +148,7 @@ const BlackScreen = (props) => { // takes in on, cat
 
     return (
         <div className={`absolute left-0 right-0 margin-auto flex justify-center items-center w-full h-full bg-black ${cl}`}>
-            {props.cat ? (<img src={sleeping} className="w-[125px] h-[100px]"/>) : (<></>)}
+            {props.cat ? (<img src={sleeping} className="w-[112.5px] h-[90px]"/>) : (<></>)}
         </div>
     )
 }

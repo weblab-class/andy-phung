@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 
 import { ImgurClient } from 'imgur';
@@ -40,6 +40,16 @@ const SideBar = (props) => { // props.userObj.user._id
     }, [props.editing, props.userObj.user.name, props.userObj.user.bio, props.userObj.user.pfp, props.userObj.user.musicVolume, props.userObj.user.sfxVolume]);
 
     const navigate = useNavigate();
+    let catlist = [];
+    for (const [name, value] of Object.entries(cats)) {
+        catlist.push({
+            name: name,
+            personality: value.personality,
+            attribution: value.attribution,
+            rare: value.rare,
+        });
+    };
+
 
     const sidebarClass = props.isOpen ? "bg-clr border-[#694F31] border-r-4 top-0 absolute h-full w-[300px] transition-left duration-300 z-30 left-0" : "bg-clr border-[#694F31] border-r-4 left-[-300px] transition-left duration-300 top-0 absolute h-full w-[300px] z-30";
 
@@ -159,14 +169,15 @@ const SideBar = (props) => { // props.userObj.user._id
                     ~ cats seen ~
                 </div>
                 <div className="flex flex-wrap justify-center">
-                    {props.userObj.user.catsSeen.map((cat) => {
-                        //console.log(achievement);
-                        if(cats[cat]) {
-                            return (
-                                <CatCard name={cat} personality={cats[cat].personality} attribution={cats[cat].attribution} img={catAnimationDict[cat]["standing"][0]} unlocked={true}/>
-                            )
-                        };
-                    })}
+                    {
+                        catlist.map((cat) => {
+                            if(props.userObj.user.catsSeen.filter((c) => c == cat.name).length > 0) {
+                                return (
+                                    <CatCard name={cat.name} personality={cat.personality} attribution={cat.attribution} rare={cat.rare} img={catAnimationDict[cat.name]["standing"][0]} unlocked={true}/>
+                                )
+                            }
+                        })
+                    }
                 </div>
             </div>
             <div id="divider" className="mt-[5px] mb-[5px] w-[85%] border-b-4 border-clr opacity-40">
@@ -176,17 +187,15 @@ const SideBar = (props) => { // props.userObj.user._id
                     ~ achievements ~
                 </div>
                 <div className="flex flex-wrap justify-center">
-                    {props.userObj.user.achievements.map((userAchievement) => { // FIXME? not in order
-                        let achievement = achievements.filter((a) => {
-                            return a.name == userAchievement;
-                        });
-                        //console.log(achievement);
-                        if(achievement.length > 0) {
-                            return (
-                                <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} unlocked={true}/>
-                            )
-                        };
-                    })}
+                    {
+                        achievements.map((achievement) => {
+                            if(props.userObj.user.achievements.filter((a) => a == achievement.name).length > 0) {
+                                return (
+                                    <AchievementCard name={achievement.name} desc={achievement.desc} img={achievement.img} unlocked={true}/>
+                                )
+                            }
+                        })
+                    }
                 </div>
             </div>
         </div>
@@ -365,6 +374,7 @@ const NavBar = (props) => {
     };
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const openModal = (content) => {
         props.setModalOpen(true);
@@ -397,7 +407,11 @@ const NavBar = (props) => {
                 <div className="inline-flex items-center w-full h-14 z-10">
                     <img src={menu_icon} className="ml-3 mr-2 hover:cursor-pointer z-10" width="37.5" 
                     height="37.5" onClick={handleSidebarClick} onMouseOver={(e) => {e.currentTarget.src = menu_icon_hover}} onMouseOut={(e) => {e.currentTarget.src = menu_icon}}/>
-                    <img src={purrductive_logo} className="h-[70px] z-10 hover:cursor-pointer" onClick={leaveRoom}/>
+                    <img src={purrductive_logo} className="h-[70px] z-10 hover:cursor-pointer" onClick={()=>{
+                        if(location.pathname != "/join") {
+                            leaveRoom();
+                        }
+                    }}/>
                 </div>
                 {props.currentRoomID != "" && (<div className="flex whitespace-nowrap items-center justify-center w-[250px] h-10 mr-[20px] z-10">
                     <div className="mr-[5px] text-xl candy-beans text-[#f5f5f5] z-10">

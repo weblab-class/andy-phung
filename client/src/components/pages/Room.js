@@ -56,6 +56,16 @@ function log(num, base) {
 
 
 const TasksProfile = (props) => { // takes in userObj
+    let catlist = [];
+    for (const [name, value] of Object.entries(cats)) {
+        catlist.push({
+            name: name,
+            personality: value.personality,
+            attribution: value.attribution,
+            rare: value.rare,
+        });
+    };
+
     const profileModal = <div className="flex flex-col items-center justify-center">
     <svg onClick={props.closeModal} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-[35px] h-[35px] absolute left-[15px] top-[15px] hover:opacity-75 hover:cursor-pointer">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -102,14 +112,16 @@ const TasksProfile = (props) => { // takes in userObj
                 ~ cats seen ~
             </div>
             <div className="flex flex-wrap justify-center">
-                {props.userObj.user.catsSeen.map((cat) => {
-                    //console.log(achievement);
-                    if(cats[cat]) {
-                        return (
-                            <CatCard name={cat} personality={cats[cat].personality} attribution={cats[cat].attribution} img={catAnimationDict[cat]["standing"][0]} unlocked={true}/>
-                        )
-                    };
-                })}
+                {
+                    catlist.map((cat) => {
+                        if(props.userObj.user.catsSeen.filter((c) => c == cat.name).length > 0) {
+                            return (
+                                <CatCard name={cat.name} personality={cat.personality} attribution={cat.attribution} rare={cat.rare} img={catAnimationDict[cat.name]["standing"][0]} unlocked={true}/>
+                            )
+                        }
+                    })
+                }
+                
             </div>
         </div>
         <div id="divider" className="mt-[5px] mb-[5px] w-[85%] border-b-4 border-clr opacity-40">
@@ -119,17 +131,16 @@ const TasksProfile = (props) => { // takes in userObj
                 ~ achievements ~
             </div>
             <div className="flex flex-wrap justify-center">
-                {props.userObj.user.achievements.map((userAchievement) => { // FIXME? not in order
-                    let achievement = achievements.filter((a) => {
-                        return a.name == userAchievement;
-                    });
-                    //console.log(achievement);
-                    if(achievement.length > 0) {
-                        return (
-                            <AchievementCard name={achievement[0].name} desc={achievement[0].desc} img={achievement[0].img} unlocked={true}/>
-                        )
-                    };
-                })}
+                {
+                    achievements.map((achievement) => {
+                        if(props.userObj.user.achievements.filter((a) => a == achievement.name).length > 0) {
+                            return (
+                                <AchievementCard name={achievement.name} desc={achievement.desc} img={achievement.img} unlocked={true}/>
+                            )
+                        }
+                    })
+                }
+                
             </div>
         </div>
     </div>
@@ -267,6 +278,7 @@ const Tasks = (props) => { // wtf
             props.setInternalCurrentRoomID(props.currentRoomID);
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
+                console.log(update.gameState.canvas.cats);
                 const userObjs = update.gameState.users.filter(e => e.username != update.username);
                 updateCanvasState(update.gameState.canvas, update.gameState.frame, update.catUpdates);
                 setOtherUserTasks(userObjs);
@@ -293,7 +305,7 @@ const Tasks = (props) => { // wtf
         }
     }, [props.currentRoomID]); 
 
-    return <div className="absolute flex justify-between top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] pl-[20px] pr-[20px] pb-[20px] z-[5]">
+    return <div className="absolute flex justify-start top-[51px] left-[50%] absolute-div-center-offset w-[95%] h-[235px] pl-[20px] pr-[20px] pb-[20px] z-[5]">
             <div className="flex h-full w-[275px] left-0 mr-[10px] mt-[13px] z-[5]">
                 <div className="flex flex-col justify-between h-full w-[275px] z-[5]">
                     <TasksProfile userObj={props.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
@@ -395,8 +407,9 @@ const ToolBar = (props) => {
     }
     
     const storeModal = <div className="w-full h-full flex flex-col items-center ">
-        <img src={close_icon} className="absolute left-[15px] top-[15px] cursor-pointer" width="20" 
-        height="20" onClick={props.closeModal}/>
+        <svg onClick={props.closeModal} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-[35px] h-[35px] absolute left-[15px] top-[15px] hover:opacity-75 hover:cursor-pointer">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
         
         <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="simply-rounded text-2xl text-clr">
@@ -449,7 +462,7 @@ const ToolBar = (props) => {
             <svg onClick={prevTrack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-8 h-8 hover:cursor-pointer hover:opacity-65 mr-[7px]">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
-            <div className="text-xl simply-rounded text-clr w-[70px] text-center">
+            <div className="text-xl simply-rounded text-clr w-[190px] text-center">
                 {props.audioTracks[props.audioTrackNumber].name}
             </div>
             <svg onClick={nextTrack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2.5" stroke={svgclr} className="w-8 h-8 hover:cursor-pointer hover:opacity-65 ml-[7px]">
@@ -610,24 +623,28 @@ const Room = (props) => {
     // so we can force a rerender (to display join code) when we receive the roomid
     const audioTracks = [ 
         {
-            name: "lofi 1",
+            name: "animal crossing lofi 1",
             link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174774583318/Animal_Crossing__New_Horizons_-_5AM_Lofi_Lia_Remix.mp3",
         },
         {
-            name: "lofi 2",
+            name: "animal crossing lofi 2",
             link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175109857300/animal_crossing_lofi_new_horizons.mp3",
         },
         {
-            name: "lofi 3",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175420493866/Copyright_Locked_Chill_Lofi_Hiphop_-_Kimochi_by_FrkA2.mp3",
-        },
-        {
-            name: "lofi 4",
+            name: "animal crossing lofi 3",
             link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174455808070/Animal_Crossing_New_Leaf_-_8PM_Lofi_Lia_Remix.mp3",
         },
         {
-            name: "lofi 5",
+            name: "soundcloud lofi 1",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175420493866/Copyright_Locked_Chill_Lofi_Hiphop_-_Kimochi_by_FrkA2.mp3",
+        },
+        {
+            name: "my one and only bsf",
             link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174078054440/Ao_no_Sumika_Jujutsu_Kaisen_Season_2_Opening_but_its_lofi_hip_hop.mp3",
+        },
+        {
+            name: "u r my special 🗣️🗣️",
+            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202461676763480064/SPECIALZ_-_Jujutsu_KaisenLofi_Remix.mp3",
         },
     ];
 

@@ -148,7 +148,7 @@ const drawToy = (toy, bbox) => { // toy is j the name
     // clearing toy area first
     context.clearRect(bbox.x - bbox.rectDimX/2, bbox.y - bbox.rectDimY/2, bbox.rectDimX, bbox.rectDimY);
     let xOffset = -20;
-    let yOffset = 20;
+    let yOffset = 15;
     context.drawImage(im, bbox.x - toysize/2 + xOffset, bbox.y - toysize/2 + yOffset, toysize, toysize);
   };
 
