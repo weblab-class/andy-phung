@@ -280,19 +280,19 @@ const storeItems = [
     },
     {
         name: "Laptop",
-        img: "https://i.imgur.com/egdGDNA.png",
+        img: "https://i.imgur.com/Rg81uAJ.png",
         price: 20,
         attribution: "psets for cats!",
     },
     {
-        name: "Tim the Beaver",
-        img: "https://i.imgur.com/rnN72dD.png",
+        name: "Wide Tim?",
+        img: "https://i.imgur.com/wLfM6NW.png",
         price: 25,
-        attribution: "ihtfp",
+        attribution: "@wide_tim",
     },
     {
         name: "Fish Plush",
-        img: "https://i.imgur.com/l3IBzuN.png",
+        img: "https://i.imgur.com/PvmOJqk.png",
         price: 20,
         attribution: "created by jessica!",
     },
@@ -317,7 +317,7 @@ const storeItems = [
     },
     {
         name: "Star Plush",
-        img: "https://i.imgur.com/zmhWGRa.png",
+        img: "https://i.imgur.com/yvLBk45.png",
         price: 30,
         attribution: "created by vi!",
     },

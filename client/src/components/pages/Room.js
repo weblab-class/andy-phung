@@ -278,27 +278,30 @@ const Tasks = (props) => { // wtf
             props.setInternalCurrentRoomID(props.currentRoomID);
 
             socket.on(props.currentRoomID, (update) => { // rmb that server also emits user's userObj
-                console.log(update.gameState.canvas.cats);
-                const userObjs = update.gameState.users.filter(e => e.username != update.username);
-                updateCanvasState(update.gameState.canvas, update.gameState.frame, update.catUpdates);
-                setOtherUserTasks(userObjs);
+                try {
+                    //console.log(update.gameState.canvas.cats);
+                    const userObjs = update.gameState.users.filter(e => e.username != update.username);
+                    updateCanvasState(update.gameState.canvas, update.gameState.frame, update.catUpdates);
+                    setOtherUserTasks(userObjs);
 
-                if(props.theme != update.gameState.canvas.theme) {
-                    props.setTheme(update.gameState.canvas.theme);
-                }
+                    if(props.theme != update.gameState.canvas.theme) {
+                        props.setTheme(update.gameState.canvas.theme);
+                    }
 
-                props.roomState.current = update.gameState.canvas;
-                
-                if(update.catUpdates.filter((c) => c.from == "").length > 0) {
-                    //console.log("yeah?");
-                    update.catUpdates.forEach((c) => {
-                        if(c.from == "" && !props.userObj.user.catsSeen.includes(c.name)) { // if new spawn and haven't seen yet
-                            //console.log("yeah????");
-                            props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: c.name}, append: "push"});
-                        }
-                    })
+                    props.roomState.current = update.gameState.canvas;
+                    
+                    if(update.catUpdates.filter((c) => c.from == "").length > 0) {
+                        //console.log("yeah?");
+                        update.catUpdates.forEach((c) => {
+                            if(c.from == "" && !props.userObj.user.catsSeen.includes(c.name)) { // if new spawn and haven't seen yet
+                                //console.log("yeah????");
+                                props.updateUserObj({_id: props.userObj.user._id, push: {catsSeen: c.name}, append: "push"});
+                            }
+                        })
+                    }
+                } catch {
+                    console.log("error occurred server -> client");
                 }
-                
             });
 
             //console.log(`client listening on ${props.currentRoomID}`);  
@@ -414,6 +417,9 @@ const ToolBar = (props) => {
         <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="simply-rounded text-2xl text-clr">
                 store!
+            </div>
+            <div className="simply-rounded text-xxs text-clr">
+                {"all drawings stolen from canva <3"}
             </div>
             <div className="mt-[5px] w-full h-auto flex flex-row flex-nowrap justify-center items-center">
                 {storePage > 0 ? (
