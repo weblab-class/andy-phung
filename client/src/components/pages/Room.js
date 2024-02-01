@@ -315,7 +315,7 @@ const Tasks = (props) => { // wtf
                     <UserTaskList createBiscuitNotification={props.createBiscuitNotification} updateAchievements={props.updateAchievements} userObj={props.userObj} updateUserObj={props.updateUserObj} userTasks={userTasks} setUserTasks={setUserTasks} userTasksCompleted={userTasksCompleted} setUserTasksCompleted={setUserTasksCompleted}/>
                 </div>
             </div>
-            <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[850px] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
+            <div className="flex flex-row h-full ml-[10px] min-w-[875px] w-[60%] mt-[13px] z-[5] overflow-x-scroll hide-scrollbar">
                 {otherUserTasks.map((obj) => {
                     return (<div className="flex flex-col justify-between h-full min-w-[275px] w-[275px] z-[5] mr-[15px]">
                         <TasksProfile userObj={obj.userObj} openModal={props.openModal} closeModal={props.closeModal}/>
