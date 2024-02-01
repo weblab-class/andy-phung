@@ -147,8 +147,8 @@ const BlackScreen = (props) => { // takes in on, cat
     const cl = props.on ? "transition-opacity duration-1000 opacity-100 z-[100]" : "transition-opacity duration-1000 opacity-0 z-[100]";
 
     return (
-        <div className={`absolute left-0 right-0 margin-auto flex justify-center items-center w-full h-full bg-black ${cl}`}>
-            {props.cat ? (<img src={sleeping} className="w-[112.5px] h-[90px]"/>) : (<></>)}
+        <div className={`absolute left-0 right-0 margin-auto flex justify-center items-center w-full h-full bg-[#060707] ${cl}`}>
+            {props.cat ? (<img src={sleeping} className="w-[112.5px] h-[90px] opacity-95"/>) : (<></>)}
         </div>
     )
 }
