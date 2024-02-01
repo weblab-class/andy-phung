@@ -115,6 +115,9 @@ const deleteUserListener = (roomid, user) => {
 };
 
 const addUserToRoom = (user, roomid, capacity=-1, theme="") => { // optional params at the end for /api/joinroom
+  // user can only be in one room at a time
+  removeUserFromRoomWithoutRoomId(user);
+
   if(rooms[roomid] == undefined && capacity != -1) { // if user is trying to create a new room
     const initcat = gameLogic.initializeGame(roomid, theme);
     gameLogic.addPlayer(roomid, user);
@@ -186,10 +189,11 @@ const removeUserFromRoom = (user, roomid) => {
     // delete user + their intervalId from gameObj
     rooms[roomid].users = rooms[roomid].users.filter((id) => {
       id != user._id;
-    })
+    });
+
     rooms[roomid].intervalIds = rooms[roomid].intervalIds.filter((intervalId) => {
       intervalId != intervalToDelete;
-    })
+    });
 
     
     

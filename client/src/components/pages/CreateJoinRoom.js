@@ -105,7 +105,7 @@ const CreateJoinRoom = (props) => {
                     </div>
                     <img src={"https://i.imgur.com/WV2O28t.png"} width={190} height={100} className="border-8 border-clr rounded-xl"/>
                 </div>
-                <div className="w-full text-lg h-[30px] flex items-center justify-center border-[3px] text-clr simply-rounded border-clr bg-[#DEB484] hover:bg-[#DBAC78] hover:cursor-pointer rounded-2xl" onClick={() => {
+                <div className="w-full text-lg h-[30px] flex items-center justify-center border-4 text-clr simply-rounded border-clr bg-[#DEB484] hover:bg-[#DBAC78] hover:cursor-pointer rounded-2xl" onClick={() => {
                 props.setBiscuitsJustEarned(0);
                 props.setTheme(theme.current);
                 post("/api/joinroom", {
@@ -140,7 +140,7 @@ const CreateJoinRoom = (props) => {
                         roomid.current = event.target.value;
                     }}/>
                 </div>
-                <button className="mt-[7px] w-full text-lg text-clr simply-rounded flex items-center justify-center border-[3px] border-clr bg-[#DEB484] hover:bg-[#DBAC78] rounded-2xl" onClick={() => {
+                <button className="mt-[7px] w-full text-lg text-clr simply-rounded flex items-center justify-center border-4 border-clr bg-[#DEB484] hover:bg-[#DBAC78] rounded-2xl" onClick={() => {
                     props.setBiscuitsJustEarned(0);
                     post("/api/joinroom", {
                         roomid: roomid.current,

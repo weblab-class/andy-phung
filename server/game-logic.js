@@ -355,7 +355,7 @@ const updateGameState = (roomid) => {
         totalTasksCompleted = totalTasksCompleted + u.tasksCompleted;
     });
 
-    if(totalTasksCompleted >= Math.pow(2, gameStates[roomid].canvas.cats.length) && gameStates[roomid].canvas.cats.length < 8) {
+    if(totalTasksCompleted >= Math.floor(Math.pow(1.5, gameStates[roomid].canvas.cats.length)) && gameStates[roomid].canvas.cats.length < 8) {
         //console.log('spawning new cat');
         // spawning new cat (w not same name)
         let rareCat = Math.random() <= 0.05;

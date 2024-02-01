@@ -137,7 +137,7 @@ const TasksProfile = (props) => { // takes in userObj
 
     //console.log(`props userobj ${props.userObj.user}`);
     return <div className="flex justify-center items-center w-full h-[40px] mb-[10px] z-[5] text-xl candy-beans text-[#f5f5f5]">
-        <img src={placeholder_pfp} className="w-[35px] h-auto mr-[10px]"/>
+        <img src={props.userObj.user.pfp} className="w-[40px] h-[40px] border-transparent border-2 rounded-full mr-[10px]"/>
         <div onClick={() => {
             props.openModal(profileModal);
         }} className="hover:cursor-pointer hover:opacity-70">
@@ -206,9 +206,9 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
     };
 
     const handleBlur = (event) => {
-        if (event.relatedTarget != null) {
+        if (event.relatedTarget == null) {
             setEditing(!editing);
-            //console.log("blur firing?");
+            console.log("blur firing?");
         }   
     }
 
@@ -216,11 +216,11 @@ const UserTaskList = (props) => { // props: userTasks, setUserTasks
         <div>
             { editing ?
                 (
-                <div onBlur={handleBlur} className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5]">
-                <input autoFocus placeholder="enter a task here!" type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
+                <div tabIndex="-1" className="flex items-center justify-between pl-[10px] w-full h-[35px] rounded-lg mb-[5px] bg-[#E3E3E3] border-[#212529] border-4 z-[5]">
+                <input autoFocus onBlur={handleBlur} placeholder="enter a task here!" type="text" onKeyDown={handleEnterInInput} onChange={(event) => {
                     newTask.current = event.target.value;
                 }}/>
-                <img src={rightarrow_icon} className="h-[10px] w-[10px] mr-[10px] hover:cursor-pointer" onClick={() => {
+                <img tabIndex="0" src={rightarrow_icon} className="h-[10px] w-[10px] mr-[10px] hover:cursor-pointer hover:opacity-75" onClick={() => {
                     props.setUserTasks([newTask.current, ...props.userTasks]);
                     newTask.current = "";
                     setEditing(!editing);

@@ -106,7 +106,8 @@ router.get("/cat", (req, res) => { // takes in name of cat
 
 router.post("/joinroom", (req, res) => { // creating a room
   try {
-    let roomid; 
+  socketManager.deleteEmptyRooms();
+  let roomid; 
   let capacity;
   let theme;
 
@@ -124,9 +125,7 @@ router.post("/joinroom", (req, res) => { // creating a room
   }
 
   const [joinState, catname] = socketManager.addUserToRoom(req.user, roomid, capacity, theme);
-
-  // intended to be after addUserToRoom; so solo players can get back to their room if accidentally left
-  socketManager.deleteEmptyRooms();
+  
 
   if(joinState == "success") {
     res.send({roomid: roomid, catname: catname});

@@ -72,7 +72,7 @@ const SideBar = (props) => { // props.userObj.user._id
                     <div className="flex flex-row items-center mb-[5px]">
                         {props.editing[1] ? (
                             <>
-                            <input autoFocus type="text" onChange={(event) => {
+                            <input autoFocus defaultValue={nameEdit} type="text" onChange={(event) => {
                                 nameEdit = event.target.value;
                             }} onKeyDown={(e) => {
                                 if(e.key == 'Enter') {
@@ -105,7 +105,7 @@ const SideBar = (props) => { // props.userObj.user._id
                     <div className="flex flex-row items-center">
                     {props.editing[2] ? (
                             <>
-                            <input autoFocus type="text" onChange={(event) => {
+                            <input autoFocus defaultValue={bioEdit} type="text" onChange={(event) => {
                                 bioEdit = event.target.value;
                             }} onKeyDown={(e) => {
                                 if(e.key == 'Enter') {

@@ -16,6 +16,23 @@ function verify(token) {
     .then((ticket) => ticket.getPayload());
 }
 
+
+const pfps = [
+  "https://i.imgur.com/uGJECfL.png",
+  "https://i.imgur.com/wwZFwZQ.png",
+  "https://i.imgur.com/U5Vjguq.png",
+  "https://i.imgur.com/oEnCoiu.png",
+  "https://i.imgur.com/3OsFpFT.png",
+  "https://i.imgur.com/a6JsE6X.png",
+  "https://i.imgur.com/oXalUsA.png",
+  "https://i.imgur.com/tn548yA.png",
+  "https://i.imgur.com/n8BK1WB.png",
+  "https://i.imgur.com/ZEuE29I.png",
+  "https://i.imgur.com/ER6wNiO.png",
+  "https://i.imgur.com/v2XWe0y.png",
+  "https://i.imgur.com/2RerLmu.png",
+]
+
 // gets user from DB, or makes a new account if it doesn't exist yet
 function getOrCreateUser(user) {
   // the "sub" field means "subject", which is a unique identifier for each user
@@ -27,7 +44,7 @@ function getOrCreateUser(user) {
       googleid: user.sub,
       biscuits: 0,
       bio: "i haven't set my bio yet!",
-      pfp: "https://cdn.discordapp.com/attachments/754243466241769515/1200135986844291154/placeholderpfp.png",
+      pfp: pfps[Math.floor(Math.random()*pfps.length)],
       pics: [],
       favPics: [],
       achievements: [],
