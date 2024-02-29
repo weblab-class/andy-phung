@@ -205,7 +205,7 @@ const CreateJoinRoom = (props) => {
                 <BgScrollContainers/>
             </div>
             <SpinningCat first={1}/>
-            <audio ref={audioRef} src="https://cdn.discordapp.com/attachments/1201919002264490034/1202044175420493866/Copyright_Locked_Chill_Lofi_Hiphop_-_Kimochi_by_FrkA2.mp3"/>
+            <audio ref={audioRef} src="https://sndup.net/ykyd/d"/>
         </div>
     );
 };

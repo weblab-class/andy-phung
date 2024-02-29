@@ -630,27 +630,27 @@ const Room = (props) => {
     const audioTracks = [ 
         {
             name: "animal crossing lofi 1",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174774583318/Animal_Crossing__New_Horizons_-_5AM_Lofi_Lia_Remix.mp3",
+            link: "https://sndup.net/fmwn/d",
         },
         {
             name: "animal crossing lofi 2",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175109857300/animal_crossing_lofi_new_horizons.mp3",
+            link: "https://sndup.net/k9sq/d",
         },
         {
             name: "animal crossing lofi 3",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174455808070/Animal_Crossing_New_Leaf_-_8PM_Lofi_Lia_Remix.mp3",
+            link: "https://sndup.net/nk34/d",
         },
         {
             name: "soundcloud lofi 1",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044175420493866/Copyright_Locked_Chill_Lofi_Hiphop_-_Kimochi_by_FrkA2.mp3",
+            link: "https://sndup.net/ykyd/d",
         },
         {
             name: "my one and only bsf",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202044174078054440/Ao_no_Sumika_Jujutsu_Kaisen_Season_2_Opening_but_its_lofi_hip_hop.mp3",
+            link: "https://sndup.net/v5n9/d",
         },
         {
             name: "u r my special 🗣️🗣️",
-            link: "https://cdn.discordapp.com/attachments/1201919002264490034/1202461676763480064/SPECIALZ_-_Jujutsu_KaisenLofi_Remix.mp3",
+            link: "https://sndup.net/v53q/d",
         },
     ];
 
@@ -740,7 +740,7 @@ const Room = (props) => {
             <Notification notificationOpen={props.notificationOpen} header={props.notificationContent.header} body={props.notificationContent.body} img={props.notificationContent.img}/>
             <BiscuitsNotification biscuits={props.biscuitsJustEarned} visible={props.biscuitNotifVisible}/>
             <audio ref={audioRef} src={audioTracks[audioTrackNumber].link}/>
-            <audio ref={sfxRef} src="https://cdn.discordapp.com/attachments/1201919002264490034/1202047959324446720/fireplace_sfx.mp3"/>
+            <audio ref={sfxRef} src="https://sndup.net/zsh5/d"/>
         </div>
     )
 }

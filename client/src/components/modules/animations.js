@@ -1,5 +1,5 @@
 const catAnimationDict = { // lmfao
-    "Shiro": {
+    "Shiro": { 
         "sitting": [
             "https://i.imgur.com/JXuCyGy.png",
             "https://i.imgur.com/JXuCyGy.png",

@@ -27,7 +27,7 @@
   width: calc(452px / 4);
   top: -200px; /* [-250, 0] */
   left: 400px; /* [-250, 0] */
-  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199659866164314292/oye_standing.png?ex=65c35950&is=65b0e450&hm=c9b571b80cc5c40e121faf9d4fef4ae9d6e1d92f2260d4418937d81925cfc931&") no-repeat;
+  background: url("https://i.imgur.com/IXU4PgP.png") no-repeat;
   background-size: cover;
   animation: catSpin 20s linear infinite;
 }
@@ -39,7 +39,7 @@
   width: calc(452px / 4);
   top: -200px; /* [-250, 0] */
   left: -50px; /* [-250, 0] */
-  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199658754875080704/comet_standing.png?ex=65c35847&is=65b0e347&hm=7a90550af6752df7ee5b96b880ccf221cf96f76b4505fb5b2e3db0b888a57fff&") no-repeat;
+  background: url("https://i.imgur.com/woOKPXR.png") no-repeat;
   background-size: cover;
   animation: catSpin 20s linear infinite;
 }
@@ -51,7 +51,7 @@
   width: calc(452px / 4);
   top: -100px; /* [-250, 0] */
   left: -200px; /* [-250, 0] */
-  background: url("https://cdn.discordapp.com/attachments/754243466241769515/1199659866164314292/oye_standing.png?ex=65c35950&is=65b0e450&hm=c9b571b80cc5c40e121faf9d4fef4ae9d6e1d92f2260d4418937d81925cfc931&") no-repeat;
+  background: url("https://i.imgur.com/IXU4PgP.png") no-repeat;
   background-size: cover;
   animation: catSpin 20s linear infinite;
 }
@@ -139,7 +139,7 @@
   transform: translate(-50%, -50%) rotate(45deg) scale(1);
   /* make BG larger than container */
   /* center bg in container - ratio of 150% */
-  background: url(https://cdn.discordapp.com/attachments/754243466241769515/1199463016962474134/space_bg.png) repeat;
+  background: url(https://i.imgur.com/UHWp4wD.png) repeat;
   background-repeat: repeat;
   background-size: 70%;
   animation: backgroundScroll 50s linear infinite;
@@ -202,12 +202,12 @@
 }
 
 .cafe-mockup-bg {
-  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201456353252741161/purrductive_canvas-01.png?ex=65c9e26c&is=65b76d6c&hm=f2546ddb435399f830910e7f8dc045ce9da59595cba138b3832ad8a288100388&);
+  background-image: url(https://i.imgur.com/fS3iYSm.png);
   background-size: contain;
 }
 
 .cafe-sky-bg {
-  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201431193263034368/night_sky_bg-01.png?ex=65c9cafd&is=65b755fd&hm=ad08671e3bc860ca8c4ce8d819d271b1517b62ad1e5951234c6d997cf3a47ac9&);
+  background-image: url(https://i.imgur.com/zxVGHAd.png);
   background-size: contain;
   background-repeat: repeat;
   animation: cafeBackgroundScroll 150s linear infinite;
@@ -224,7 +224,7 @@
 }
 
 .cafe-skyscrapers-bg {
-  background-image: url(https://cdn.discordapp.com/attachments/754243466241769515/1201553716059328592/cafe-skyscrapers4-01.png?ex=65ca3d19&is=65b7c819&hm=459d5c0742815fcbde0f582aa3cdda098254706145a3cc648003cfd7758d3921&);
+  background-image: url(https://i.imgur.com/nUeu4VO.png);
   background-size: cover;
   background-repeat: repeat-x;
 }
