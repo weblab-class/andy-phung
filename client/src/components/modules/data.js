@@ -234,7 +234,7 @@ const cats = {
     },
     {
         name: "oye.",
-        img: "https://cdn.discordapp.com/attachments/1152789674289528903/1200270172670394388/2Q.png?ex=65c591b5&is=65b31cb5&hm=249593700160cefea38b8de9caa7e838640aa33ca3762671eed2ee0cd1385ff0&",
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2lTKvHtpz2Qt4QykCteSM41rNGT0K0WP_0vdWwM9TbQ&s",
         desc: "attract oye",
         condition: {
             catsSeen: "oye",
